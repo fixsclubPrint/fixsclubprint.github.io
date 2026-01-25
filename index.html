@@ -1,91 +1,80 @@
-<div id="manualPortal" class="box" style="max-width: 950px; text-align: left; margin: 20px auto;">
-    <button onclick="goBackToDash()" style="background:#666; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-bottom:15px;">⬅️ Back to Dashboard</button>
-    
-    <h2 style="text-align:center; color:#1a237e;">All-India Multi-Language Print</h2>
+<div id="rtpsPrintArea" class="box" style="max-width: 950px; border-top: 6px solid #2e7d32; background: #fff;">
+    <h2 style="color: #1b5e20;">📄 Manual Certificate Designer (Backup System)</h2>
+    <p style="font-size: 14px; color: #666;">Official site down hone par yahan se details bharein aur signature ke sath download karein.</p>
 
-    <div style="background:#e3f2fd; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <label><b>Bhasha Chunein (Select Language):</b></label>
-        <select id="targetLang" style="width:100%; padding:12px; margin-top:8px; border:2px solid #1a237e;">
-            <option value="hi">Hindi (हिंदी)</option>
-            <option value="mr">Marathi (मराठी)</option>
-            <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
-            <option value="ta">Tamil (தமிழ்)</option>
-            <option value="te">Telugu (తెలుగు)</option>
-            <option value="bn">Bengali (বাংলা)</option>
-            <option value="gu">Gujarati (ગુજરાતી)</option>
-            <option value="kn">Kannada (ಕನ್ನಡ)</option>
-            <option value="ml">Malayalam (മലയാളം)</option>
-            <option value="or">Odia (ଓଡ଼ିଆ)</option>
-        </select>
-    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; padding: 15px;">
+        
+        <div style="background: #f1f8e9; padding: 20px; border-radius: 12px; border: 1px solid #c8e6c9;">
+            <label><b>Certificate Type:</b></label>
+            <select id="cert_type" style="width:100%; padding:10px; margin-bottom:10px;">
+                <option value="जाति प्रमाण पत्र (Caste Certificate)">जाति प्रमाण पत्र (Caste)</option>
+                <option value="आय प्रमाण पत्र (Income Certificate)">आय प्रमाण पत्र (Income)</option>
+                <option value="निवास प्रमाण पत्र (Residence Certificate)">निवास प्रमाण पत्र (Residence)</option>
+            </select>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 300px;">
-            <label>Full Name (English):</label>
-            <input type="text" id="en_name" onkeyup="runTranslation('en_name', 'local_name')" placeholder="Type Name in English">
-            
-            <label>Naam (Auto Translation - Editable):</label>
-            <input type="text" id="local_name" onkeyup="updatePreview()" placeholder="Yahan auto-naam aayega">
+            <label><b>Name (Hindi/English):</b></label>
+            <input type="text" id="m_name" placeholder="Name yahan likhein" style="width:100%; padding:10px; margin-bottom:10px;">
 
-            <label>Father's Name (English):</label>
-            <input type="text" id="en_father" onkeyup="runTranslation('en_father', 'local_father')" placeholder="Type Father Name">
-            
-            <input type="text" id="local_father" onkeyup="updatePreview()" placeholder="Pita ka naam (Auto)">
+            <label><b>Tracking ID / Ref No:</b></label>
+            <input type="text" id="m_ref" placeholder="BICC/2024/XXXXXX" style="width:100%; padding:10px; margin-bottom:10px;">
 
-            <label>Address (English):</label>
-            <textarea id="en_addr" onkeyup="runTranslation('en_addr', 'local_addr')" placeholder="Full Address in English"></textarea>
+            <label><b>Upload Photo:</b></label>
+            <input type="file" id="m_photo_input" accept="image/*" onchange="previewFile('m_photo_input', 'p_photo')" style="margin-bottom:10px;">
+
+            <label><b>Upload Signature:</b></label>
+            <input type="file" id="m_sign_input" accept="image/*" onchange="previewFile('m_sign_input', 'p_sign')" style="margin-bottom:10px;">
             
-            <textarea id="local_addr" onkeyup="updatePreview()" placeholder="Pata (Auto Translation)"></textarea>
-            
-            <button class="btn" style="background:#d32f2f; margin-top:10px;" onclick="generateQR()">Update Card & QR</button>
+            <button class="btn" style="background: #2e7d32; width: 100%;" onclick="startPdfProcess()">Pay ₹10 & Unlock Download</button>
         </div>
 
-        <div id="printArea" style="flex: 1; border: 2px solid #333; padding: 15px; background: white; min-height: 250px; position: relative;">
-            <div style="text-align:center; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">भारत सरकार / GOVT OF INDIA</div>
-            <p><b>Name:</b> <span id="p_local_name">---</span> / <span id="p_en_name">---</span></p>
-            <p><b>Father:</b> <span id="p_local_father">---</span> / <span id="p_en_father">---</span></p>
-            <p><b>Address:</b> <span id="p_local_addr">---</span> <br> <span id="p_en_addr">---</span></p>
-            <div id="card_qr" style="position:absolute; bottom:10px; right:10px;"></div>
+        <div id="certPreview" style="border: 2px solid #ccc; padding: 30px; position: relative; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); font-family: 'Arial', sans-serif;">
+            <div style="text-align: center; border-bottom: 2px solid #1b5e20; padding-bottom: 10px;">
+                <h3 style="margin: 0; color: #1b5e20;">बिहार सरकार / GOVT OF BIHAR</h3>
+                <h4 id="p_type" style="margin: 5px 0;">जाति प्रमाण पत्र</h4>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 14px; line-height: 1.8;">
+                <p><b>प्रमाण पत्र संख्या (Ref No):</b> <span id="p_ref">----------</span></p>
+                <p><b>नाम (Name):</b> <span id="p_name">----------</span></p>
+                <p>यह प्रमाणित किया जाता है कि उपरोक्त विवरण सही हैं।</p>
+            </div>
+
+            <img id="p_photo" src="" style="width: 80px; height: 90px; border: 1px solid #ddd; position: absolute; top: 120px; right: 30px; display: none;">
+
+            <div style="margin-top: 50px; text-align: right;">
+                <p style="font-size: 10px; margin-bottom: 5px;">Digitally Signed By: Revenue Officer</p>
+                <img id="p_sign" src="" style="width: 120px; height: 50px; display: none; margin-left: auto;">
+                <p style="font-weight: bold; border-top: 1px solid #000; display: inline-block;">हस्ताक्षर (Signature)</p>
+            </div>
         </div>
+
     </div>
 </div>
 
 <script>
-    // Translation chalu karne wala function
-    function runTranslation(srcId, targetId) {
-        const text = document.getElementById(srcId).value;
-        const lang = document.getElementById('targetLang').value;
-        
-        if (text.length < 2) return;
+    function previewFile(inputId, targetImgId) {
+        const file = document.getElementById(inputId).files[0];
+        const preview = document.getElementById(targetImgId);
+        const reader = new FileReader();
 
-        // Google API URL
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`;
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = "block";
+        }
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if(data && data[0] && data[0][0]) {
-                    document.getElementById(targetId).value = data[0][0][0];
-                    updatePreview(); // Preview update karein
-                }
-            })
-            .catch(err => console.error("Translation Error: ", err));
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     }
 
-    function updatePreview() {
-        document.getElementById('p_en_name').innerText = document.getElementById('en_name').value;
-        document.getElementById('p_local_name').innerText = document.getElementById('local_name').value;
-        document.getElementById('p_en_father').innerText = document.getElementById('en_father').value;
-        document.getElementById('p_local_father').innerText = document.getElementById('local_father').value;
-        document.getElementById('p_en_addr').innerText = document.getElementById('en_addr').value;
-        document.getElementById('p_local_addr').innerText = document.getElementById('local_addr').value;
-    }
-
-    function generateQR() {
-        document.getElementById('card_qr').innerHTML = "";
-        new QRCode(document.getElementById("card_qr"), {
-            text: document.getElementById('en_name').value || "fixsclubPrint",
-            width: 60, height: 60
-        });
-    }
+    // Input values ko preview mein turant dikhane ke liye
+    document.getElementById('m_name').addEventListener('input', function() {
+        document.getElementById('p_name').innerText = this.value;
+    });
+    document.getElementById('m_ref').addEventListener('input', function() {
+        document.getElementById('p_ref').innerText = this.value;
+    });
+    document.getElementById('cert_type').addEventListener('change', function() {
+        document.getElementById('p_type').innerText = this.value;
+    });
 </script>
