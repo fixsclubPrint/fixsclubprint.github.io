@@ -3,125 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fixsclubPrint | All-in-One Digital Portal</title>
+    <title>fixsclubPrint | Master Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --primary: #1a237e; --secondary: #d32f2f; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f7f6; text-align: center; }
-        .box { background: white; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 1000px; }
+        :root { --primary: #1a237e; --secondary: #d32f2f; --sidebar-bg: #1e272e; --sidebar-hover: #34495e; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; background: #f4f7f6; }
+        
+        /* Sidebar Styles */
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; transition: 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1565c0; font-weight: bold; font-size: 20px; }
+        .menu-item { padding: 15px 20px; cursor: pointer; display: flex; align-items: center; border-bottom: 1px solid #2c3e50; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
+        .menu-item:hover { background: var(--sidebar-hover); padding-left: 30px; }
+        .menu-item i { margin-right: 10px; }
+        .active-menu { background: var(--primary); border-left: 5px solid #fff; }
+
+        /* Main Content Styles */
+        .main-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .top-bar { background: white; padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .content-area { padding: 25px; }
+        .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .hidden { display: none; }
-        input, select, textarea { width: 90%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; }
-        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 10px; }
-        .card { border-radius: 15px; padding: 15px; text-align: left; position: relative; border-top: 5px solid var(--primary); }
-        #p_photo { border: 1px solid #000; position: absolute; top: 100px; right: 30px; width: 80px; height: 100px; }
+        #sessionTimer { background: var(--secondary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        
+        /* Buttons and Inputs */
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1.5px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div style="background: var(--secondary); color: white; padding: 12px; font-size: 18px; font-weight: bold;">
-        📢 वृद्धा, विकलांग और विधवा पेंशन KYC यहाँ बिल्कुल FREE है! | CSC सेवाएँ उपलब्ध
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">FixsClub Print</div>
+        <div class="menu-item active-menu" onclick="showPage('dashArea')">🏠 Dashboard</div>
+        <div class="menu-item" onclick="showPage('aadhaarArea')">🆔 Aadhaar Card</div>
+        <div class="menu-item" onclick="showPage('voterArea')">🗳️ Voter ID Card</div>
+        <div class="menu-item" onclick="showPage('pensionArea')">👵 Pension KYC</div>
+        <div class="menu-item" onclick="showPage('rtpsArea')">📜 RTPS (Manual)</div>
+        <div class="menu-item" onclick="showPage('panArea')">💳 Pan Advance</div>
+        <div class="menu-item" style="color: #ff4757;" onclick="location.reload()">🔒 Logout</div>
     </div>
-    <marquee style="background: #fff9c4; padding: 5px; font-weight: bold; color: #333;">
-        बिना CSC ID के भी आप यहाँ से सर्टिफिकेट डाउनलोड और KYC कर सकते हैं। केवल ₹10 चार्ज देना होगा।
-    </marquee>
 
-    <div id="authPage" class="box" style="max-width: 400px;">
-        <div id="loginForm">
-            <h2 style="color: var(--primary);">Login to Portal</h2>
-            <input type="number" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--primary); width: 100%;" onclick="handleLogin()">Login</button>
-            <p style="font-size: 13px;">Naya account? <a href="#" onclick="alert('Admin 9693101077 se sampark karein')">Contact Admin</a></p>
+    <div class="main-content">
+        <div class="top-bar">
+            <span style="font-weight: bold; color: var(--primary);">All-in-One Multi Service</span>
+            <div id="sessionTimer">Session: 30:00</div>
         </div>
-    </div>
 
-    <div id="dashPage" class="hidden">
-        
-        <div class="grid">
+        <div class="content-area">
             
-            <div class="box card" style="background: #f3e5f5; border-color: #673ab7;">
-                <h3>👵 Pension KYC (e-Labharthi)</h3>
-                <p>Bina ID ke KYC karein. ID/Pass auto-copy ho jayega.</p>
-                <button class="btn" style="background: #673ab7;" onclick="openPension()">KYC Portal Khalein</button>
+            <div id="dashArea" class="page">
+                <div class="box">
+                    <h2>Welcome to fixsclubPrint Dashboard</h2>
+                    <p>Side menu se koi bhi service chunein aur kaam shuru karein.</p>
+                </div>
             </div>
 
-            <div class="box card" style="background: #e8f5e9; border-color: #2e7d32;">
-                <h3>📜 Manual RTPS (Jati/Aay/Niwasi)</h3>
-                <input type="text" id="track_id" placeholder="Enter Ref/Tracking No.">
-                <button class="btn" style="background: var(--success);" onclick="startPayment('RTPS Download')">Download (₹10)</button>
-                <button class="btn" style="background: #555;" onclick="toggleManualRTPS()">Fill Manual Form</button>
+            <div id="aadhaarArea" class="page hidden">
+                <div class="box">
+                    <h3 style="color: #ff9800;">Manual Aadhaar Print</h3>
+                    <input type="text" placeholder="Aadhaar Number (12 Digit)">
+                    <input type="text" placeholder="Full Name (Hindi)">
+                    <textarea placeholder="Full Address (Hindi)"></textarea>
+                    <button class="btn" style="background: #ff9800;" onclick="pay('Aadhaar')">Generate & Print (₹10)</button>
+                </div>
             </div>
 
-            <div class="box card" style="background: #e3f2fd; border-color: #1565c0;">
-                <h3>📷 PAN Image Resizer</h3>
-                <p>Photo: 213x213px | Sign: 400x200px</p>
-                <button class="btn" style="background: #1565c0;" onclick="showResizer()">Open Resizer Tool</button>
+            <div id="voterArea" class="page hidden">
+                <div class="box">
+                    <h3 style="color: #2196f3;">Manual Voter Print</h3>
+                    <input type="text" placeholder="EPIC Number (e.g. ABC1234567)">
+                    <input type="text" placeholder="Name (English)">
+                    <input type="text" placeholder="Name (Hindi)">
+                    <button class="btn" style="background: #2196f3;" onclick="pay('Voter')">Generate & Print (₹10)</button>
+                </div>
+            </div>
+
+            <div id="pensionArea" class="page hidden">
+                <div class="box">
+                    <h3 style="color: #673ab7;">Pension KYC Service</h3>
+                    <p>CSC ID: 477437620016 (Auto Copy)</p>
+                    <button class="btn" style="background: #673ab7;" onclick="openPension()">Open elabharthi Portal</button>
+                </div>
+            </div>
+
+            <div id="rtpsArea" class="page hidden">
+                <div class="box">
+                    <h3 style="color: #2e7d32;">Manual RTPS (Caste/Income/Res)</h3>
+                    <select><option>जाति प्रमाण पत्र</option><option>आय प्रमाण पत्र</option><option>निवास प्रमाण पत्र</option></select>
+                    <input type="text" placeholder="Reference ID (BICC/2024/...)">
+                    <input type="text" placeholder="Applicant Name">
+                    <button class="btn" style="background: #2e7d32;" onclick="pay('RTPS')">Download Certificate (₹10)</button>
+                </div>
             </div>
 
         </div>
-
-        <div id="adminInbox" class="box hidden" style="border-top: 6px solid gold;">
-            <h3 style="color: gold;">👑 Admin Secret Inbox (Messages)</h3>
-            <div id="msgList" style="text-align: left; background: #fafafa; padding: 10px;"></div>
-        </div>
-
     </div>
 
-    <div id="payModal" class="hidden box" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; border: 3px solid var(--secondary);">
-        <h3 style="color: var(--secondary);">Pay ₹10 to Unlock</h3>
-        <div id="qrcode" style="display: flex; justify-content: center; margin: 15px;"></div>
-        <p>UPI ID: Q973860146@ybl</p>
-        <input type="text" id="utr_input" placeholder="Enter 12 Digit UTR">
-        <button class="btn" style="background: var(--success);" onclick="verifyPayment()">Verify & Print</button>
-        <button class="btn" style="background: #999;" onclick="closePay()">Cancel</button>
+    <div id="payModal" class="hidden box" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; border: 3px solid var(--secondary); width: 300px; text-align: center;">
+        <h3>Pay ₹10</h3>
+        <div id="qrcode" style="display: flex; justify-content: center; margin-bottom: 10px;"></div>
+        <input type="text" id="utr" placeholder="12 Digit UTR">
+        <button class="btn" style="background: var(--success);" onclick="verify()">Verify</button>
+        <button onclick="document.getElementById('payModal').classList.add('hidden')" style="margin-top: 5px; cursor: pointer; border: none; background: none; color: gray;">Cancel</button>
     </div>
 
     <script>
-        const botToken = "YOUR_BOT_TOKEN"; // Telegram Bot Token dalein
-        const chatId = "YOUR_CHAT_ID";     // Telegram Chat ID dalein
-
-        function handleLogin() {
-            const mob = document.getElementById('l_mob').value;
-            const pass = document.getElementById('l_pass').value;
-            if(mob === "9693101077" && pass === "Yadav@957272") {
-                document.getElementById('authPage').classList.add('hidden');
-                document.getElementById('dashPage').classList.remove('hidden');
-                document.getElementById('adminInbox').classList.remove('hidden');
-                loadMsgs();
-            } else { alert("Invalid Admin Login"); }
+        // Page Switching Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-menu'));
+            document.getElementById(pageId).classList.remove('hidden');
+            event.currentTarget.classList.add('active-menu');
         }
 
-        function openPension() {
-            // Auto Copy CSC ID
-            const el = document.createElement('textarea');
-            el.value = "ID: 477437620016 \nPass: Yadav@957272";
-            document.body.appendChild(el); el.select(); document.execCommand('copy');
-            document.body.removeChild(el);
-            alert("CSC Details Copied! Now pasting on portal.");
-            window.open('https://elabharthi.bihar.gov.in/', '_blank');
-        }
+        // Timer Logic (30 Mins)
+        let timeLeft = 30 * 60;
+        setInterval(() => {
+            if(timeLeft <= 0) location.reload();
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+            document.getElementById('sessionTimer').innerText = `Session: ${m}:${s < 10 ? '0'+s : s}`;
+            timeLeft--;
+        }, 1000);
 
-        function startPayment(service) {
+        // Payment Logic
+        function pay(srv) {
             document.getElementById('payModal').classList.remove('hidden');
             document.getElementById('qrcode').innerHTML = "";
             new QRCode(document.getElementById("qrcode"), {
-                text: `upi://pay?pa=Q973860146@ybl&pn=fixsclub&am=10&cu=INR&tn=${service}`,
+                text: `upi://pay?pa=Q973860146@ybl&am=10&tn=${srv}`,
                 width: 150, height: 150
             });
         }
 
-        function verifyPayment() {
-            const utr = document.getElementById('utr_input').value;
-            if(utr.length === 12) {
-                alert("Payment Verified! Opening Print...");
-                window.print();
-                closePay();
-            } else { alert("Enter 12 digit UTR!"); }
+        function verify() {
+            if(document.getElementById('utr').value.length === 12) {
+                alert("Payment Success! Printing..."); window.print();
+            } else { alert("Sahi UTR daalein!"); }
         }
 
-        function closePay() { document.getElementById('payModal').classList.add('hidden'); }
+        function openPension() {
+            navigator.clipboard.writeText("ID: 477437620016 Pass: Yadav@957272");
+            alert("ID/Pass Copy ho gaya!");
+            window.open('https://elabharthi.bihar.gov.in/', '_blank');
+        }
     </script>
 </body>
 </html>
