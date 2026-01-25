@@ -1,193 +1,56 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fixsclubPrint | User Management</title>
-    <style>
-        :root { --primary: #1a237e; --sidebar: #2c3e50; --active: #34495e; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
-        
-        /* Sidebar & Layout Styles */
-        .sidebar { width: 260px; background: var(--sidebar); color: white; display: flex; flex-direction: column; z-index: 100; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 15px 25px; cursor: pointer; border-bottom: 1px solid #34495e; transition: 0.3s; font-size: 13px; text-transform: uppercase; }
-        .menu-item:hover { background: var(--active); padding-left: 35px; }
-        .active-nav { background: var(--primary); border-left: 5px solid #fff; }
-
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); margin: 20px; }
-        .hidden { display: none !important; }
-
-        /* Auth Screen Styles */
-        .auth-overlay { position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .btn { padding: 12px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        
-        /* History Table */
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background: var(--primary); color: white; }
-    </style>
-</head>
-<body>
-
-    <div id="authScreen" class="auth-overlay">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--primary); margin-bottom: 20px;">Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number (e.g. 9693101077)">
-            <div style="position:relative;">
-                <input type="password" id="l_pass" placeholder="Password">
-                <span style="position:absolute; right:10px; top:18px; cursor:pointer;" onclick="toggleP('l_pass')">👁️</span>
-            </div>
-            <button class="btn" style="background: var(--primary);" onclick="doLogin()">LOGIN</button>
-            <p style="font-size: 14px; margin-top: 20px;">Naya account banana hai? <br><span style="color:blue; cursor:pointer; font-weight:bold;" onclick="switchAuth('reg')">Yahan Register Karein</span></p>
+<div id="voter-view" class="view hidden">
+    <div class="box">
+        <h3 style="color: #2980b9; border-bottom: 2px solid #2980b9; padding-bottom: 10px;">🗳️ Voter Card Manual Entry</h3>
+        <div class="grid-form">
+            <div><label>EPIC Number</label><input type="text" id="v_epic" placeholder="ABC1234567"></div>
+            <div><label>Full Name (English)</label><input type="text" id="v_name_en"></div>
+            <div><label>Naam (Hindi)</label><input type="text" id="v_name_hi"></div>
+            <div><label>Father/Husband Name</label><input type="text" id="v_rel_name"></div>
+            <div><label>Relation Type</label><select id="v_rel"><option>Father</option><option>Husband</option></select></div>
+            <div><label>Age / DOB</label><input type="text" id="v_age"></div>
+            <div><label>Gender</label><select id="v_gen"><option>MALE</option><option>FEMALE</option></select></div>
+            <div><label>Assembly (Vidhansabha)</label><input type="text" id="v_assembly"></div>
+            <div><label>Part Number</label><input type="text" id="v_part"></div>
         </div>
-
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success); margin-bottom: 20px;">Create Account</h2>
-            <input type="text" id="r_name" placeholder="Full Name (Pura Naam)">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="email" id="r_email" placeholder="Email ID">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: var(--success);" onclick="doRegister()">REGISTER & CREATE</button>
-            <p style="font-size: 14px; margin-top: 20px;">Pehle se account hai? <br><span style="color:blue; cursor:pointer; font-weight:bold;" onclick="switchAuth('login')">Wapas Login Karein</span></p>
-        </div>
+        <label>Full Address (Hindi/English)</label>
+        <textarea id="v_addr" rows="2"></textarea>
+        <button class="btn" style="background: #2980b9;" onclick="saveVoter()">Save & Print Voter</button>
     </div>
+</div>
 
-    <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FixsClub Print</div>
-        <div class="menu-item active-nav" onclick="nav('dash')">🏠 Dashboard</div>
-        <div class="menu-item" onclick="nav('aadhaar')">🆔 Aadhaar Entry</div>
-        <div class="menu-item" onclick="nav('history')">📂 Saved History</div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 Logout</div>
-    </div>
-
-    <div id="mainArea" class="main-content hidden">
-        <div class="top-nav">
-            <strong id="userWelcome">Welcome, User</strong>
-            <div id="timer" style="background:#e74c3c; color:white; padding:5px 12px; border-radius:4px; font-weight:bold;">30:00</div>
+<div id="pan-view" class="view hidden">
+    <div class="box">
+        <h3 style="color: #00695c; border-bottom: 2px solid #00695c; padding-bottom: 10px;">💳 PAN Card Advance Entry</h3>
+        <div class="grid-form">
+            <div><label>PAN Number</label><input type="text" id="p_no" placeholder="ABCDE1234F"></div>
+            <div><label>Full Name</label><input type="text" id="p_name"></div>
+            <div><label>Father's Name</label><input type="text" id="p_father"></div>
+            <div><label>Date of Birth</label><input type="date" id="p_dob"></div>
+            <div><label>Upload Photo</label><input type="file"></div>
+            <div><label>Upload Signature</label><input type="file"></div>
         </div>
-
-        <div class="view-area">
-            <div id="dash-view" class="view">
-                <div class="box"><h3>Namaste!</h3><p>Aapka account active hai. Side menu se kaam shuru karein.</p></div>
-            </div>
-
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3>🆔 Aadhaar Entry Form</h3>
-                    <input type="text" id="a_no" placeholder="Aadhar Card Number">
-                    <input type="text" id="a_name" placeholder="Name on Aadhaar">
-                    <button class="btn" style="background: var(--success); width: 200px;" onclick="saveData()">Save & Print</button>
-                </div>
-            </div>
-
-            <div id="history-view" class="view hidden">
-                <div class="box">
-                    <h3>📂 Saved Data</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Aadhar No</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <button class="btn" style="background: #00695c;" onclick="savePan()">Save & Print PAN</button>
     </div>
+</div>
 
-    <script>
-        // Switch between Login and Register
-        function switchAuth(type) {
-            document.getElementById('loginBox').classList.toggle('hidden', type === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', type === 'login');
-        }
+<script>
+    // Voter aur PAN ke liye alag saving functions
+    function saveVoter() {
+        const entry = { type: 'Voter', name: document.getElementById('v_name_en').value, id_no: document.getElementById('v_epic').value };
+        saveToHistory(entry);
+    }
 
-        // Show/Hide Password
-        function toggleP(id) {
-            const x = document.getElementById(id);
-            x.type = x.type === "password" ? "text" : "password";
-        }
+    function savePan() {
+        const entry = { type: 'PAN', name: document.getElementById('p_name').value, id_no: document.getElementById('p_no').value };
+        saveToHistory(entry);
+    }
 
-        // Register User Logic
-        function doRegister() {
-            const name = document.getElementById('r_name').value.trim();
-            const mob = document.getElementById('r_mob').value.trim();
-            const email = document.getElementById('r_email').value.trim();
-            const pass = document.getElementById('r_pass').value;
-
-            if(!name || !mob || !email || !pass) return alert("Kripya saari jankari bharein!");
-
-            // Save user data in local storage
-            const userData = { name, mob, email, pass };
-            localStorage.setItem("user_" + mob, JSON.stringify(userData));
-            
-            alert("Account ban gaya! Ab mobile aur password se login karein.");
-            switchAuth('login');
-        }
-
-        // Login Logic
-        function doLogin() {
-            const mob = document.getElementById('l_mob').value.trim();
-            const pass = document.getElementById('l_pass').value;
-
-            // Check for Master Admin or Registered User
-            const storedUser = JSON.parse(localStorage.getItem("user_" + mob));
-
-            if ((mob === "9693101077" && pass === "Yadav@957272") || (storedUser && storedUser.pass === pass)) {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('mainArea').classList.remove('hidden');
-                document.getElementById('userWelcome').innerText = "Welcome, " + (storedUser ? storedUser.name : "Admin");
-                startSession();
-                loadHistory();
-            } else {
-                alert("Invalid Login! Sahi mobile number aur password daalein.");
-            }
-        }
-
-        // Sidebar Navigation
-        function nav(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id + '-view').classList.remove('hidden');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
-        }
-
-        // Data Save & History logic (Same as before)
-        function saveData() {
-            let data = {
-                no: document.getElementById('a_no').value,
-                name: document.getElementById('a_name').value
-            };
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            history.push(data);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            loadHistory();
-            window.print();
-        }
-
-        function loadHistory() {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            let html = '';
-            history.forEach((item, index) => {
-                html += `<tr><td>${item.name}</td><td>${item.no}</td><td><button onclick="deleteData(${index})">🗑️</button></td></tr>`;
-            });
-            document.getElementById('historyBody').innerHTML = html;
-        }
-
-        // Timer Session
-        let time = 30 * 60;
-        function startSession() {
-            setInterval(() => {
-                if(time <= 0) location.reload();
-                let m = Math.floor(time/60), s = time%60;
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-                time--;
-            }, 1000);
-        }
-    </script>
-</body>
-</html>
+    function saveToHistory(entry) {
+        let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+        history.push(entry);
+        localStorage.setItem('fclub_history', JSON.stringify(history));
+        alert(entry.type + " Data Saved!");
+        loadHistory();
+        window.print();
+    }
+</script>
