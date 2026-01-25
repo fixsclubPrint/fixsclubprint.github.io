@@ -1,189 +1,152 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Portal</title>
-    <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
-        
-        /* Notice Bar */
-        .notice-bar { position: fixed; top: 0; width: 100%; z-index: 10000; background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px; height: 30px; }
-        
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; margin-top: 40px; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 13px; transition: 0.3s; }
-        .menu-item:hover { background: #34495e; }
-        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
+<meta charset="UTF-8">
+<title>INDI PRINT PORTAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        /* Content Area */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; margin-top: 40px; }
-        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
-        .container { padding: 20px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .hidden { display: none !important; }
+<style>
+body{margin:0;font-family:Segoe UI;background:#f1f3f6;display:flex;height:100vh}
+.sidebar{
+width:260px;background:#1e2a38;color:#fff;overflow:auto
+}
+.sidebar h2{padding:15px;margin:0;background:#0f1a24;font-size:16px}
+.menu{padding:10px 15px;cursor:pointer;border-bottom:1px solid #2f3f50;font-size:14px}
+.menu:hover{background:#2f3f50}
+.active{background:#3f51b5}
 
-        /* Form Grid */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: var(--active-blue); color: white; }
-    </style>
+.main{flex:1;overflow:auto}
+.top{background:#fff;padding:15px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+.container{padding:20px}
+
+.box{background:#fff;padding:20px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.hidden{display:none}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+input,select,textarea{
+width:100%;padding:8px;font-size:13px;border:1px solid #ccc;border-radius:4px
+}
+label{font-size:12px;font-weight:bold;color:#555}
+
+.btn{
+margin-top:15px;padding:10px 25px;border:none;
+background:#4caf50;color:#fff;font-weight:bold;border-radius:4px;cursor:pointer
+}
+</style>
 </head>
+
 <body>
 
-    <div class="notice-bar">
-        <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
-            बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। 30 दिन के बाद आपको ₹100 Fee देना पड़ेगा।
-        </marquee>
-    </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>INDI PRINT PORTAL</h2>
 
-    <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Create Account</p>
-        </div>
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success);">Register</h2>
-            <input type="text" id="r_name" placeholder="Full Name">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Back to Login</p>
-        </div>
-    </div>
+<div class="menu active" onclick="openView('aadhaar',this)">🆔 Aadhaar Manual</div>
+<div class="menu" onclick="openView('voter',this)">🗳️ Voter ID Manual</div>
+<div class="menu" onclick="openView('pan',this)">💳 PAN Card Print</div>
 
-    <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FixsClub Portal</div>
-        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
-        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
-        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER MANUAL</div>
-        <div class="menu-item" onclick="nav('history')">📂 SAVED HISTORY</div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 LOGOUT</div>
-    </div>
+</div>
 
-    <div id="mainArea" class="main-content hidden">
-        <div class="top-nav">
-            <span id="welcomeMsg">Welcome</span>
-            <div id="timer" style="background:red; color:white; padding:5px 10px; border-radius:4px;">30:00</div>
-        </div>
+<!-- MAIN -->
+<div class="main">
+<div class="top">Welcome : Operator Panel</div>
 
-        <div class="container">
-            <div id="dash-view" class="view">
-                <div class="box"><h3>Welcome to FixsClub</h3><p>Select service from sidebar.</p></div>
-            </div>
+<div class="container">
 
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd; padding-bottom: 10px;">🆔 Aadhaar Manual Entry</h3>
-                    <div class="grid-3">
-                        <div><label>Aadhar No.</label><input type="text" id="a_no"></div>
-                        <div><label>Full Name (English)</label><input type="text" id="a_name"></div>
-                        <div><label>Naam (Hindi)</label><input type="text" id="a_name_hi"></div>
-                        <div><label>Father/Husband (English)</label><input type="text" id="a_father"></div>
-                        <div><label>Pita/Pati Ka Naam (Hindi)</label><input type="text" id="a_father_hi"></div>
-                        <div><label>Date of Birth</label><input type="text" id="a_dob" placeholder="DD/MM/YYYY"></div>
-                    </div>
+<!-- AADHAAR -->
+<div id="aadhaar" class="box">
+<h3>🆔 Aadhaar Card Manual Entry</h3>
 
-                    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <label>Full Address (English)</label>
-                            <textarea id="a_addr_en" rows="4" placeholder="House No, Street, Village, Post, District, State, Pin"></textarea>
-                        </div>
-                        <div>
-                            <label>Pura Pata (Hindi)</label>
-                            <textarea id="a_addr_hi" rows="4" placeholder="मकान नंबर, गली, गाँव, पोस्ट, जिला, राज्य, पिन"></textarea>
-                        </div>
-                    </div>
-                    
-                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Save & Download PDF</button>
-                </div>
-            </div>
+<div class="grid-3">
+<div><label>Aadhaar No</label><input></div>
+<div><label>Name</label><input></div>
+<div><label>Father Name</label><input></div>
 
-            <div id="history-view" class="view hidden">
-                <div class="box">
-                    <h3>📂 Saved Records</h3>
-                    <table>
-                        <thead><tr><th>Type</th><th>Name</th><th>ID No.</th><th>Actions</th></tr></thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+<div><label>House No</label><input></div>
+<div><label>Gali / Locality</label><input></div>
+<div><label>Post Office</label><input></div>
 
-    <script>
-        // Auth, Nav and Save functions (Logic remain stable)
-        function toggleAuth(t) {
-            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
-        }
+<div><label>State</label><input></div>
+<div><label>City</label><input></div>
+<div><label>Pincode</label><input></div>
 
-        function doRegister() {
-            const m = document.getElementById('r_mob').value;
-            const u = { name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value };
-            localStorage.setItem("user_" + m, JSON.stringify(u));
-            alert("Registered!"); toggleAuth('login');
-        }
+<div><label>DOB</label><input></div>
+<div><label>Gender</label>
+<select><option>Male</option><option>Female</option></select>
+</div>
 
-        function doLogin() {
-            const m = document.getElementById('l_mob').value;
-            const p = document.getElementById('l_pass').value;
-            const u = JSON.parse(localStorage.getItem("user_" + m));
-            if ((m === "9693101077" && p === "Yadav@957272") || (u && u.pass === p)) {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('mainArea').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "Welcome, " + (u ? u.name : "Admin");
-                loadHistory();
-            } else { alert("Login Failed!"); }
-        }
+<div>
+<label>Select Photo</label>
+<input type="file" accept="image/*">
+</div>
+</div>
 
-        function nav(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id + '-view').classList.remove('hidden');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
-        }
+<textarea placeholder="Full Address"></textarea>
 
-        function saveData(type) {
-            const entry = {
-                type: type,
-                name: document.getElementById('a_name').value,
-                id_no: document.getElementById('a_no').value
-            };
-            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            h.push(entry);
-            localStorage.setItem('fclub_history', JSON.stringify(h));
-            loadHistory();
-            window.print();
-        }
+<button class="btn">Save & Print Aadhaar</button>
+</div>
 
-        function loadHistory() {
-            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            let html = '';
-            h.forEach((item, i) => {
-                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td><button onclick="deleteEntry(${i})" style="background:red; color:white; border:none; padding:5px; border-radius:3px;">Del</button></td></tr>`;
-            });
-            document.getElementById('historyBody').innerHTML = html;
-        }
+<!-- VOTER -->
+<div id="voter" class="box hidden">
+<h3>🗳️ Voter ID Manual Entry</h3>
 
-        function deleteEntry(i) {
-            let h = JSON.parse(localStorage.getItem('fclub_history'));
-            h.splice(i, 1);
-            localStorage.setItem('fclub_history', JSON.stringify(h));
-            loadHistory();
-        }
-    </script>
+<div class="grid-3">
+<div><label>EPIC No</label><input></div>
+<div><label>Name</label><input></div>
+<div><label>Father / Husband</label><input></div>
+
+<div><label>Age / DOB</label><input></div>
+<div><label>Gender</label>
+<select><option>Male</option><option>Female</option></select>
+</div>
+<div><label>Assembly</label><input></div>
+
+<div><label>Part No</label><input></div>
+<div>
+<label>Photo</label>
+<input type="file" accept="image/*">
+</div>
+</div>
+
+<textarea placeholder="Address"></textarea>
+
+<button class="btn">Save & Print Voter ID</button>
+</div>
+
+<!-- PAN -->
+<div id="pan" class="box hidden">
+<h3>💳 PAN Card Print</h3>
+
+<div class="grid-3">
+<div><label>PAN No</label><input></div>
+<div><label>Name</label><input></div>
+<div><label>Father Name</label><input></div>
+
+<div><label>DOB</label><input></div>
+<div><label>Category</label>
+<select><option>Individual</option></select>
+</div>
+
+<div>
+<label>Photo</label>
+<input type="file" accept="image/*">
+</div>
+</div>
+
+<button class="btn">Save & Print PAN</button>
+</div>
+
+</div>
+</div>
+
+<script>
+function openView(id,el){
+document.querySelectorAll('.box').forEach(v=>v.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+document.querySelectorAll('.menu').forEach(m=>m.classList.remove('active'));
+el.classList.add('active');
+}
+</script>
+
 </body>
 </html>
