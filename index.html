@@ -2,125 +2,108 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>FixsClub | Voter Print Master</title>
+    <title>FixsClub | All-In-One Print Portal</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .form-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 1000px; margin: auto; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        label { font-size: 12px; font-weight: bold; color: #444; margin-bottom: 5px; display: block; }
-        .btn-print { background: #1a237e; color: white; padding: 15px 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; }
-
-        /* 🖨️ PRINT STYLES (Exact Layout) */
-        #printArea { display: none; padding: 10px; }
-        .card-frame { 
-            width: 325px; height: 205px; border: 1px solid #000; 
-            position: relative; background: #fff; display: inline-block; 
-            margin: 10px; vertical-align: top; overflow: hidden;
-        }
-        .v-header { text-align: center; font-size: 9px; font-weight: bold; border-bottom: 1px solid #000; padding: 2px; line-height: 1.1; }
-        .v-epic { position: absolute; top: 32px; left: 10px; font-weight: bold; font-size: 11px; }
-        .v-photo { position: absolute; top: 50px; left: 10px; width: 72px; height: 90px; border: 1px solid #000; }
-        .v-details { position: absolute; top: 50px; left: 90px; font-size: 9px; line-height: 1.2; width: 220px; }
-        .v-details b { font-size: 10px; display: block; margin-bottom: 1px; text-transform: uppercase; }
+        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --success: #2e7d32; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
-        /* Back Side */
-        .v-address { position: absolute; top: 10px; left: 110px; width: 205px; font-size: 8px; line-height: 1.2; }
-        .v-qr { position: absolute; top: 60px; left: 10px; width: 85px; height: 85px; border: 1px solid #ddd; }
-        .v-footer { position: absolute; bottom: 3px; width: 100%; font-size: 7px; text-align: center; border-top: 0.5px solid #000; }
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; z-index: 1000; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 14px; transition: 0.3s; }
+        .menu-item:hover { background: var(--active-blue); }
+        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
+        /* Content */
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 20px; margin-top: 10px; }
+        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .hidden { display: none !important; }
+
+        /* Grid & Forms */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
+
+        /* Print Card Styling */
+        .card-preview { border: 2px solid #333; margin-top: 20px; background: white; position: relative; }
+        
         @media print {
-            .form-box { display: none; }
-            #printArea { display: block !important; }
+            .sidebar, .btn, .notice-bar, .form-section { display: none !important; }
+            .card-preview { display: block !important; border: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
-        <h2 style="color: #1a237e; border-bottom: 2px solid #1a237e; padding-bottom: 10px;">🗳️ Voter Card Manual Portal</h2>
-        
-        <div class="grid">
-            <div><label>EPIC No.</label><input type="text" id="i_epic" oninput="liveUpdate()" placeholder="EPIC Number"></div>
-            <div><label>Name (English)</label><input type="text" id="i_name_en" oninput="liveUpdate()"></div>
-            <div><label>नाम (हिंदी)</label><input type="text" id="i_name_hi" oninput="liveUpdate()"></div>
-            
-            <div><label>Relation Name (En)</label><input type="text" id="i_rel_en" oninput="liveUpdate()"></div>
-            <div><label>संबंधी का नाम (Hi)</label><input type="text" id="i_rel_hi" oninput="liveUpdate()"></div>
-            <div>
-                <label>Gender (लिंग)</label>
-                <select id="i_gen" onchange="liveUpdate()">
-                    <option value="MALE / पुरुष">MALE / पुरुष</option>
-                    <option value="FEMALE / महिला">FEMALE / महिला</option>
-                    <option value="THIRD GENDER">OTHER</option>
-                </select>
-            </div>
-
-            <div><label>Date of Birth / Age</label><input type="text" id="i_dob" oninput="liveUpdate()"></div>
-            <div><label>Vidhansabha (Assembly)</label><input type="text" id="i_ass" oninput="liveUpdate()"></div>
-            <div><label>Photo</label><input type="file" onchange="upImg(event)"></div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-            <div><label>Address (Hindi)</label><textarea id="i_addr_hi" rows="3" oninput="liveUpdate()"></textarea></div>
-            <div><label>Address (English)</label><textarea id="i_addr_en" rows="3" oninput="liveUpdate()"></textarea></div>
-        </div>
-
-        <button class="btn-print" onclick="window.print()">Generate Voter Card</button>
+    <div class="sidebar">
+        <div class="sidebar-header">FIXSCLUB ADMIN</div>
+        <div class="menu-item active-nav" onclick="showPage('aadhaar', this)">🆔 Aadhaar Manual</div>
+        <div class="menu-item" onclick="showPage('voter', this)">🗳️ Voter Manual</div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ffab91; margin-top: auto;">🔒 Logout</div>
     </div>
 
-    <div id="printArea">
-        <div class="card-frame">
-            <div class="v-header">भारत निर्वाचन आयोग<br>ELECTION COMMISSION OF INDIA</div>
-            <div class="v-epic" id="p_epic">ABC0000000</div>
-            <img id="p_photo" class="v-photo">
-            <div class="v-details">
-                नाम: <b id="p_name_hi">नाम यहाँ आएगा</b>
-                Name: <b id="p_name_en">NAME HERE</b>
-                <br>
-                निर्वाचक के संबंधी का नाम: <b id="p_rel_hi">पिता का नाम</b>
-                Relation Name: <b id="p_rel_en">FATHER NAME</b>
-                <br>
-                लिंग / Gender: <b id="p_gen">MALE / पुरुष</b>
-                <br>
-                जन्मतिथि / आयु / DOB: <b id="p_dob">01/01/1990</b>
+    <div class="main-content">
+        
+        <div id="aadhaar-page" class="page-view">
+            <div class="box form-section">
+                <h3 style="color: var(--active-blue);">🆔 Aadhaar Manual Entry</h3>
+                <div class="grid-3">
+                    <div><label>Aadhaar No.</label><input type="text" id="a_no" oninput="updateAadhaar()"></div>
+                    <div><label>Name (English)</label><input type="text" id="a_name_en" oninput="updateAadhaar()"></div>
+                    <div><label>नाम (हिंदी)</label><input type="text" id="a_name_hi" oninput="updateAadhaar()"></div>
+                    <div><label>Father Name (En)</label><input type="text" id="a_fath_en" oninput="updateAadhaar()"></div>
+                    <div><label>पिता का नाम (Hi)</label><input type="text" id="a_fath_hi" oninput="updateAadhaar()"></div>
+                    <div><label>DOB</label><input type="text" id="a_dob" oninput="updateAadhaar()" placeholder="DD/MM/YYYY"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div><label>Address (Hindi)</label><textarea id="a_addr_hi" rows="3" oninput="updateAadhaar()"></textarea></div>
+                    <div><label>Address (English)</label><textarea id="a_addr_en" rows="3" oninput="updateAadhaar()"></textarea></div>
+                </div>
+                <button class="btn" style="background: var(--success);" onclick="window.print()">Print Aadhaar</button>
             </div>
-            <div class="v-footer">e-Electors Photo Identity Card - ई-मतदाता पहचान पत्र</div>
         </div>
 
-        <div class="card-frame">
-            <div class="v-address">
-                पता: <span id="p_addr_hi">पता यहाँ आएगा</span><br><br>
-                Address: <span id="p_addr_en">Address Here</span>
+        <div id="voter-page" class="page-view hidden">
+            <div class="box form-section">
+                <h3 style="color: #2980b9;">🗳️ Voter ID Manual Entry</h3>
+                <div class="grid-3">
+                    <div><label>EPIC Number</label><input type="text" id="v_epic"></div>
+                    <div><label>Name (English)</label><input type="text" id="v_name_en"></div>
+                    <div><label>नाम (हिंदी)</label><input type="text" id="v_name_hi"></div>
+                    <div><label>Relation Name (En)</label><input type="text" id="v_rel_en"></div>
+                    <div><label>Gender</label>
+                        <select id="v_gen">
+                            <option>MALE / पुरुष</option>
+                            <option>FEMALE / महिला</option>
+                        </select>
+                    </div>
+                    <div><label>Photo</label><input type="file" accept="image/*"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                    <div><label>Address (Hindi)</label><textarea id="v_addr_hi" rows="3"></textarea></div>
+                    <div><label>Address (English)</label><textarea id="v_addr_en" rows="3"></textarea></div>
+                </div>
+                <button class="btn" style="background: #2980b9;" onclick="window.print()">Print Voter ID</button>
             </div>
-            <div class="v-qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=FixsClub" style="width:100%;">
-            </div>
-            <div style="position:absolute; bottom:20px; right:10px; font-size:7px; text-align:center;">
-                <b>निर्वाचक रजिस्ट्रीकरण अधिकारी</b><br>Electoral Registration Officer<br>
-                निर्वाचन क्षेत्र: <span id="p_ass">विधानसभा</span>
-            </div>
-            <div class="v-footer">Visit: www.nvsp.in for more details</div>
         </div>
+
     </div>
 
     <script>
-        function liveUpdate() {
-            document.getElementById('p_epic').innerText = document.getElementById('i_epic').value;
-            document.getElementById('p_name_hi').innerText = document.getElementById('i_name_hi').value;
-            document.getElementById('p_name_en').innerText = document.getElementById('i_name_en').value;
-            document.getElementById('p_rel_hi').innerText = document.getElementById('i_rel_hi').value;
-            document.getElementById('p_rel_en').innerText = document.getElementById('i_rel_en').value;
-            document.getElementById('p_gen').innerText = document.getElementById('i_gen').value;
-            document.getElementById('p_dob').innerText = document.getElementById('i_dob').value;
-            document.getElementById('p_addr_hi').innerText = document.getElementById('i_addr_hi').value;
-            document.getElementById('p_addr_en').innerText = document.getElementById('i_addr_en').value;
-            document.getElementById('p_ass').innerText = document.getElementById('i_ass').value;
+        // Navigation Logic
+        function showPage(pageId, element) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
+            document.getElementById(pageId + '-page').classList.remove('hidden');
+            
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
+            element.classList.add('active-nav');
         }
 
-        function upImg(e) {
-            const p = document.getElementById('p_photo');
-            p.src = URL.createObjectURL(e.target.files[0]);
+        // Live Update Example for Aadhaar
+        function updateAadhaar() {
+            // Yahan card preview ka logic dal sakte hain
+            console.log("Updating Aadhaar Preview...");
         }
     </script>
 </body>
