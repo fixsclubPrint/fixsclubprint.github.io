@@ -4,342 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aadhaar Card Generator</title>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; background-color: #f4f7f6; padding: 20px; box-sizing: border-box; }
-        .container { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1200px; width: 100%; }
-        .form-section { flex: 1; min-width: 300px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .form-section h2 { color: #333; margin-bottom: 20px; font-size: 24px; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group select {
-            width: calc(100% - 20px);
-            padding: 12px 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-        }
-        .form-group input[type="text"]:focus,
-        .form-group input[type="date"]:focus,
-        .form-group select:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .form-group input[type="file"] {
-            display: block;
-            margin-top: 8px;
-        }
-        .preview-image-container { margin-top: 15px; text-align: center; }
-        #imagePreview {
-            max-width: 120px;
-            max-height: 120px;
-            border: 1px dashed #ccc;
-            padding: 5px;
-            display: none; /* Hide by default */
-            border-radius: 5px;
-            object-fit: cover;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 14px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-
-        /* Aadhaar Card Styles */
-        .aadhaar-card-display { flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 25px; align-items: center; padding-top: 20px; }
-
-        .aadhaar-card-wrapper { font-family: 'Arial', sans-serif; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .form-section { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 500px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        button { background-color: #28a745; color: white; padding: 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; }
+        
+        /* Aadhaar Card Display - Ab ye hamesha dikhega */
+        .aadhaar-card-wrapper { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 20px; }
         .card-front, .card-back {
             width: 325px; height: 205px; border: 1px solid #ccc;
             border-radius: 10px; position: relative; background: #fff;
-            padding: 10px; box-sizing: border-box; overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 10px; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .card-header { border-bottom: 1px solid #ff9933; color: #000080; font-size: 10px; font-weight: bold; margin-bottom: 5px; padding-bottom: 3px; }
-        .card-body { display: flex; gap: 10px; margin-top: 8px; }
-        #p_img { width: 75px; height: 90px; border: 1px solid #eee; object-fit: cover; border-radius: 3px; }
-        .user-info p { margin: 2px 0; font-size: 11px; line-height: 1.4; color: #333; }
-        .user-info b { color: #000; }
-        .card-footer { text-align: center; border-top: 1px solid #008000; position: absolute; bottom: 8px; width: calc(100% - 20px); padding-top: 5px; }
-        .card-footer h2 { margin: 0; font-size: 16px; color: #333; letter-spacing: 1px; }
+        .card-header { border-bottom: 1px solid #ff9933; color: #000080; font-size: 10px; font-weight: bold; padding-bottom: 3px; }
+        .card-body { display: flex; gap: 10px; margin-top: 10px; }
+        #p_img { width: 80px; height: 95px; border: 1px solid #eee; object-fit: cover; }
+        .user-info p { margin: 2px 0; font-size: 11px; color: #333; }
+        .card-footer { text-align: center; border-top: 1px solid #008000; position: absolute; bottom: 8px; width: calc(100% - 20px); }
+        .card-footer h2 { margin: 5px 0 0 0; font-size: 16px; letter-spacing: 1px; }
 
-        /* Card Back specific styles */
-        .card-back .card-header { border-bottom: 1px solid #008000; color: #000080; }
-        .card-back .card-body { flex-direction: row; align-items: center; justify-content: space-between; margin-top: 5px; }
-        #p_address { font-size: 10px; line-height: 1.4; color: #333; flex-grow: 1; padding-right: 5px; }
-        .qr-placeholder {
-            width: 70px; /* Slightly larger for QR */
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            color: #555;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            flex-shrink: 0;
-        }
+        .card-back .card-header { border-bottom: 1px solid #008000; }
+        #p_address { font-size: 10px; line-height: 1.3; flex-grow: 1; }
+        #qrcode { width: 70px; height: 70px; background: #eee; }
 
-        /* Print Styles */
-        @media screen {
-            .print-only { display: none; }
-        }
         @media print {
-            body * { visibility: hidden; }
-            .print-only, .print-only * { visibility: visible; }
-            .print-only {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                align-items: center;
-                justify-content: center;
-                page-break-after: always; /* Ensure each card prints on a new page if multiple */
-            }
-            .aadhaar-card-wrapper {
-                 /* Ensure print scale is correct */
-                transform: scale(1);
-                transform-origin: top left;
-                margin: 20px; /* Add some margin for printing */
-            }
-            .card-front, .card-back {
-                box-shadow: none; /* No shadow in print */
-                border: 1px solid #000; /* Darker border for print visibility */
-            }
+            .form-section, button { display: none; }
+            body { background: none; padding: 0; }
+            .card-front, .card-back { box-shadow: none; border: 1px solid #000; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="form-section">
-            <h2>Aadhaar Card Details</h2>
-            <div class="form-group">
-                <label for="a_name">Name:</label>
-                <input type="text" id="a_name" placeholder="Enter Full Name">
-            </div>
-            <div class="form-group">
-                <label for="a_dob">Date of Birth:</label>
-                <input type="date" id="a_dob">
-            </div>
-            <div class="form-group">
-                <label for="a_gender">Gender:</label>
-                <select id="a_gender">
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="a_no">Aadhaar Number (12 Digits):</label>
-                <input type="text" id="a_no" placeholder="e.g., 0000 0000 0000" maxlength="14" oninput="formatAadhaar(this)">
-            </div>
-            <div class="form-group">
-                <label for="a_house">House No./Street:</label>
-                <input type="text" id="a_house" placeholder="e.g., H.No. 123, Gandhi Marg">
-            </div>
-            <div class="form-group">
-                <label for="a_post">Locality/Post Office:</label>
-                <input type="text" id="a_post" placeholder="e.g., Civil Lines Post Office">
-            </div>
-            <div class="form-group">
-                <label for="a_city">City/District:</label>
-                <input type="text" id="a_city" placeholder="e.g., New Delhi">
-            </div>
-            <div class="form-group">
-                <label for="a_pin">Pincode (6 Digits):</label>
-                <input type="text" id="a_pin" placeholder="e.g., 110001" maxlength="6">
-            </div>
-            <div class="form-group">
-                <label for="a_pic">Upload Photo:</label>
-                <input type="file" id="a_pic" accept="image/*" onchange="previewImage(event)">
-                <div class="preview-image-container">
-                    <img id="imagePreview" src="#" alt="Image Preview">
+    <div class="form-section">
+        <h2 style="text-align:center">Aadhaar Card Details</h2>
+        <div class="form-group"><label>Full Name:</label><input type="text" id="a_name" value="MOHAN KUMAR"></div>
+        <div class="form-group"><label>DOB:</label><input type="date" id="a_dob" value="1990-01-15"></div>
+        <div class="form-group"><label>Gender:</label>
+            <select id="a_gender"><option value="Male">Male</option><option value="Female">Female</option></select>
+        </div>
+        <div class="form-group"><label>Aadhaar No:</label><input type="text" id="a_no" maxlength="14" value="1234 5678 9012"></div>
+        <div class="form-group"><label>Full Address:</label><input type="text" id="a_addr" value="H.No 123, Sector 1, New Delhi - 110001"></div>
+        <div class="form-group"><label>Photo:</label><input type="file" id="a_pic" accept="image/*" onchange="preview(event)"></div>
+        <button onclick="generate()">Generate & Print</button>
+    </div>
+
+    <div class="aadhaar-card-wrapper">
+        <div class="card-front">
+            <div class="card-header">भारतीय विशिष्ट पहचान प्राधिकरण | UIDAI</div>
+            <div class="card-body">
+                <img id="p_img" src="https://via.placeholder.com/80x95?text=PHOTO">
+                <div class="user-info">
+                    <p><b>नाम / Name:</b> <span id="p_name">MOHAN KUMAR</span></p>
+                    <p><b>जन्म तिथि / DOB:</b> <span id="p_dob">15/01/1990</span></p>
+                    <p><b>लिंग / Gender:</b> <span id="p_gender">Male</span></p>
                 </div>
             </div>
-
-            <button onclick="saveData()">Generate & Print Aadhaar</button>
+            <div class="card-footer"><h2 id="p_uida">1234 5678 9012</h2></div>
         </div>
 
-        <div class="aadhaar-card-display">
-            <div id="printcard" class="print-only">
-                <div class="aadhaar-card-wrapper">
-                    <div class="card-front">
-                        <div class="card-header">भारतीय विशिष्ट पहचान प्राधिकरण | uidai</div>
-                        <div class="card-body">
-                            <img id="p_img" src="https://via.placeholder.com/75x90?text=Photo" alt="photo">
-                            <div class="user-info">
-                                <p><b>नाम / name:</b> <span id="p_name"></span></p>
-                                <p><b>जन्म तिथि / dob:</b> <span id="p_dob"></span></p>
-                                <p><b>लिंग / gender:</b> <span id="p_gender"></span></p>
-                            </div>
-                        </div>
-                        <div class="card-footer"><h2 id="p_uida">0000 0000 0000</h2></div>
-                    </div>
-
-                    <div class="card-back">
-                        <div class="card-header">पता / address:</div>
-                        <div class="card-body">
-                            <p id="p_address"></p>
-                            <div id="qrcode" class="qr-placeholder"></div> </div>
-                        <div class="card-footer"><h2 id="p_uida_back">0000 0000 0000</h2></div>
-                    </div>
-                </div>
+        <div class="card-back">
+            <div class="card-header">पता / Address:</div>
+            <div class="card-body">
+                <p id="p_address">H.No 123, Sector 1, New Delhi - 110001</p>
+                <div id="qrcode"></div>
             </div>
+            <div class="card-footer"><h2 id="p_uida_back">1234 5678 9012</h2></div>
         </div>
     </div>
 
     <script>
-        let qrcodeInstance = null; // Store QR code instance
-
-        // Function to preview image in the form itself
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var output = document.getElementById('imagePreview');
-                output.src = reader.result;
-                output.style.display = 'block';
-            };
+        function preview(event) {
+            let reader = new FileReader();
+            reader.onload = function() { document.getElementById('p_img').src = reader.result; }
             reader.readAsDataURL(event.target.files[0]);
         }
 
-        // Function to format Aadhaar number as 0000 0000 0000
-        function formatAadhaar(input) {
-            let value = input.value.replace(/\D/g, ''); // Remove non-digits
-            let formattedValue = '';
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) {
-                    formattedValue += ' ';
-                }
-                formattedValue += value[i];
-            }
-            input.value = formattedValue;
+        function generate() {
+            document.getElementById('p_name').innerText = document.getElementById('a_name').value;
+            document.getElementById('p_dob').innerText = document.getElementById('a_dob').value;
+            document.getElementById('p_gender').innerText = document.getElementById('a_gender').value;
+            document.getElementById('p_uida').innerText = document.getElementById('a_no').value;
+            document.getElementById('p_uida_back').innerText = document.getElementById('a_no').value;
+            document.getElementById('p_address').innerText = document.getElementById('a_addr').value;
+
+            // Generate QR
+            let qrDiv = document.getElementById('qrcode');
+            qrDiv.innerHTML = "";
+            new QRCode(qrDiv, { text: document.getElementById('a_no').value, width: 70, height: 70 });
+
+            setTimeout(() => { window.print(); }, 500);
         }
-
-        // Main function to save data and trigger print
-        function saveData() {
-            // Get values from form
-            const name = document.getElementById('a_name').value;
-            const dob = document.getElementById('a_dob').value;
-            const gender = document.getElementById('a_gender').value;
-            const uid = document.getElementById('a_no').value.replace(/\s/g, ''); // Remove spaces for validation and QR
-            const house = document.getElementById('a_house').value;
-            const post = document.getElementById('a_post').value;
-            const city = document.getElementById('a_city').value;
-            const pin = document.getElementById('a_pin').value;
-            const file = document.getElementById('a_pic').files[0];
-
-            // Basic Validation
-            if (!name || !dob || !gender || !uid || !house || !post || !city || !pin) {
-                alert('Please fill in all details.');
-                return;
-            }
-            if (uid.length !== 12 || isNaN(uid)) {
-                alert('Aadhaar Number must be 12 digits.');
-                return;
-            }
-            if (pin.length !== 6 || isNaN(pin)) {
-                alert('Pincode must be 6 digits.');
-                return;
-            }
-
-            // Fill the template
-            document.getElementById('p_name').innerText = name;
-            document.getElementById('p_dob').innerText = dob;
-            document.getElementById('p_gender').innerText = gender;
-            document.getElementById('p_uida').innerText = formatAadhaarNumberDisplay(uid);
-            document.getElementById('p_uida_back').innerText = formatAadhaarNumberDisplay(uid);
-
-            // Cleanly format address (filter out empty parts)
-            const addressParts = [house, post, city].filter(Boolean);
-            let fullAddress = addressParts.join(', ');
-            if (pin) {
-                fullAddress += ` - ${pin}`;
-            }
-            document.getElementById('p_address').innerText = fullAddress;
-
-            // Generate QR Code
-            // Data for QR code (you can make this more comprehensive)
-            const qrData = `UID:${uid}\nName:${name}\nDOB:${dob}\nGender:${gender}\nAddress:${fullAddress}`;
-
-            const qrcodeDiv = document.getElementById('qrcode');
-            qrcodeDiv.innerHTML = ''; // Clear previous QR code if any
-
-            if (qrcodeInstance) {
-                qrcodeInstance.clear(); // Clear existing instance if it exists
-                qrcodeInstance = null;
-            }
-
-            qrcodeInstance = new QRCode(qrcodeDiv, {
-                text: qrData,
-                width: 70, // Matches the qr-placeholder size
-                height: 70,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-
-            // Handle image upload and then print
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('p_img').src = e.target.result;
-                    // Give a small delay for image and QR to render before printing
-                    setTimeout(() => { window.print(); }, 700);
-                }
-                reader.readAsDataURL(file);
-            } else {
-                // If no image, just print after QR is rendered
-                setTimeout(() => { window.print(); }, 700);
-            }
-        }
-
-        function formatAadhaarNumberDisplay(uid) {
-            let formatted = '';
-            for (let i = 0; i < uid.length; i++) {
-                if (i > 0 && i % 4 === 0) {
-                    formatted += ' ';
-                }
-                formatted += uid[i];
-            }
-            return formatted;
-        }
-
-        // Set default values for demonstration
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('a_name').value = 'MOHAN KUMAR';
-            document.getElementById('a_dob').value = '1990-01-15';
-            document.getElementById('a_gender').value = 'Male';
-            document.getElementById('a_no').value = '1234 5678 9012';
-            document.getElementById('a_house').value = 'H.No. 123, Sector-1';
-            document.getElementById('a_post').value = 'Dwarka';
-            document.getElementById('a_city').value = 'New Delhi';
-            document.getElementById('a_pin').value = '110075';
-        });
     </script>
 </body>
-</html>
+    </html>
+    
