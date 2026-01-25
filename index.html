@@ -1,109 +1,195 @@
+<div style="background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px;">
+    <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
+        बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। सहायता के लिए टेलीग्राम पर संपर्क करें।
+30 दिन के बाद आपको ₹100 Fee देना पड़ेगा पोर्टल रिपेयरिंग के लिए 
+    </marquee>
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>FixsClub | All-In-One Print Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixsClub Print | Official Portal</title>
     <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --success: #2e7d32; }
+        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
         /* Sidebar */
-        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; z-index: 1000; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 14px; transition: 0.3s; }
-        .menu-item:hover { background: var(--active-blue); }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+        .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
-        /* Content */
-        .main-content { flex-grow: 1; overflow-y: auto; padding: 20px; margin-top: 10px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        /* Main Content */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
+        .container { padding: 20px; }
+        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .hidden { display: none !important; }
 
-        /* Grid & Forms */
+        /* Form Grid (As per Screenshot 52002.jpg) */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
-
-        /* Print Card Styling */
-        .card-preview { border: 2px solid #333; margin-top: 20px; background: white; position: relative; }
         
-        @media print {
-            .sidebar, .btn, .notice-bar, .form-section { display: none !important; }
-            .card-preview { display: block !important; border: none; }
-        }
+        /* History Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
+        th { background: var(--active-blue); color: white; }
+        .action-btn { padding: 5px 10px; border-radius: 3px; border: none; cursor: pointer; color: white; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="sidebar-header">FIXSCLUB ADMIN</div>
-        <div class="menu-item active-nav" onclick="showPage('aadhaar', this)">🆔 Aadhaar Manual</div>
-        <div class="menu-item" onclick="showPage('voter', this)">🗳️ Voter Manual</div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ffab91; margin-top: auto;">🔒 Logout</div>
+    <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
+            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
+            <input type="text" id="l_mob" placeholder="Mobile Number">
+            <input type="password" id="l_pass" placeholder="Password">
+            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
+            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Naya account? Create Account</p>
+        </div>
+        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
+            <h2 style="color: var(--success);">Register User</h2>
+            <input type="text" id="r_name" placeholder="Full Name">
+            <input type="text" id="r_mob" placeholder="Mobile Number">
+            <input type="email" id="r_email" placeholder="Email ID">
+            <input type="password" id="r_pass" placeholder="Set Password">
+            <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
+            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Wapas Login Karein</p>
+        </div>
     </div>
 
-    <div class="main-content">
-        
-        <div id="aadhaar-page" class="page-view">
-            <div class="box form-section">
-                <h3 style="color: var(--active-blue);">🆔 Aadhaar Manual Entry</h3>
-                <div class="grid-3">
-                    <div><label>Aadhaar No.</label><input type="text" id="a_no" oninput="updateAadhaar()"></div>
-                    <div><label>Name (English)</label><input type="text" id="a_name_en" oninput="updateAadhaar()"></div>
-                    <div><label>नाम (हिंदी)</label><input type="text" id="a_name_hi" oninput="updateAadhaar()"></div>
-                    <div><label>Father Name (En)</label><input type="text" id="a_fath_en" oninput="updateAadhaar()"></div>
-                    <div><label>पिता का नाम (Hi)</label><input type="text" id="a_fath_hi" oninput="updateAadhaar()"></div>
-                    <div><label>DOB</label><input type="text" id="a_dob" oninput="updateAadhaar()" placeholder="DD/MM/YYYY"></div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-                    <div><label>Address (Hindi)</label><textarea id="a_addr_hi" rows="3" oninput="updateAadhaar()"></textarea></div>
-                    <div><label>Address (English)</label><textarea id="a_addr_en" rows="3" oninput="updateAadhaar()"></textarea></div>
-                </div>
-                <button class="btn" style="background: var(--success);" onclick="window.print()">Print Aadhaar</button>
-            </div>
+    <div id="sidebar" class="sidebar hidden">
+        <div class="sidebar-header">FixsClub Portal</div>
+        <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
+        <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR MANUAL</span></div>
+        <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER MANUAL</span></div>
+        <div class="menu-item" onclick="nav('pan')"><span>💳 PAN ADVANCE</span></div>
+        <div class="menu-item" onclick="nav('history')"><span>📂 SAVED HISTORY</span></div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;"><span>🔒 LOGOUT</span></div>
+    </div>
+
+    <div id="mainArea" class="main-content hidden">
+        <div class="top-nav">
+            <span id="welcomeMsg">Welcome</span>
+            <div id="timer" style="background:red; color:white; padding:5px 10px; border-radius:4px;">30:00</div>
         </div>
 
-        <div id="voter-page" class="page-view hidden">
-            <div class="box form-section">
-                <h3 style="color: #2980b9;">🗳️ Voter ID Manual Entry</h3>
-                <div class="grid-3">
-                    <div><label>EPIC Number</label><input type="text" id="v_epic"></div>
-                    <div><label>Name (English)</label><input type="text" id="v_name_en"></div>
-                    <div><label>नाम (हिंदी)</label><input type="text" id="v_name_hi"></div>
-                    <div><label>Relation Name (En)</label><input type="text" id="v_rel_en"></div>
-                    <div><label>Gender</label>
-                        <select id="v_gen">
-                            <option>MALE / पुरुष</option>
-                            <option>FEMALE / महिला</option>
-                        </select>
+        <div class="container">
+            <div id="aadhaar-view" class="view hidden">
+                <div class="box">
+                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd; padding-bottom: 10px;">🆔 Aadhaar Card Form</h3>
+                    <div class="grid-3">
+                        <div><label>Aadhar No.</label><input type="text" id="a_no" placeholder="Aadharcard No..."></div>
+                        <div><label>Name</label><input type="text" id="a_name" placeholder="Raju Kumar"></div>
+                        <div><label>Father Name</label><input type="text" id="a_father" placeholder="Shyam Singh"></div>
+                        <div><label>House No</label><input type="text" id="a_house"></div>
+                        <div><label>Post Office</label><input type="text" id="a_post"></div>
+                        <div><label>Pin Code</label><input type="text" id="a_pin"></div>
+                        <div><label>State</label><input type="text" id="a_state"></div>
+                        <div><label>City</label><input type="text" id="a_city"></div>
+                        <div><label>DOB</label><input type="text" id="a_dob" placeholder="DD/MM/YYYY"></div>
                     </div>
-                    <div><label>Photo</label><input type="file" accept="image/*"></div>
+                    <label>Full Address</label>
+                    <textarea id="a_addr" rows="2"></textarea>
+                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Submit & Download</button>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-                    <div><label>Address (Hindi)</label><textarea id="v_addr_hi" rows="3"></textarea></div>
-                    <div><label>Address (English)</label><textarea id="v_addr_en" rows="3"></textarea></div>
+            </div>
+
+            <div id="history-view" class="view hidden">
+                <div class="box">
+                    <h3>📂 Saved Records (Jab tak aap delete na karein)</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Service</th><th>Name</th><th>ID No.</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
                 </div>
-                <button class="btn" style="background: #2980b9;" onclick="window.print()">Print Voter ID</button>
+            </div>
+
+            <div id="dash-view" class="view">
+                <div class="box"><h3>Namaste!</h3><p>Aapka data hamesha surakshit rahega.</p></div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Navigation Logic
-        function showPage(pageId, element) {
-            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
-            document.getElementById(pageId + '-page').classList.remove('hidden');
-            
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            element.classList.add('active-nav');
+        function toggleAuth(t) {
+            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
+            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
         }
 
-        // Live Update Example for Aadhaar
-        function updateAadhaar() {
-            // Yahan card preview ka logic dal sakte hain
-            console.log("Updating Aadhaar Preview...");
+        function doRegister() {
+            const m = document.getElementById('r_mob').value;
+            const user = { name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value };
+            localStorage.setItem("user_" + m, JSON.stringify(user));
+            alert("Account Registered!"); toggleAuth('login');
+        }
+
+        function doLogin() {
+            const m = document.getElementById('l_mob').value;
+            const p = document.getElementById('l_pass').value;
+            const u = JSON.parse(localStorage.getItem("user_" + m));
+            if ((m === "9693101077" && p === "Yadav@957272") || (u && u.pass === p)) {
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('mainArea').classList.remove('hidden');
+                document.getElementById('welcomeMsg').innerText = "Welcome, " + (u ? u.name : "Admin");
+                loadHistory();
+            } else { alert("Login Failed!"); }
+        }
+
+        function nav(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id + '-view').classList.remove('hidden');
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
+            event.currentTarget.classList.add('active-nav');
+        }
+
+        function saveData(type) {
+            const entry = {
+                type: type,
+                name: document.getElementById('a_name').value,
+                id_no: document.getElementById('a_no').value,
+                date: new Date().toLocaleDateString()
+            };
+            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            history.push(entry);
+            localStorage.setItem('fclub_history', JSON.stringify(history));
+            alert("Data Saved! Downloading...");
+            loadHistory();
+            window.print(); // Browser download option
+        }
+
+        function loadHistory() {
+            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            let html = '';
+            history.forEach((item, index) => {
+                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td>
+                    <button class="action-btn" style="background:orange;" onclick="editEntry(${index})">Edit</button>
+                    <button class="action-btn" style="background:red;" onclick="deleteEntry(${index})">Del</button>
+                </td></tr>`;
+            });
+            document.getElementById('historyBody').innerHTML = html;
+        }
+
+        function deleteEntry(i) {
+            let h = JSON.parse(localStorage.getItem('fclub_history'));
+            h.splice(i, 1);
+            localStorage.setItem('fclub_history', JSON.stringify(h));
+            loadHistory();
+        }
+
+        function editEntry(i) {
+            let h = JSON.parse(localStorage.getItem('fclub_history'));
+            let item = h[i];
+            document.getElementById('a_name').value = item.name;
+            document.getElementById('a_no').value = item.id_no;
+            nav('aadhaar');
+            deleteEntry(i);
         }
     </script>
 </body>
