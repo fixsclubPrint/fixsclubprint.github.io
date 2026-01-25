@@ -1,91 +1,127 @@
-<div id="manualPortal" class="box" style="max-width: 950px; text-align: left; margin: 20px auto;">
-    <button onclick="goBackToDash()" style="background:#666; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-bottom:15px;">⬅️ Back to Dashboard</button>
-    
-    <h2 style="text-align:center; color:#1a237e;">All-India Multi-Language Print</h2>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fixsclubPrint | All-in-One Digital Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --primary: #1a237e; --secondary: #d32f2f; --success: #2e7d32; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f7f6; text-align: center; }
+        .box { background: white; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 1000px; }
+        .hidden { display: none; }
+        input, select, textarea { width: 90%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; }
+        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 10px; }
+        .card { border-radius: 15px; padding: 15px; text-align: left; position: relative; border-top: 5px solid var(--primary); }
+        #p_photo { border: 1px solid #000; position: absolute; top: 100px; right: 30px; width: 80px; height: 100px; }
+    </style>
+</head>
+<body>
 
-    <div style="background:#e3f2fd; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <label><b>Bhasha Chunein (Select Language):</b></label>
-        <select id="targetLang" style="width:100%; padding:12px; margin-top:8px; border:2px solid #1a237e;">
-            <option value="hi">Hindi (हिंदी)</option>
-            <option value="mr">Marathi (मराठी)</option>
-            <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
-            <option value="ta">Tamil (தமிழ்)</option>
-            <option value="te">Telugu (తెలుగు)</option>
-            <option value="bn">Bengali (বাংলা)</option>
-            <option value="gu">Gujarati (ગુજરાતી)</option>
-            <option value="kn">Kannada (ಕನ್ನಡ)</option>
-            <option value="ml">Malayalam (മലയാളം)</option>
-            <option value="or">Odia (ଓଡ଼ିଆ)</option>
-        </select>
+    <div style="background: var(--secondary); color: white; padding: 12px; font-size: 18px; font-weight: bold;">
+        📢 वृद्धा, विकलांग और विधवा पेंशन KYC यहाँ बिल्कुल FREE है! | CSC सेवाएँ उपलब्ध
     </div>
+    <marquee style="background: #fff9c4; padding: 5px; font-weight: bold; color: #333;">
+        बिना CSC ID के भी आप यहाँ से सर्टिफिकेट डाउनलोड और KYC कर सकते हैं। केवल ₹10 चार्ज देना होगा।
+    </marquee>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 300px;">
-            <label>Full Name (English):</label>
-            <input type="text" id="en_name" onkeyup="runTranslation('en_name', 'local_name')" placeholder="Type Name in English">
-            
-            <label>Naam (Auto Translation - Editable):</label>
-            <input type="text" id="local_name" onkeyup="updatePreview()" placeholder="Yahan auto-naam aayega">
-
-            <label>Father's Name (English):</label>
-            <input type="text" id="en_father" onkeyup="runTranslation('en_father', 'local_father')" placeholder="Type Father Name">
-            
-            <input type="text" id="local_father" onkeyup="updatePreview()" placeholder="Pita ka naam (Auto)">
-
-            <label>Address (English):</label>
-            <textarea id="en_addr" onkeyup="runTranslation('en_addr', 'local_addr')" placeholder="Full Address in English"></textarea>
-            
-            <textarea id="local_addr" onkeyup="updatePreview()" placeholder="Pata (Auto Translation)"></textarea>
-            
-            <button class="btn" style="background:#d32f2f; margin-top:10px;" onclick="generateQR()">Update Card & QR</button>
-        </div>
-
-        <div id="printArea" style="flex: 1; border: 2px solid #333; padding: 15px; background: white; min-height: 250px; position: relative;">
-            <div style="text-align:center; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">भारत सरकार / GOVT OF INDIA</div>
-            <p><b>Name:</b> <span id="p_local_name">---</span> / <span id="p_en_name">---</span></p>
-            <p><b>Father:</b> <span id="p_local_father">---</span> / <span id="p_en_father">---</span></p>
-            <p><b>Address:</b> <span id="p_local_addr">---</span> <br> <span id="p_en_addr">---</span></p>
-            <div id="card_qr" style="position:absolute; bottom:10px; right:10px;"></div>
+    <div id="authPage" class="box" style="max-width: 400px;">
+        <div id="loginForm">
+            <h2 style="color: var(--primary);">Login to Portal</h2>
+            <input type="number" id="l_mob" placeholder="Mobile Number">
+            <input type="password" id="l_pass" placeholder="Password">
+            <button class="btn" style="background: var(--primary); width: 100%;" onclick="handleLogin()">Login</button>
+            <p style="font-size: 13px;">Naya account? <a href="#" onclick="alert('Admin 9693101077 se sampark karein')">Contact Admin</a></p>
         </div>
     </div>
-</div>
 
-<script>
-    // Translation chalu karne wala function
-    function runTranslation(srcId, targetId) {
-        const text = document.getElementById(srcId).value;
-        const lang = document.getElementById('targetLang').value;
+    <div id="dashPage" class="hidden">
         
-        if (text.length < 2) return;
+        <div class="grid">
+            
+            <div class="box card" style="background: #f3e5f5; border-color: #673ab7;">
+                <h3>👵 Pension KYC (e-Labharthi)</h3>
+                <p>Bina ID ke KYC karein. ID/Pass auto-copy ho jayega.</p>
+                <button class="btn" style="background: #673ab7;" onclick="openPension()">KYC Portal Khalein</button>
+            </div>
 
-        // Google API URL
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`;
+            <div class="box card" style="background: #e8f5e9; border-color: #2e7d32;">
+                <h3>📜 Manual RTPS (Jati/Aay/Niwasi)</h3>
+                <input type="text" id="track_id" placeholder="Enter Ref/Tracking No.">
+                <button class="btn" style="background: var(--success);" onclick="startPayment('RTPS Download')">Download (₹10)</button>
+                <button class="btn" style="background: #555;" onclick="toggleManualRTPS()">Fill Manual Form</button>
+            </div>
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if(data && data[0] && data[0][0]) {
-                    document.getElementById(targetId).value = data[0][0][0];
-                    updatePreview(); // Preview update karein
-                }
-            })
-            .catch(err => console.error("Translation Error: ", err));
-    }
+            <div class="box card" style="background: #e3f2fd; border-color: #1565c0;">
+                <h3>📷 PAN Image Resizer</h3>
+                <p>Photo: 213x213px | Sign: 400x200px</p>
+                <button class="btn" style="background: #1565c0;" onclick="showResizer()">Open Resizer Tool</button>
+            </div>
 
-    function updatePreview() {
-        document.getElementById('p_en_name').innerText = document.getElementById('en_name').value;
-        document.getElementById('p_local_name').innerText = document.getElementById('local_name').value;
-        document.getElementById('p_en_father').innerText = document.getElementById('en_father').value;
-        document.getElementById('p_local_father').innerText = document.getElementById('local_father').value;
-        document.getElementById('p_en_addr').innerText = document.getElementById('en_addr').value;
-        document.getElementById('p_local_addr').innerText = document.getElementById('local_addr').value;
-    }
+        </div>
 
-    function generateQR() {
-        document.getElementById('card_qr').innerHTML = "";
-        new QRCode(document.getElementById("card_qr"), {
-            text: document.getElementById('en_name').value || "fixsclubPrint",
-            width: 60, height: 60
-        });
-    }
-</script>
+        <div id="adminInbox" class="box hidden" style="border-top: 6px solid gold;">
+            <h3 style="color: gold;">👑 Admin Secret Inbox (Messages)</h3>
+            <div id="msgList" style="text-align: left; background: #fafafa; padding: 10px;"></div>
+        </div>
+
+    </div>
+
+    <div id="payModal" class="hidden box" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; border: 3px solid var(--secondary);">
+        <h3 style="color: var(--secondary);">Pay ₹10 to Unlock</h3>
+        <div id="qrcode" style="display: flex; justify-content: center; margin: 15px;"></div>
+        <p>UPI ID: Q973860146@ybl</p>
+        <input type="text" id="utr_input" placeholder="Enter 12 Digit UTR">
+        <button class="btn" style="background: var(--success);" onclick="verifyPayment()">Verify & Print</button>
+        <button class="btn" style="background: #999;" onclick="closePay()">Cancel</button>
+    </div>
+
+    <script>
+        const botToken = "YOUR_BOT_TOKEN"; // Telegram Bot Token dalein
+        const chatId = "YOUR_CHAT_ID";     // Telegram Chat ID dalein
+
+        function handleLogin() {
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            if(mob === "9693101077" && pass === "Yadav@957272") {
+                document.getElementById('authPage').classList.add('hidden');
+                document.getElementById('dashPage').classList.remove('hidden');
+                document.getElementById('adminInbox').classList.remove('hidden');
+                loadMsgs();
+            } else { alert("Invalid Admin Login"); }
+        }
+
+        function openPension() {
+            // Auto Copy CSC ID
+            const el = document.createElement('textarea');
+            el.value = "ID: 477437620016 \nPass: Yadav@957272";
+            document.body.appendChild(el); el.select(); document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("CSC Details Copied! Now pasting on portal.");
+            window.open('https://elabharthi.bihar.gov.in/', '_blank');
+        }
+
+        function startPayment(service) {
+            document.getElementById('payModal').classList.remove('hidden');
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: `upi://pay?pa=Q973860146@ybl&pn=fixsclub&am=10&cu=INR&tn=${service}`,
+                width: 150, height: 150
+            });
+        }
+
+        function verifyPayment() {
+            const utr = document.getElementById('utr_input').value;
+            if(utr.length === 12) {
+                alert("Payment Verified! Opening Print...");
+                window.print();
+                closePay();
+            } else { alert("Enter 12 digit UTR!"); }
+        }
+
+        function closePay() { document.getElementById('payModal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
