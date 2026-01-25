@@ -3,205 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Portal</title>
+    <title>FixsClub | Aadhaar Advanced Portal</title>
     <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
+        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --success: #2e7d32; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
         /* Notice Bar */
         .notice-bar { position: fixed; top: 0; width: 100%; z-index: 10000; background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px; height: 35px; }
         
         /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; margin-top: 45px; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 13px; transition: 0.3s; }
-        .menu-item:hover { background: #34495e; }
-        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; margin-top: 45px; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 14px; }
+        .menu-item:hover, .active { background: var(--active-blue); }
 
         /* Main Content */
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; margin-top: 45px; }
-        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
-        .container { padding: 20px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .hidden { display: none !important; }
+        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { padding: 25px; }
+        .box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-        /* Form Grid */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        /* Aadhaar Grid Form */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .field-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
+        input:focus { border-color: var(--active-blue); outline: none; box-shadow: 0 0 5px rgba(26,35,126,0.2); }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: var(--active-blue); color: white; }
+        .btn-submit { background: var(--success); color: white; padding: 15px 40px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .btn-submit:hover { background: #1b5e20; transform: translateY(-2px); }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div class="notice-bar">
-        <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
-            बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। 30 दिन के बाद आपको ₹100 Fee देना पड़ेगा पोर्टल रिपेयरिंग के लिए।
+        <marquee behavior="scroll" direction="left" style="color: #d32f2f; font-weight: bold;">
+            Aadhaar Manual Service is Live! बिना CSC ID के प्रिंट करें। 30 दिन के बाद ₹100 पोर्टल मेंटेनेंस शुल्क अनिवार्य है।
         </marquee>
     </div>
 
     <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Create Account</p>
-        </div>
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success);">Register</h2>
-            <input type="text" id="r_name" placeholder="Full Name">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Back to Login</p>
+        <div class="box" style="width: 350px; text-align: center;">
+            <h2 style="color: var(--active-blue);">Admin Login</h2>
+            <input type="text" id="l_mob" placeholder="Mobile Number" style="margin-bottom: 15px;">
+            <input type="password" id="l_pass" placeholder="Password" style="margin-bottom: 15px;">
+            <button class="btn-submit" style="width: 100%; margin: 0;" onclick="doLogin()">Enter Portal</button>
         </div>
     </div>
 
     <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FixsClub Portal</div>
-        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
-        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
-        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER MANUAL</div>
-        <div class="menu-item" onclick="nav('pan')">💳 PAN ADVANCE</div>
-        <div class="menu-item" onclick="nav('history')">📂 SAVED HISTORY</div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 LOGOUT</div>
+        <div class="sidebar-header">FIXSCLUB ADMIN</div>
+        <div class="menu-item active" onclick="showView('aadhaar')">🆔 AADHAAR MANUAL</div>
+        <div class="menu-item" onclick="showView('history')">📂 SAVED RECORDS</div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ffab91; margin-top: auto;">🔒 LOGOUT</div>
     </div>
 
     <div id="mainArea" class="main-content hidden">
         <div class="top-nav">
-            <span id="welcomeMsg">Welcome</span>
-            <div id="timer" style="background:red; color:white; padding:5px 10px; border-radius:4px;">30:00</div>
+            <span id="adminName" style="font-weight: bold; color: var(--active-blue);">Welcome, Admin</span>
+            <div style="background: #e53935; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px;">Session: <span id="timer">30:00</span></div>
         </div>
 
         <div class="container">
-            <div id="voter-view" class="view hidden">
+            <div id="aadhaar-view" class="view">
                 <div class="box">
-                    <h3 style="color: #2980b9; border-bottom: 2px solid #ddd; padding-bottom: 10px;">🗳️ Voter Card Manual Entry</h3>
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 15px; color: #1a237e;">🆔 New Aadhaar Entry (Dual Language)</h3>
+                    
                     <div class="grid-3">
-                        <div><label>EPIC Number</label><input type="text" id="v_epic" placeholder="ABC1234567"></div>
-                        <div><label>Full Name (English)</label><input type="text" id="v_name_en"></div>
-                        <div><label>Naam (Hindi)</label><input type="text" id="v_name_hi"></div>
-                        
-                        <div><label>Father/Husband Name (English)</label><input type="text" id="v_fath_en"></div>
-                        <div><label>Pita/Pati Naam (Hindi)</label><input type="text" id="v_fath_hi"></div>
-                        <div><label>Relation Type</label>
-                            <select id="v_rel">
-                                <option>Father</option>
-                                <option>Husband</option>
-                                <option>Mother</option>
-                            </select>
+                        <div class="field-group">
+                            <label>Aadhar Number</label>
+                            <input type="text" id="a_no" placeholder="0000 0000 0000">
                         </div>
-
-                        <div><label>Age / DOB</label><input type="text" id="v_dob"></div>
-                        <div><label>Gender</label>
-                            <select id="v_gen">
-                                <option>MALE</option>
-                                <option>FEMALE</option>
-                                <option>OTHER</option>
-                            </select>
+                        <div class="field-group">
+                            <label>Full Name (English)</label>
+                            <input type="text" id="a_name_en" placeholder="Example: Rajesh Kumar">
                         </div>
-                        <div><label>Assembly (Vidhansabha)</label><input type="text" id="v_assembly"></div>
-                        
-                        <div><label>Part Number</label><input type="text" id="v_part"></div>
-                        <div><label>Upload Photo</label><input type="file" style="border:none;"></div>
+                        <div class="field-group">
+                            <label>पूरा नाम (हिंदी)</label>
+                            <input type="text" id="a_name_hi" placeholder="उदाहरण: राजेश कुमार">
+                        </div>
+                        <div class="field-group">
+                            <label>Father/Husband (English)</label>
+                            <input type="text" id="a_father_en" placeholder="S/O or W/O Name">
+                        </div>
+                        <div class="field-group">
+                            <label>पिता/पति का नाम (हिंदी)</label>
+                            <input type="text" id="a_father_hi" placeholder="पिता या पति का नाम">
+                        </div>
+                        <div class="field-group">
+                            <label>Date of Birth</label>
+                            <input type="text" id="a_dob" placeholder="DD/MM/YYYY">
+                        </div>
                     </div>
 
-                    <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div><label>Full Address (English)</label><textarea id="v_addr_en" rows="3"></textarea></div>
-                        <div><label>Pura Pata (Hindi)</label><textarea id="v_addr_hi" rows="3"></textarea></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">
+                        <div class="field-group">
+                            <label>Full Address (English)</label>
+                            <textarea id="a_addr_en" rows="4" placeholder="House No, Street, Village, Post, District, State, PIN"></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label>पूरा पता (हिंदी)</label>
+                            <textarea id="a_addr_hi" rows="4" placeholder="मकान नंबर, गली, ग्राम, पोस्ट, जिला, राज्य, पिन"></textarea>
+                        </div>
                     </div>
 
-                    <button class="btn" style="background: #2980b9;" onclick="saveData('Voter')">Save & Print Voter Card</button>
+                    <div class="grid-3">
+                        <div class="field-group">
+                            <label>Gender</label>
+                            <select id="a_gender">
+                                <option>MALE / पुरुष</option>
+                                <option>FEMALE / महिला</option>
+                                <option>TRANSGENDER</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Upload Photo</label>
+                            <input type="file" style="border: none; padding: 5px;">
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn-submit" onclick="processAadhaar()">Submit & Generate Print</button>
+                    </div>
                 </div>
             </div>
 
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd;">🆔 Aadhaar Manual Entry</h3>
-                    <div class="grid-3">
-                        <div><label>Aadhar No.</label><input type="text" id="a_no"></div>
-                        <div><label>Full Name (English)</label><input type="text" id="a_name"></div>
-                        <div><label>Naam (Hindi)</label><input type="text" id="a_name_hi"></div>
-                        <div><label>Father/Husband (English)</label><input type="text" id="a_father"></div>
-                        <div><label>Pita/Pati Ka Naam (Hindi)</label><input type="text" id="a_father_hi"></div>
-                        <div><label>Date of Birth</label><input type="text" id="a_dob"></div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div><label>Address (English)</label><textarea id="a_addr_en" rows="3"></textarea></div>
-                        <div><label>Pata (Hindi)</label><textarea id="a_addr_hi" rows="3"></textarea></div>
-                    </div>
-                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Save & Download</button>
-                </div>
-            </div>
-
-            <div id="dash-view" class="view"><div class="box"><h3>Namaste!</h3><p>Sabhi services active hain.</p></div></div>
             <div id="history-view" class="view hidden">
-                <div class="box"><h3>📂 Saved Records</h3><table><thead><tr><th>Type</th><th>Name</th><th>ID No.</th><th>Action</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+                <div class="box">
+                    <h3>📂 History / Saved Cards</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f8f9fa;">
+                            <tr><th style="padding: 12px; border-bottom: 2px solid #ddd;">Aadhaar No.</th><th style="padding: 12px; border-bottom: 2px solid #ddd;">Name</th><th style="padding: 12px; border-bottom: 2px solid #ddd;">Action</th></tr>
+                        </thead>
+                        <tbody id="historyList"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleAuth(t) {
-            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
-        }
-
-        function doRegister() {
-            const m = document.getElementById('r_mob').value;
-            localStorage.setItem("user_" + m, JSON.stringify({ name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value }));
-            alert("Account Registered!"); toggleAuth('login');
-        }
-
         function doLogin() {
             const m = document.getElementById('l_mob').value;
             const p = document.getElementById('l_pass').value;
-            const u = JSON.parse(localStorage.getItem("user_" + m));
-            if ((m === "9693101077" && p === "Yadav@957272") || (u && u.pass === p)) {
+            if (m === "9693101077" && p === "Yadav@957272") {
                 document.getElementById('authScreen').classList.add('hidden');
                 document.getElementById('sidebar').classList.remove('hidden');
                 document.getElementById('mainArea').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "Welcome, " + (u ? u.name : "Admin");
                 loadHistory();
-            } else { alert("Login Failed!"); }
+                startTimer();
+            } else { alert("Wrong ID or Password!"); }
         }
 
-        function nav(id) {
+        function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(id + '-view').classList.remove('hidden');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
         }
 
-        function saveData(type) {
-            let name = (type === 'Aadhaar') ? document.getElementById('a_name').value : document.getElementById('v_name_en').value;
-            let id_no = (type === 'Aadhaar') ? document.getElementById('a_no').value : document.getElementById('v_epic').value;
-            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            h.push({ type, name, id_no });
-            localStorage.setItem('fclub_history', JSON.stringify(h));
+        function processAadhaar() {
+            const data = {
+                no: document.getElementById('a_no').value,
+                name: document.getElementById('a_name_en').value
+            };
+            let history = JSON.parse(localStorage.getItem('aadhaar_db') || '[]');
+            history.push(data);
+            localStorage.setItem('aadhaar_db', JSON.stringify(history));
+            alert("Data Saved Successfully!");
             loadHistory();
             window.print();
         }
 
         function loadHistory() {
-            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            let history = JSON.parse(localStorage.getItem('aadhaar_db') || '[]');
             let html = '';
-            h.forEach((item, i) => {
-                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td><button onclick="deleteEntry(${i})" style="background:red;color:white;border:none;padding:5px;">Del</button></td></tr>`;
+            history.forEach((item, i) => {
+                html += `<tr><td style="padding:10px; border-bottom:1px solid #eee;">${item.no}</td><td style="padding:10px; border-bottom:1px solid #eee;">${item.name}</td><td style="padding:10px; border-bottom:1px solid #eee;"><button onclick="deleteRec(${i})" style="color:red; cursor:pointer; border:none; background:none;">Delete</button></td></tr>`;
             });
-            document.getElementById('historyBody').innerHTML = html;
+            document.getElementById('historyList').innerHTML = html;
         }
 
-        function deleteEntry(i) {
-            let h = JSON.parse(localStorage.getItem('fclub_history'));
+        function deleteRec(i) {
+            let h = JSON.parse(localStorage.getItem('aadhaar_db'));
             h.splice(i, 1);
-            localStorage.setItem('fclub_history', JSON.stringify(h));
+            localStorage.setItem('aadhaar_db', JSON.stringify(h));
             loadHistory();
+        }
+
+        let time = 1800;
+        function startTimer() {
+            setInterval(() => {
+                let m = Math.floor(time/60), s = time%60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                if(time > 0) time--; else location.reload();
+            }, 1000);
         }
     </script>
 </body>
