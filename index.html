@@ -1,212 +1,56 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | All-In-One Portal</title>
-    <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
-        
-        /* Sidebar layout from your screenshot */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
-        .menu-item:hover { background: #34495e; }
-        .active-nav { background: var(--active-blue) !important; border-left: 4px solid #fff; }
-        .new-badge { background: red; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; }
-
-        /* Main Area */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
-        .container { padding: 20px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .hidden { display: none !important; }
-
-        /* Forms */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: var(--active-blue); color: white; }
-    </style>
-</head>
-<body>
-
-    <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--active-blue);">Login to Portal</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Naya account? Create Account</p>
+<div id="voter-view" class="view hidden">
+    <div class="box">
+        <h3 style="color: #2980b9; border-bottom: 2px solid #2980b9; padding-bottom: 10px;">🗳️ Voter Card Manual Entry</h3>
+        <div class="grid-form">
+            <div><label>EPIC Number</label><input type="text" id="v_epic" placeholder="ABC1234567"></div>
+            <div><label>Full Name (English)</label><input type="text" id="v_name_en"></div>
+            <div><label>Naam (Hindi)</label><input type="text" id="v_name_hi"></div>
+            <div><label>Father/Husband Name</label><input type="text" id="v_rel_name"></div>
+            <div><label>Relation Type</label><select id="v_rel"><option>Father</option><option>Husband</option></select></div>
+            <div><label>Age / DOB</label><input type="text" id="v_age"></div>
+            <div><label>Gender</label><select id="v_gen"><option>MALE</option><option>FEMALE</option></select></div>
+            <div><label>Assembly (Vidhansabha)</label><input type="text" id="v_assembly"></div>
+            <div><label>Part Number</label><input type="text" id="v_part"></div>
         </div>
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: green;">Create Account</h2>
-            <input type="text" id="r_name" placeholder="Full Name">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="email" id="r_email" placeholder="Email ID">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: green; width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Wapas Login Karein</p>
-        </div>
+        <label>Full Address (Hindi/English)</label>
+        <textarea id="v_addr" rows="2"></textarea>
+        <button class="btn" style="background: #2980b9;" onclick="saveVoter()">Save & Print Voter</button>
     </div>
+</div>
 
-    <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FixsClub Print</div>
-        <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
-        <div class="menu-item" style="background:linear-gradient(to right, #ff0000, #00ff00); color:white;"><span>🔋 RECHARGE NOW</span></div>
-        <div class="menu-item" style="background:#f39c12;"><span>💳 NEW WALLET</span></div>
-        <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR</span> <span class="new-badge">New</span></div>
-        <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER</span></div>
-        <div class="menu-item"><span>🚗 DL PRINT</span></div>
-        <div class="menu-item"><span>💳 PAN ADVANCE</span></div>
-        <div class="menu-item"><span>📄 AADHAR TO RATION PDF</span></div>
-        <div class="menu-item"><span>📑 RATION CARD PDF</span></div>
-        <div class="menu-item"><span>🔄 RATION TO ADHAR</span></div>
-        <div class="menu-item"><span>🔍 FIND PAN</span></div>
-        <div class="menu-item"><span>🚜 VEHICLES SERVICE</span></div>
-        <div class="menu-item" onclick="nav('history')"><span>📂 SAVED HISTORY</span></div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: 20px;"><span>🔒 LOGOUT</span></div>
-    </div>
-
-    <div id="mainArea" class="main-content hidden">
-        <div class="top-nav">
-            <span id="welcomeMsg">Welcome</span>
-            <div id="timer" style="background:red; color:white; padding:5px 10px; border-radius:4px;">30:00</div>
+<div id="pan-view" class="view hidden">
+    <div class="box">
+        <h3 style="color: #00695c; border-bottom: 2px solid #00695c; padding-bottom: 10px;">💳 PAN Card Advance Entry</h3>
+        <div class="grid-form">
+            <div><label>PAN Number</label><input type="text" id="p_no" placeholder="ABCDE1234F"></div>
+            <div><label>Full Name</label><input type="text" id="p_name"></div>
+            <div><label>Father's Name</label><input type="text" id="p_father"></div>
+            <div><label>Date of Birth</label><input type="date" id="p_dob"></div>
+            <div><label>Upload Photo</label><input type="file"></div>
+            <div><label>Upload Signature</label><input type="file"></div>
         </div>
-
-        <div class="container">
-            <div id="dash-view" class="view">
-                <div class="box"><h3>📊 Dashboard Overview</h3><p>Sabhi services ab active hain.</p></div>
-            </div>
-
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd; padding-bottom: 10px;">🆔 Aadhaar Manual Entry</h3>
-                    <div class="grid-3">
-                        <input type="text" id="a_no" placeholder="Aadhar Card No.">
-                        <input type="text" id="a_name" placeholder="Full Name">
-                        <input type="text" id="a_father" placeholder="Father Name">
-                        <input type="text" id="a_house" placeholder="House No">
-                        <input type="text" id="a_post" placeholder="Post Office">
-                        <input type="text" id="a_pin" placeholder="Pin Code">
-                    </div>
-                    <textarea id="a_addr" placeholder="Full Address" rows="2"></textarea>
-                    <button class="btn" style="background: #2e7d32;" onclick="saveData()">Save & Print</button>
-                </div>
-            </div>
-
-            <div id="history-view" class="view hidden">
-                <div class="box">
-                    <h3>📂 Saved Records</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Aadhar No</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <button class="btn" style="background: #00695c;" onclick="savePan()">Save & Print PAN</button>
     </div>
+</div>
 
-    <script>
-        function toggleAuth(t) {
-            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
-        }
+<script>
+    // Voter aur PAN ke liye alag saving functions
+    function saveVoter() {
+        const entry = { type: 'Voter', name: document.getElementById('v_name_en').value, id_no: document.getElementById('v_epic').value };
+        saveToHistory(entry);
+    }
 
-        function doRegister() {
-            const m = document.getElementById('r_mob').value;
-            const userData = {
-                name: document.getElementById('r_name').value,
-                email: document.getElementById('r_email').value,
-                pass: document.getElementById('r_pass').value
-            };
-            localStorage.setItem("user_" + m, JSON.stringify(userData));
-            alert("Account Ban Gaya! Login Karein.");
-            toggleAuth('login');
-        }
+    function savePan() {
+        const entry = { type: 'PAN', name: document.getElementById('p_name').value, id_no: document.getElementById('p_no').value };
+        saveToHistory(entry);
+    }
 
-        function doLogin() {
-            const m = document.getElementById('l_mob').value;
-            const p = document.getElementById('l_pass').value;
-            const user = JSON.parse(localStorage.getItem("user_" + m));
-
-            if ((m === "9693101077" && p === "Yadav@957272") || (user && user.pass === p)) {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('mainArea').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "Welcome, " + (user ? user.name : "Admin");
-                loadHistory();
-                startTimer();
-            } else { alert("Login Failed!"); }
-        }
-
-        function nav(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id + '-view').classList.remove('hidden');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
-        }
-
-        function saveData() {
-            const data = {
-                no: document.getElementById('a_no').value,
-                name: document.getElementById('a_name').value,
-                father: document.getElementById('a_father').value
-            };
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            history.push(data);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            loadHistory();
-            window.print();
-        }
-
-        function loadHistory() {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            let html = '';
-            history.forEach((item, index) => {
-                html += `<tr><td>${item.name}</td><td>${item.no}</td><td>
-                    <button onclick="editRecord(${index})" style="background:orange; border:none; padding:5px; border-radius:3px;">Edit</button>
-                    <button onclick="deleteRecord(${index})" style="background:red; color:white; border:none; padding:5px; border-radius:3px;">Del</button>
-                </td></tr>`;
-            });
-            document.getElementById('historyBody').innerHTML = html;
-        }
-
-        function editRecord(index) {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            let item = history[index];
-            document.getElementById('a_no').value = item.no;
-            document.getElementById('a_name').value = item.name;
-            document.getElementById('a_father').value = item.father;
-            nav('aadhaar');
-            history.splice(index, 1);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            loadHistory();
-        }
-
-        function deleteRecord(index) {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            history.splice(index, 1);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            loadHistory();
-        }
-
-        let timeLeft = 30 * 60;
-        function startTimer() {
-            setInterval(() => {
-                if(timeLeft <= 0) location.reload();
-                let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-                timeLeft--;
-            }, 1000);
-        }
-    </script>
-</body>
-</html>
+    function saveToHistory(entry) {
+        let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+        history.push(entry);
+        localStorage.setItem('fclub_history', JSON.stringify(history));
+        alert(entry.type + " Data Saved!");
+        loadHistory();
+        window.print();
+    }
+</script>
