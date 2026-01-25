@@ -3,131 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fixsclubPrint | Multi-Service Portal</title>
+    <title>fixsclubPrint | User Management</title>
     <style>
-        :root { --primary: #1a237e; --sidebar: #2c3e50; --active: #34495e; --text: #ecf0f1; }
+        :root { --primary: #1a237e; --sidebar: #2c3e50; --active: #34495e; --success: #2e7d32; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 260px; background: var(--sidebar); color: var(--text); display: flex; flex-direction: column; z-index: 100; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 20px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #34495e; transition: 0.3s; font-size: 14px; display: flex; align-items: center; }
-        .menu-item:hover { background: var(--active); padding-left: 30px; }
+        /* Sidebar & Layout Styles */
+        .sidebar { width: 260px; background: var(--sidebar); color: white; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 15px 25px; cursor: pointer; border-bottom: 1px solid #34495e; transition: 0.3s; font-size: 13px; text-transform: uppercase; }
+        .menu-item:hover { background: var(--active); padding-left: 35px; }
         .active-nav { background: var(--primary); border-left: 5px solid #fff; }
 
-        /* Main Content */
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .container { padding: 25px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        #timer { background: #e74c3c; color: #fff; padding: 5px 15px; border-radius: 4px; font-weight: bold; }
+        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); margin: 20px; }
         .hidden { display: none !important; }
 
-        /* Aadhaar Form Grid (As per your 52002.jpg) */
-        .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
-        .form-group { margin-bottom: 10px; }
-        label { display: block; font-size: 13px; color: #7f8c8d; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #dcdde1; border-radius: 4px; box-sizing: border-box; }
-        .full-row { grid-column: span 3; }
-        .submit-btn { background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 25px; font-size: 16px; cursor: pointer; margin-top: 20px; font-weight: bold; width: 200px; }
+        /* Auth Screen Styles */
+        .auth-overlay { position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn { padding: 12px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
         
-        /* Login Eye */
-        .pass-box { position: relative; }
-        .eye { position: absolute; right: 10px; top: 10px; cursor: pointer; }
+        /* History Table */
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: var(--primary); color: white; }
     </style>
 </head>
 <body>
 
-    <div id="loginScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div class="box" style="width: 350px; text-align: center;">
-            <h2 style="color: var(--primary);">Login to Portal</h2>
-            <input type="text" id="adminMob" placeholder="9693101077">
-            <div class="pass-box">
-                <input type="password" id="adminPass" placeholder="Password">
-                <span class="eye" onclick="togglePass()">👁️</span>
+    <div id="authScreen" class="auth-overlay">
+        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Login</h2>
+            <input type="text" id="l_mob" placeholder="Mobile Number (e.g. 9693101077)">
+            <div style="position:relative;">
+                <input type="password" id="l_pass" placeholder="Password">
+                <span style="position:absolute; right:10px; top:18px; cursor:pointer;" onclick="toggleP('l_pass')">👁️</span>
             </div>
-            <button class="submit-btn" style="background: var(--primary); width: 100%; border-radius: 5px;" onclick="handleLogin()">Login</button>
+            <button class="btn" style="background: var(--primary);" onclick="doLogin()">LOGIN</button>
+            <p style="font-size: 14px; margin-top: 20px;">Naya account banana hai? <br><span style="color:blue; cursor:pointer; font-weight:bold;" onclick="switchAuth('reg')">Yahan Register Karein</span></p>
+        </div>
+
+        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
+            <h2 style="color: var(--success); margin-bottom: 20px;">Create Account</h2>
+            <input type="text" id="r_name" placeholder="Full Name (Pura Naam)">
+            <input type="text" id="r_mob" placeholder="Mobile Number">
+            <input type="email" id="r_email" placeholder="Email ID">
+            <input type="password" id="r_pass" placeholder="Set Password">
+            <button class="btn" style="background: var(--success);" onclick="doRegister()">REGISTER & CREATE</button>
+            <p style="font-size: 14px; margin-top: 20px;">Pehle se account hai? <br><span style="color:blue; cursor:pointer; font-weight:bold;" onclick="switchAuth('login')">Wapas Login Karein</span></p>
         </div>
     </div>
 
     <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">fixsclubPrint</div>
-        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DashBoard</div>
-        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR</div>
-        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER</div>
-        <div class="menu-item" onclick="nav('dl')">🚗 DL PRINT</div>
-        <div class="menu-item" onclick="nav('pan')">💳 PAN ADVANCE</div>
-        <div class="menu-item" onclick="nav('pension')">👵 PENSION KYC</div>
-        <div class="menu-item" onclick="location.reload()" style="color: #e74c3c; margin-top: auto;">🔒 LOGOUT</div>
+        <div class="sidebar-header">FixsClub Print</div>
+        <div class="menu-item active-nav" onclick="nav('dash')">🏠 Dashboard</div>
+        <div class="menu-item" onclick="nav('aadhaar')">🆔 Aadhaar Entry</div>
+        <div class="menu-item" onclick="nav('history')">📂 Saved History</div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 Logout</div>
     </div>
 
-    <div id="mainApp" class="main-content hidden">
+    <div id="mainArea" class="main-content hidden">
         <div class="top-nav">
-            <strong>Multi-Service Dashboard</strong>
-            <div id="timer">30:00</div>
+            <strong id="userWelcome">Welcome, User</strong>
+            <div id="timer" style="background:#e74c3c; color:white; padding:5px 12px; border-radius:4px; font-weight:bold;">30:00</div>
         </div>
 
-        <div class="container">
+        <div class="view-area">
             <div id="dash-view" class="view">
-                <div class="box">
-                    <h3>Welcome to fixsclubPrint</h3>
-                    <p>Select a service from the sidebar to start working.</p>
-                </div>
+                <div class="box"><h3>Namaste!</h3><p>Aapka account active hai. Side menu se kaam shuru karein.</p></div>
             </div>
 
             <div id="aadhaar-view" class="view hidden">
                 <div class="box">
-                    <h3 style="color: #2980b9; border-bottom: 1px solid #eee; padding-bottom: 10px;">Aadhaar Card Entry</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Aadhar Card No.</label><input type="text" placeholder="XXXX XXXX XXXX"></div>
-                        <div class="form-group"><label>Name</label><input type="text" placeholder="Example: Raju Kumar"></div>
-                        <div class="form-group"><label>Father Name</label><input type="text" placeholder="Example: Shyam Singh"></div>
-                        <div class="form-group"><label>House No</label><input type="text"></div>
-                        <div class="form-group"><label>Gali, Locality</label><input type="text"></div>
-                        <div class="form-group"><label>Post Office</label><input type="text"></div>
-                        <div class="form-group"><label>State</label><input type="text" value="Bihar"></div>
-                        <div class="form-group"><label>City</label><input type="text"></div>
-                        <div class="form-group"><label>Pin code</label><input type="text"></div>
-                        <div class="form-group"><label>Date Of Birth</label><input type="date"></div>
-                        <div class="form-group"><label>Select Gender</label><select><option>MALE</option><option>FEMALE</option></select></div>
-                        <div class="form-group"><label>Select Image</label><input type="file"></div>
-                        <div class="form-group full-row"><label>Address</label><textarea rows="2"></textarea></div>
-                    </div>
-                    <button class="submit-btn" onclick="window.print()">Submit & Print (Free)</button>
+                    <h3>🆔 Aadhaar Entry Form</h3>
+                    <input type="text" id="a_no" placeholder="Aadhar Card Number">
+                    <input type="text" id="a_name" placeholder="Name on Aadhaar">
+                    <button class="btn" style="background: var(--success); width: 200px;" onclick="saveData()">Save & Print</button>
                 </div>
             </div>
 
-            <div id="voter-view" class="view hidden">
+            <div id="history-view" class="view hidden">
                 <div class="box">
-                    <h3>Voter Advance Manual</h3>
-                    <label>Epic No.</label><input type="text" style="max-width: 400px; display: block; margin-bottom: 15px;">
-                    <label>Upload Photo</label><input type="file" style="max-width: 400px; display: block;">
-                    <button class="submit-btn" style="background: #34495e;" onclick="window.print()">Submit</button>
+                    <h3>📂 Saved Data</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Name</th><th>Aadhar No</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Password Show/Hide
-        function togglePass() {
-            let p = document.getElementById('adminPass');
-            p.type = p.type === "password" ? "text" : "password";
+        // Switch between Login and Register
+        function switchAuth(type) {
+            document.getElementById('loginBox').classList.toggle('hidden', type === 'reg');
+            document.getElementById('regBox').classList.toggle('hidden', type === 'login');
+        }
+
+        // Show/Hide Password
+        function toggleP(id) {
+            const x = document.getElementById(id);
+            x.type = x.type === "password" ? "text" : "password";
+        }
+
+        // Register User Logic
+        function doRegister() {
+            const name = document.getElementById('r_name').value.trim();
+            const mob = document.getElementById('r_mob').value.trim();
+            const email = document.getElementById('r_email').value.trim();
+            const pass = document.getElementById('r_pass').value;
+
+            if(!name || !mob || !email || !pass) return alert("Kripya saari jankari bharein!");
+
+            // Save user data in local storage
+            const userData = { name, mob, email, pass };
+            localStorage.setItem("user_" + mob, JSON.stringify(userData));
+            
+            alert("Account ban gaya! Ab mobile aur password se login karein.");
+            switchAuth('login');
         }
 
         // Login Logic
-        function handleLogin() {
-            let m = document.getElementById('adminMob').value.trim();
-            let p = document.getElementById('adminPass').value;
-            if(m === "9693101077" && p === "Yadav@957272") {
-                document.getElementById('loginScreen').classList.add('hidden');
+        function doLogin() {
+            const mob = document.getElementById('l_mob').value.trim();
+            const pass = document.getElementById('l_pass').value;
+
+            // Check for Master Admin or Registered User
+            const storedUser = JSON.parse(localStorage.getItem("user_" + mob));
+
+            if ((mob === "9693101077" && pass === "Yadav@957272") || (storedUser && storedUser.pass === pass)) {
+                document.getElementById('authScreen').classList.add('hidden');
                 document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-                startTimer();
-            } else { alert("Invalid Admin Login"); }
+                document.getElementById('mainArea').classList.remove('hidden');
+                document.getElementById('userWelcome').innerText = "Welcome, " + (storedUser ? storedUser.name : "Admin");
+                startSession();
+                loadHistory();
+            } else {
+                alert("Invalid Login! Sahi mobile number aur password daalein.");
+            }
         }
 
-        // Navigation
+        // Sidebar Navigation
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(id + '-view').classList.remove('hidden');
@@ -135,15 +156,36 @@
             event.currentTarget.classList.add('active-nav');
         }
 
-        // Timer Logic
-        let timeLeft = 30 * 60;
-        function startTimer() {
+        // Data Save & History logic (Same as before)
+        function saveData() {
+            let data = {
+                no: document.getElementById('a_no').value,
+                name: document.getElementById('a_name').value
+            };
+            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            history.push(data);
+            localStorage.setItem('fclub_history', JSON.stringify(history));
+            loadHistory();
+            window.print();
+        }
+
+        function loadHistory() {
+            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            let html = '';
+            history.forEach((item, index) => {
+                html += `<tr><td>${item.name}</td><td>${item.no}</td><td><button onclick="deleteData(${index})">🗑️</button></td></tr>`;
+            });
+            document.getElementById('historyBody').innerHTML = html;
+        }
+
+        // Timer Session
+        let time = 30 * 60;
+        function startSession() {
             setInterval(() => {
-                if(timeLeft <= 0) location.reload();
-                let m = Math.floor(timeLeft / 60);
-                let s = timeLeft % 60;
+                if(time <= 0) location.reload();
+                let m = Math.floor(time/60), s = time%60;
                 document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-                timeLeft--;
+                time--;
             }, 1000);
         }
     </script>
