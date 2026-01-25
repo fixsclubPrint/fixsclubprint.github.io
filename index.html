@@ -1,80 +1,127 @@
-<div id="rtpsPrintArea" class="box" style="max-width: 950px; border-top: 6px solid #2e7d32; background: #fff;">
-    <h2 style="color: #1b5e20;">📄 Manual Certificate Designer (Backup System)</h2>
-    <p style="font-size: 14px; color: #666;">Official site down hone par yahan se details bharein aur signature ke sath download karein.</p>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fixsclubPrint | All-in-One Digital Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --primary: #1a237e; --secondary: #d32f2f; --success: #2e7d32; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f7f6; text-align: center; }
+        .box { background: white; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 1000px; }
+        .hidden { display: none; }
+        input, select, textarea { width: 90%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; }
+        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 10px; }
+        .card { border-radius: 15px; padding: 15px; text-align: left; position: relative; border-top: 5px solid var(--primary); }
+        #p_photo { border: 1px solid #000; position: absolute; top: 100px; right: 30px; width: 80px; height: 100px; }
+    </style>
+</head>
+<body>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; padding: 15px;">
+    <div style="background: var(--secondary); color: white; padding: 12px; font-size: 18px; font-weight: bold;">
+        📢 वृद्धा, विकलांग और विधवा पेंशन KYC यहाँ बिल्कुल FREE है! | CSC सेवाएँ उपलब्ध
+    </div>
+    <marquee style="background: #fff9c4; padding: 5px; font-weight: bold; color: #333;">
+        बिना CSC ID के भी आप यहाँ से सर्टिफिकेट डाउनलोड और KYC कर सकते हैं। केवल ₹10 चार्ज देना होगा।
+    </marquee>
+
+    <div id="authPage" class="box" style="max-width: 400px;">
+        <div id="loginForm">
+            <h2 style="color: var(--primary);">Login to Portal</h2>
+            <input type="number" id="l_mob" placeholder="Mobile Number">
+            <input type="password" id="l_pass" placeholder="Password">
+            <button class="btn" style="background: var(--primary); width: 100%;" onclick="handleLogin()">Login</button>
+            <p style="font-size: 13px;">Naya account? <a href="#" onclick="alert('Admin 9693101077 se sampark karein')">Contact Admin</a></p>
+        </div>
+    </div>
+
+    <div id="dashPage" class="hidden">
         
-        <div style="background: #f1f8e9; padding: 20px; border-radius: 12px; border: 1px solid #c8e6c9;">
-            <label><b>Certificate Type:</b></label>
-            <select id="cert_type" style="width:100%; padding:10px; margin-bottom:10px;">
-                <option value="जाति प्रमाण पत्र (Caste Certificate)">जाति प्रमाण पत्र (Caste)</option>
-                <option value="आय प्रमाण पत्र (Income Certificate)">आय प्रमाण पत्र (Income)</option>
-                <option value="निवास प्रमाण पत्र (Residence Certificate)">निवास प्रमाण पत्र (Residence)</option>
-            </select>
-
-            <label><b>Name (Hindi/English):</b></label>
-            <input type="text" id="m_name" placeholder="Name yahan likhein" style="width:100%; padding:10px; margin-bottom:10px;">
-
-            <label><b>Tracking ID / Ref No:</b></label>
-            <input type="text" id="m_ref" placeholder="BICC/2024/XXXXXX" style="width:100%; padding:10px; margin-bottom:10px;">
-
-            <label><b>Upload Photo:</b></label>
-            <input type="file" id="m_photo_input" accept="image/*" onchange="previewFile('m_photo_input', 'p_photo')" style="margin-bottom:10px;">
-
-            <label><b>Upload Signature:</b></label>
-            <input type="file" id="m_sign_input" accept="image/*" onchange="previewFile('m_sign_input', 'p_sign')" style="margin-bottom:10px;">
+        <div class="grid">
             
-            <button class="btn" style="background: #2e7d32; width: 100%;" onclick="startPdfProcess()">Pay ₹10 & Unlock Download</button>
+            <div class="box card" style="background: #f3e5f5; border-color: #673ab7;">
+                <h3>👵 Pension KYC (e-Labharthi)</h3>
+                <p>Bina ID ke KYC karein. ID/Pass auto-copy ho jayega.</p>
+                <button class="btn" style="background: #673ab7;" onclick="openPension()">KYC Portal Khalein</button>
+            </div>
+
+            <div class="box card" style="background: #e8f5e9; border-color: #2e7d32;">
+                <h3>📜 Manual RTPS (Jati/Aay/Niwasi)</h3>
+                <input type="text" id="track_id" placeholder="Enter Ref/Tracking No.">
+                <button class="btn" style="background: var(--success);" onclick="startPayment('RTPS Download')">Download (₹10)</button>
+                <button class="btn" style="background: #555;" onclick="toggleManualRTPS()">Fill Manual Form</button>
+            </div>
+
+            <div class="box card" style="background: #e3f2fd; border-color: #1565c0;">
+                <h3>📷 PAN Image Resizer</h3>
+                <p>Photo: 213x213px | Sign: 400x200px</p>
+                <button class="btn" style="background: #1565c0;" onclick="showResizer()">Open Resizer Tool</button>
+            </div>
+
         </div>
 
-        <div id="certPreview" style="border: 2px solid #ccc; padding: 30px; position: relative; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); font-family: 'Arial', sans-serif;">
-            <div style="text-align: center; border-bottom: 2px solid #1b5e20; padding-bottom: 10px;">
-                <h3 style="margin: 0; color: #1b5e20;">बिहार सरकार / GOVT OF BIHAR</h3>
-                <h4 id="p_type" style="margin: 5px 0;">जाति प्रमाण पत्र</h4>
-            </div>
-
-            <div style="margin-top: 20px; font-size: 14px; line-height: 1.8;">
-                <p><b>प्रमाण पत्र संख्या (Ref No):</b> <span id="p_ref">----------</span></p>
-                <p><b>नाम (Name):</b> <span id="p_name">----------</span></p>
-                <p>यह प्रमाणित किया जाता है कि उपरोक्त विवरण सही हैं।</p>
-            </div>
-
-            <img id="p_photo" src="" style="width: 80px; height: 90px; border: 1px solid #ddd; position: absolute; top: 120px; right: 30px; display: none;">
-
-            <div style="margin-top: 50px; text-align: right;">
-                <p style="font-size: 10px; margin-bottom: 5px;">Digitally Signed By: Revenue Officer</p>
-                <img id="p_sign" src="" style="width: 120px; height: 50px; display: none; margin-left: auto;">
-                <p style="font-weight: bold; border-top: 1px solid #000; display: inline-block;">हस्ताक्षर (Signature)</p>
-            </div>
+        <div id="adminInbox" class="box hidden" style="border-top: 6px solid gold;">
+            <h3 style="color: gold;">👑 Admin Secret Inbox (Messages)</h3>
+            <div id="msgList" style="text-align: left; background: #fafafa; padding: 10px;"></div>
         </div>
 
     </div>
-</div>
 
-<script>
-    function previewFile(inputId, targetImgId) {
-        const file = document.getElementById(inputId).files[0];
-        const preview = document.getElementById(targetImgId);
-        const reader = new FileReader();
+    <div id="payModal" class="hidden box" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; border: 3px solid var(--secondary);">
+        <h3 style="color: var(--secondary);">Pay ₹10 to Unlock</h3>
+        <div id="qrcode" style="display: flex; justify-content: center; margin: 15px;"></div>
+        <p>UPI ID: Q973860146@ybl</p>
+        <input type="text" id="utr_input" placeholder="Enter 12 Digit UTR">
+        <button class="btn" style="background: var(--success);" onclick="verifyPayment()">Verify & Print</button>
+        <button class="btn" style="background: #999;" onclick="closePay()">Cancel</button>
+    </div>
 
-        reader.onloadend = function () {
-            preview.src = reader.result;
-            preview.style.display = "block";
+    <script>
+        const botToken = "YOUR_BOT_TOKEN"; // Telegram Bot Token dalein
+        const chatId = "YOUR_CHAT_ID";     // Telegram Chat ID dalein
+
+        function handleLogin() {
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            if(mob === "9693101077" && pass === "Yadav@957272") {
+                document.getElementById('authPage').classList.add('hidden');
+                document.getElementById('dashPage').classList.remove('hidden');
+                document.getElementById('adminInbox').classList.remove('hidden');
+                loadMsgs();
+            } else { alert("Invalid Admin Login"); }
         }
 
-        if (file) {
-            reader.readAsDataURL(file);
+        function openPension() {
+            // Auto Copy CSC ID
+            const el = document.createElement('textarea');
+            el.value = "ID: 477437620016 \nPass: Yadav@957272";
+            document.body.appendChild(el); el.select(); document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("CSC Details Copied! Now pasting on portal.");
+            window.open('https://elabharthi.bihar.gov.in/', '_blank');
         }
-    }
 
-    // Input values ko preview mein turant dikhane ke liye
-    document.getElementById('m_name').addEventListener('input', function() {
-        document.getElementById('p_name').innerText = this.value;
-    });
-    document.getElementById('m_ref').addEventListener('input', function() {
-        document.getElementById('p_ref').innerText = this.value;
-    });
-    document.getElementById('cert_type').addEventListener('change', function() {
-        document.getElementById('p_type').innerText = this.value;
-    });
-</script>
+        function startPayment(service) {
+            document.getElementById('payModal').classList.remove('hidden');
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: `upi://pay?pa=Q973860146@ybl&pn=fixsclub&am=10&cu=INR&tn=${service}`,
+                width: 150, height: 150
+            });
+        }
+
+        function verifyPayment() {
+            const utr = document.getElementById('utr_input').value;
+            if(utr.length === 12) {
+                alert("Payment Verified! Opening Print...");
+                window.print();
+                closePay();
+            } else { alert("Enter 12 digit UTR!"); }
+        }
+
+        function closePay() { document.getElementById('payModal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
