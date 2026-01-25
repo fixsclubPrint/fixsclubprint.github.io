@@ -1,66 +1,6 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Portal</title>
-    <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
-        
-        /* Notice Bar */
-        .notice-bar { position: fixed; top: 0; width: 100%; z-index: 10000; background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px; height: 30px; }
-        
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; margin-top: 40px; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 13px; transition: 0.3s; }
-        .menu-item:hover { background: #34495e; }
-        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
-
-        /* Content Area */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; margin-top: 40px; }
-        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
-        .container { padding: 20px; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .hidden { display: none !important; }
-
-        /* Form Grid */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: var(--active-blue); color: white; }
-    </style>
-</head>
-<body>
-
-    <div class="notice-bar">
-        <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
-            बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। 30 दिन के बाद आपको ₹100 Fee देना पड़ेगा।
-        </marquee>
-    <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Create Account</p>
-        </div>
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success);">Register</h2>
-            <input type="text" id="r_name" placeholder="Full Name">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Back to Login</p>
-        </div>
-    </div>
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FixsClub Print | Official Portal</title>
