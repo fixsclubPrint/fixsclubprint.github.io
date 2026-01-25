@@ -2,35 +2,122 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>INDI PRINT PORTAL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aadhaar Print Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{margin:0;font-family:Segoe UI;background:#f1f3f6;display:flex;height:100vh}
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f2f2f2;
+}
+
+/* ===== LAYOUT ===== */
 .sidebar{
-width:260px;background:#1e2a38;color:#fff;overflow:auto
+    width:230px;
+    background:#1f2d3d;
+    color:#fff;
+    position:fixed;
+    top:0;bottom:0;left:0;
 }
-.sidebar h2{padding:15px;margin:0;background:#0f1a24;font-size:16px}
-.menu{padding:10px 15px;cursor:pointer;border-bottom:1px solid #2f3f50;font-size:14px}
-.menu:hover{background:#2f3f50}
-.active{background:#3f51b5}
+.sidebar h2{
+    padding:15px;
+    margin:0;
+    background:#16222e;
+    font-size:16px;
+}
+.menu{
+    padding:12px 15px;
+    border-bottom:1px solid #2e3e50;
+    cursor:pointer;
+}
+.menu:hover,.active{
+    background:#3f51b5;
+}
 
-.main{flex:1;overflow:auto}
-.top{background:#fff;padding:15px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,.1)}
-.container{padding:20px}
+.main{
+    margin-left:230px;
+    padding:20px;
+}
 
-.box{background:#fff;padding:20px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.hidden{display:none}
-
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+/* ===== FORM ===== */
+.box{
+    background:#fff;
+    padding:20px;
+    border-radius:6px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+label{
+    font-size:12px;
+    font-weight:bold;
+}
 input,select,textarea{
-width:100%;padding:8px;font-size:13px;border:1px solid #ccc;border-radius:4px
+    width:100%;
+    padding:8px;
+    font-size:13px;
+    margin-top:5px;
 }
-label{font-size:12px;font-weight:bold;color:#555}
 
 .btn{
-margin-top:15px;padding:10px 25px;border:none;
-background:#4caf50;color:#fff;font-weight:bold;border-radius:4px;cursor:pointer
+    margin-top:20px;
+    padding:10px 30px;
+    background:#4caf50;
+    color:#fff;
+    border:none;
+    font-weight:bold;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+/* ===== PRINT CARD ===== */
+#printArea{
+    display:none;
+}
+.card{
+    width:350px;
+    border:1px solid #000;
+    padding:10px;
+}
+.card h3{
+    margin:0;
+    text-align:center;
+    font-size:14px;
+}
+.card-body{
+    display:flex;
+    margin-top:10px;
+}
+.photo{
+    width:90px;
+    height:110px;
+    border:1px solid #000;
+}
+.photo img{
+    width:100%;
+    height:100%;
+}
+.details{
+    font-size:12px;
+    margin-left:10px;
+}
+
+/* ===== PRINT RULE ===== */
+@media print{
+    body *{
+        visibility:hidden;
+    }
+    #printArea, #printArea *{
+        visibility:visible;
+    }
+    #printArea{
+        position:absolute;
+        left:0;
+        top:0;
+    }
 }
 </style>
 </head>
@@ -39,112 +126,102 @@ background:#4caf50;color:#fff;font-weight:bold;border-radius:4px;cursor:pointer
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h2>INDI PRINT PORTAL</h2>
-
-<div class="menu active" onclick="openView('aadhaar',this)">🆔 Aadhaar Manual</div>
-<div class="menu" onclick="openView('voter',this)">🗳️ Voter ID Manual</div>
-<div class="menu" onclick="openView('pan',this)">💳 PAN Card Print</div>
-
+<h2>PRINT PORTAL</h2>
+<div class="menu active">🆔 Aadhaar Print</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
-<div class="top">Welcome : Operator Panel</div>
+<div class="box">
+<h3>Aadhaar Manual Entry</h3>
 
-<div class="container">
-
-<!-- AADHAAR -->
-<div id="aadhaar" class="box">
-<h3>🆔 Aadhaar Card Manual Entry</h3>
-
-<div class="grid-3">
-<div><label>Aadhaar No</label><input></div>
-<div><label>Name</label><input></div>
-<div><label>Father Name</label><input></div>
-
-<div><label>House No</label><input></div>
-<div><label>Gali / Locality</label><input></div>
-<div><label>Post Office</label><input></div>
-
-<div><label>State</label><input></div>
-<div><label>City</label><input></div>
-<div><label>Pincode</label><input></div>
-
-<div><label>DOB</label><input></div>
-<div><label>Gender</label>
-<select><option>Male</option><option>Female</option></select>
+<div class="grid">
+<div>
+<label>Aadhaar No</label>
+<input id="a_no">
+</div>
+<div>
+<label>Name</label>
+<input id="a_name">
+</div>
+<div>
+<label>Father Name</label>
+<input id="a_father">
 </div>
 
 <div>
-<label>Select Photo</label>
-<input type="file" accept="image/*">
+<label>DOB</label>
+<input id="a_dob">
 </div>
-</div>
-
-<textarea placeholder="Full Address"></textarea>
-
-<button class="btn">Save & Print Aadhaar</button>
-</div>
-
-<!-- VOTER -->
-<div id="voter" class="box hidden">
-<h3>🗳️ Voter ID Manual Entry</h3>
-
-<div class="grid-3">
-<div><label>EPIC No</label><input></div>
-<div><label>Name</label><input></div>
-<div><label>Father / Husband</label><input></div>
-
-<div><label>Age / DOB</label><input></div>
-<div><label>Gender</label>
-<select><option>Male</option><option>Female</option></select>
-</div>
-<div><label>Assembly</label><input></div>
-
-<div><label>Part No</label><input></div>
 <div>
-<label>Photo</label>
-<input type="file" accept="image/*">
-</div>
-</div>
-
-<textarea placeholder="Address"></textarea>
-
-<button class="btn">Save & Print Voter ID</button>
-</div>
-
-<!-- PAN -->
-<div id="pan" class="box hidden">
-<h3>💳 PAN Card Print</h3>
-
-<div class="grid-3">
-<div><label>PAN No</label><input></div>
-<div><label>Name</label><input></div>
-<div><label>Father Name</label><input></div>
-
-<div><label>DOB</label><input></div>
-<div><label>Category</label>
-<select><option>Individual</option></select>
+<label>Gender</label>
+<select id="a_gender">
+<option>Male</option>
+<option>Female</option>
+</select>
 </div>
 
 <div>
 <label>Photo</label>
-<input type="file" accept="image/*">
+<input type="file" id="a_photo" accept="image/*">
 </div>
 </div>
 
-<button class="btn">Save & Print PAN</button>
+<label>Address</label>
+<textarea id="a_addr"></textarea>
+
+<button type="button" class="btn" onclick="preparePrint()">Save & Print Aadhaar</button>
+</div>
 </div>
 
+<!-- ===== PRINT AREA ===== -->
+<div id="printArea">
+<div class="card">
+<h3>Government of India</h3>
+
+<div class="card-body">
+<div class="photo">
+<img id="p_photo">
+</div>
+<div class="details">
+<b>Name:</b> <span id="p_name"></span><br>
+<b>Father:</b> <span id="p_father"></span><br>
+<b>DOB:</b> <span id="p_dob"></span><br>
+<b>Gender:</b> <span id="p_gender"></span><br>
+<b>Aadhaar:</b> <span id="p_no"></span>
+</div>
+</div>
+
+<p style="font-size:11px;margin-top:8px">
+<b>Address:</b> <span id="p_addr"></span>
+</p>
 </div>
 </div>
 
 <script>
-function openView(id,el){
-document.querySelectorAll('.box').forEach(v=>v.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-document.querySelectorAll('.menu').forEach(m=>m.classList.remove('active'));
-el.classList.add('active');
+function preparePrint(){
+
+    // Text fill
+    p_name.innerText = a_name.value;
+    p_father.innerText = a_father.value;
+    p_dob.innerText = a_dob.value;
+    p_gender.innerText = a_gender.value;
+    p_no.innerText = a_no.value;
+    p_addr.innerText = a_addr.value;
+
+    // Photo
+    const file = a_photo.files[0];
+    if(!file){
+        alert("Photo select karo");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(){
+        p_photo.src = reader.result;
+        window.print();
+    };
+    reader.readAsDataURL(file);
 }
 </script>
 
