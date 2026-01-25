@@ -1,185 +1,204 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Official Aadhaar Letter Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Arial', sans-serif; background: #555; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Input Form Style */
-        .no-print { background: #fff; padding: 25px; border-radius: 12px; margin-bottom: 30px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; }
-        .no-print h2 { color: #d32f2f; text-align: center; margin-top: 0; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { background: #138808; color: white; border: none; padding: 15px; width: 100%; cursor: pointer; font-weight: bold; font-size: 18px; border-radius: 6px; margin-top: 10px; }
+<meta charset="UTF-8">
+<title>Aadhaar Card Print</title>
 
-        /* A4 Page Styling */
-        .a4-page {
-            width: 210mm; height: 297mm; background: white; 
-            padding: 12mm; box-sizing: border-box; display: flex; flex-direction: column;
-            box-shadow: 0 0 20px rgba(0,0,0,0.4); position: relative; overflow: hidden;
-        }
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    padding:20px;
+}
 
-        /* Top Header */
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .emblem { height: 65px; }
-        .aadhaar-logo { height: 60px; }
-        .gov-text { text-align: center; flex-grow: 1; font-weight: bold; font-size: 18px; line-height: 1.2; }
+.form-box{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    max-width:900px;
+    margin:auto;
+}
 
-        .banner-orange { background: #ff9933; color: white; text-align: center; padding: 6px; font-weight: bold; font-size: 18px; border-top: 1px solid #000; }
-        .banner-green { background: #138808; color: white; text-align: center; padding: 6px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #000; }
+.form-box h2{
+    text-align:center;
+    margin-bottom:20px;
+}
 
-        .letter-body { display: flex; margin-top: 30px; min-height: 450px; border-bottom: 1px solid #eee; }
-        .address-box { flex: 1.5; padding-right: 30px; font-size: 15px; line-height: 1.5; }
-        .qr-box-large { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        
-        /* Signature/Yellow Question Mark Look */
-        .sig-box { position: absolute; left: -100px; top: 150px; text-align: center; width: 150px; }
-        .yellow-q { color: #ffd700; font-size: 60px; font-weight: bold; margin: 0; }
-        .sig-text { font-size: 9px; line-height: 1; margin-top: -10px; }
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
 
-        .uid-display { text-align: center; margin: 30px 0; border-top: 2px solid #ccc; padding-top: 20px; }
-        .uid-display h1 { font-size: 42px; letter-spacing: 8px; margin: 10px 0; font-family: 'Courier New', monospace; }
-        .tagline { color: #d32f2f; font-weight: bold; font-size: 24px; }
+input, select, textarea{
+    width:100%;
+    padding:10px;
+    border-radius:20px;
+    border:1px solid #ccc;
+    outline:none;
+}
 
-        /* Scissor Cut Line */
-        .cut-line { border-top: 2px dashed #000; margin: 20px 0; position: relative; }
-        .cut-line:before { content: '✂'; position: absolute; left: 0; top: -15px; font-size: 20px; }
+textarea{
+    grid-column:span 3;
+}
 
-        /* Bottom PVC Cards */
-        .cards-row { display: flex; justify-content: center; gap: 15px; }
-        .pvc-card { width: 86mm; height: 54mm; border: 1px solid #888; border-radius: 10px; position: relative; overflow: hidden; background: #fff; }
-        .pvc-top { background: linear-gradient(to right, #ff9933, #fff, #138808); height: 12px; border-bottom: 0.5px solid #000; }
-        .pvc-content { display: flex; padding: 8px; gap: 8px; font-size: 9px; }
-        #p_img_card { width: 20mm; height: 26mm; border: 0.5px solid #ccc; object-fit: cover; }
-        .uid-footer { position: absolute; bottom: 0; width: 100%; text-align: center; border-top: 1px solid #138808; padding: 4px 0; background: #fff; font-weight: bold; }
-        .uid-footer h3 { margin: 0; font-size: 18px; letter-spacing: 2px; }
+button{
+    background:#4CAF50;
+    color:#fff;
+    padding:12px;
+    border:none;
+    border-radius:25px;
+    font-size:16px;
+    cursor:pointer;
+    width:200px;
+}
 
-        @media print {
-            .no-print { display: none; }
-            body { background: white; padding: 0; }
-            .a4-page { box-shadow: none; margin: 0; border: none; }
-        }
-    </style>
+button:hover{
+    background:#43a047;
+}
+
+/* Aadhaar Card */
+#printArea{
+    display:none;
+}
+
+.aadhaar-card{
+    width:360px;
+    border:1px solid #000;
+    padding:10px;
+    font-size:13px;
+}
+
+.aadhaar-header{
+    text-align:center;
+    font-weight:bold;
+    border-bottom:1px solid #000;
+}
+
+.aadhaar-body{
+    display:flex;
+    margin-top:8px;
+}
+
+.photo{
+    width:80px;
+    height:100px;
+    border:1px solid #000;
+}
+
+.photo img{
+    width:100%;
+    height:100%;
+}
+
+.details{
+    margin-left:10px;
+}
+
+.qr{
+    text-align:center;
+    font-size:11px;
+    margin-top:8px;
+}
+
+@media print{
+    body *{
+        visibility:hidden;
+    }
+    #printArea, #printArea *{
+        visibility:visible;
+    }
+    #printArea{
+        position:absolute;
+        left:0;
+        top:0;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="no-print">
-    <h2>Aadhaar Letter Input</h2>
-    <input type="text" id="in_name" placeholder="नाम और Name (Hindi & English)">
-    <input type="text" id="in_dob" placeholder="DOB (DD/MM/YYYY)">
-    <input type="text" id="in_uid" placeholder="Aadhaar No (0000 0000 0000)" maxlength="14">
-    <textarea id="in_addr" rows="4" placeholder="Full Address with PIN"></textarea>
-    <input type="file" id="in_file" accept="image/*" onchange="loadImg(event)">
-    <button onclick="window.print()">Print Aadhaar Letter</button>
+<div class="form-box">
+<h2>Aadhaar Card Print</h2>
+
+<form onsubmit="printAadhaar(); return false;">
+<div class="grid">
+<input id="aadhar" placeholder="Aadhaar Number" required>
+<input id="name" placeholder="Name" required>
+<input id="father" placeholder="Father Name">
+
+<input id="dob" placeholder="Date of Birth">
+<select id="gender">
+<option value="">Gender</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+<input type="file" id="photo" accept="image/*" required>
+
+<textarea id="address" placeholder="Address"></textarea>
 </div>
 
-<div class="a4-page">
-    <div class="top-header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Emblem_of_India.svg" class="emblem">
-        <div class="gov-text">भारत सरकार<br>Government of India</div>
-        <img src="https://upload.wikimedia.org/wikipedia/en/c/cf/Aadhaar_Logo.svg" class="aadhaar-logo">
-    </div>
+<br>
+<center><button type="submit">Submit & Print</button></center>
+</form>
+</div>
 
-    <div class="banner-orange">भारत सरकार / Government of India</div>
-    <div class="banner-green">भारतीय विशिष्ट पहचान प्राधिकरण / Unique Identification Authority of India</div>
+<!-- PRINT AREA -->
+<div id="printArea">
+<div class="aadhaar-card">
+<div class="aadhaar-header">
+Government of India<br>
+आधार
+</div>
 
-    <div class="letter-body">
-        <div class="address-box">
-            <p>Enrolment No.: 1234/56789/01234</p>
-            <p>To,</p>
-            <p><b id="out_name" style="font-size:18px;">NAME HERE</b></p>
-            <p id="out_addr" style="white-space: pre-line;">Address lines will appear here...</p>
-        </div>
-        <div class="qr-box-large">
-            <div id="qr_big"></div>
-            <div class="sig-box">
-                <p class="yellow-q">?</p>
-                <div class="sig-text">
-                    Signature Not Verified<br>
-                    Digitally signed by DS<br>
-                    Date: 2024.01.25
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="aadhaar-body">
+<div class="photo">
+<img id="pPhoto">
+</div>
+<div class="details">
+<b>Name:</b> <span id="pName"></span><br>
+<b>DOB:</b> <span id="pDob"></span><br>
+<b>Gender:</b> <span id="pGender"></span><br><br>
+<b>Aadhaar No:</b><br>
+<span id="pAadhar"></span>
+</div>
+</div>
 
-    <div class="uid-display">
-        <p style="font-size:20px; font-weight:bold; margin-bottom:0;">आपका आधार क्रमांक / Your Aadhaar No. :</p>
-        <h1 id="out_uid">0000 0000 0000</h1>
-        <div class="tagline">मेरा आधार, मेरी पहचान</div>
-    </div>
-
-    <div class="cut-line"></div>
-
-    <div class="cards-row">
-        <div class="pvc-card">
-            <div class="pvc-top"></div>
-            <div style="text-align:center; font-size:7px; font-weight:bold; padding:2px;">भारत सरकार | Government of India</div>
-            <div class="pvc-content">
-                <img id="p_img_card" src="https://via.placeholder.com/80x100?text=PHOTO">
-                <div style="line-height:1.4;">
-                    <p style="margin:0;"><b>नाम / Name:</b> <br><span id="s_name">NAME</span></p>
-                    <p style="margin:0;"><b>जन्म तिथि / DOB:</b> <span id="s_dob">01/01/1990</span></p>
-                    <p style="margin:0;"><b>लिंग / Gender:</b> Male/पुरुष</p>
-                </div>
-            </div>
-            <div class="uid-footer">
-                <h3 id="s_uid">0000 0000 0000</h3>
-                <p style="font-size:6px; color:red; margin:0;">मेरा आधार, मेरी पहचान</p>
-            </div>
-        </div>
-
-        <div class="pvc-card">
-            <div class="pvc-top" style="background: #138808;"></div>
-            <div style="padding:8px; font-size:8px;">
-                <b>पता / Address:</b>
-                <p id="s_addr" style="margin:3px 0; font-size:7.5px;">Address details...</p>
-            </div>
-            <div id="qr_small" style="position:absolute; right:8px; bottom:30px;"></div>
-            <div class="uid-footer">
-                <h3 id="s_uid_back">0000 0000 0000</h3>
-                <p style="font-size:6px; margin:0;">www.uidai.gov.in</p>
-            </div>
-        </div>
-    </div>
+<div class="qr">
+<span id="pAddress"></span>
+</div>
+</div>
 </div>
 
 <script>
-    function loadImg(event) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('p_img_card').src = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    }
+function printAadhaar(){
+    document.getElementById("pName").innerText =
+        document.getElementById("name").value;
 
-    // Live update function
-    document.querySelectorAll('input, textarea').forEach(input => {
-        input.addEventListener('input', () => {
-            const name = document.getElementById('in_name').value;
-            const dob = document.getElementById('in_dob').value;
-            const uid = document.getElementById('in_uid').value;
-            const addr = document.getElementById('in_addr').value;
+    document.getElementById("pDob").innerText =
+        document.getElementById("dob").value;
 
-            document.getElementById('out_name').innerText = name;
-            document.getElementById('s_name').innerText = name;
-            document.getElementById('out_addr').innerText = addr;
-            document.getElementById('s_addr').innerText = addr;
-            document.getElementById('out_uid').innerText = uid;
-            document.getElementById('s_uid').innerText = uid;
-            document.getElementById('s_uid_back').innerText = uid;
-            document.getElementById('s_dob').innerText = dob;
+    document.getElementById("pGender").innerText =
+        document.getElementById("gender").value;
 
-            if(uid.length >= 12) {
-                document.getElementById('qr_big').innerHTML = "";
-                document.getElementById('qr_small').innerHTML = "";
-                new QRCode(document.getElementById('qr_big'), {text: "UID:"+uid, width: 140, height: 140});
-                new QRCode(document.getElementById('qr_small'), {text: "UID:"+uid, width: 65, height: 65});
-            }
-        });
-    });
+    document.getElementById("pAadhar").innerText =
+        document.getElementById("aadhar").value;
+
+    document.getElementById("pAddress").innerText =
+        document.getElementById("address").value;
+
+    const file = document.getElementById("photo").files[0];
+    const reader = new FileReader();
+    reader.onload = function(e){
+        document.getElementById("pPhoto").src = e.target.result;
+        document.getElementById("printArea").style.display="block";
+        window.print();
+    };
+    reader.readAsDataURL(file);
+}
 </script>
+
 </body>
 </html>
