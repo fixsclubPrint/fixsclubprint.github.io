@@ -1,7 +1,3 @@
-<div style="background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px;">
-    <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
-        बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। सहायता के लिए टेलीग्राम पर संपर्क करें।
-    </marquee>
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -12,34 +8,41 @@
         :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
+        /* Notice Bar */
+        .notice-bar { position: fixed; top: 0; width: 100%; z-index: 10000; background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px; height: 35px; }
+        
         /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; margin-top: 45px; }
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
-        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+        .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 13px; transition: 0.3s; }
         .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
         /* Main Content */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; margin-top: 45px; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
         .container { padding: 20px; }
         .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .hidden { display: none !important; }
 
-        /* Form Grid (As per Screenshot 52002.jpg) */
+        /* Form Grid */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
         input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
         
-        /* History Table */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background: var(--active-blue); color: white; }
-        .action-btn { padding: 5px 10px; border-radius: 3px; border: none; cursor: pointer; color: white; margin-right: 5px; }
     </style>
 </head>
 <body>
+
+    <div class="notice-bar">
+        <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
+            बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। 30 दिन के बाद आपको ₹100 Fee देना पड़ेगा पोर्टल रिपेयरिंग के लिए।
+        </marquee>
+    </div>
 
     <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
         <div id="loginBox" class="box" style="width: 380px; text-align: center;">
@@ -47,27 +50,26 @@
             <input type="text" id="l_mob" placeholder="Mobile Number">
             <input type="password" id="l_pass" placeholder="Password">
             <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Naya account? Create Account</p>
+            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Create Account</p>
         </div>
         <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success);">Register User</h2>
+            <h2 style="color: var(--success);">Register</h2>
             <input type="text" id="r_name" placeholder="Full Name">
             <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="email" id="r_email" placeholder="Email ID">
             <input type="password" id="r_pass" placeholder="Set Password">
             <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Wapas Login Karein</p>
+            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Back to Login</p>
         </div>
     </div>
 
     <div id="sidebar" class="sidebar hidden">
         <div class="sidebar-header">FixsClub Portal</div>
-        <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
-        <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR MANUAL</span></div>
-        <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER MANUAL</span></div>
-        <div class="menu-item" onclick="nav('pan')"><span>💳 PAN ADVANCE</span></div>
-        <div class="menu-item" onclick="nav('history')"><span>📂 SAVED HISTORY</span></div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;"><span>🔒 LOGOUT</span></div>
+        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
+        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
+        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER MANUAL</div>
+        <div class="menu-item" onclick="nav('pan')">💳 PAN ADVANCE</div>
+        <div class="menu-item" onclick="nav('history')">📂 SAVED HISTORY</div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 LOGOUT</div>
     </div>
 
     <div id="mainArea" class="main-content hidden">
@@ -77,40 +79,69 @@
         </div>
 
         <div class="container">
+            <div id="voter-view" class="view hidden">
+                <div class="box">
+                    <h3 style="color: #2980b9; border-bottom: 2px solid #ddd; padding-bottom: 10px;">🗳️ Voter Card Manual Entry</h3>
+                    <div class="grid-3">
+                        <div><label>EPIC Number</label><input type="text" id="v_epic" placeholder="ABC1234567"></div>
+                        <div><label>Full Name (English)</label><input type="text" id="v_name_en"></div>
+                        <div><label>Naam (Hindi)</label><input type="text" id="v_name_hi"></div>
+                        
+                        <div><label>Father/Husband Name (English)</label><input type="text" id="v_fath_en"></div>
+                        <div><label>Pita/Pati Naam (Hindi)</label><input type="text" id="v_fath_hi"></div>
+                        <div><label>Relation Type</label>
+                            <select id="v_rel">
+                                <option>Father</option>
+                                <option>Husband</option>
+                                <option>Mother</option>
+                            </select>
+                        </div>
+
+                        <div><label>Age / DOB</label><input type="text" id="v_dob"></div>
+                        <div><label>Gender</label>
+                            <select id="v_gen">
+                                <option>MALE</option>
+                                <option>FEMALE</option>
+                                <option>OTHER</option>
+                            </select>
+                        </div>
+                        <div><label>Assembly (Vidhansabha)</label><input type="text" id="v_assembly"></div>
+                        
+                        <div><label>Part Number</label><input type="text" id="v_part"></div>
+                        <div><label>Upload Photo</label><input type="file" style="border:none;"></div>
+                    </div>
+
+                    <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div><label>Full Address (English)</label><textarea id="v_addr_en" rows="3"></textarea></div>
+                        <div><label>Pura Pata (Hindi)</label><textarea id="v_addr_hi" rows="3"></textarea></div>
+                    </div>
+
+                    <button class="btn" style="background: #2980b9;" onclick="saveData('Voter')">Save & Print Voter Card</button>
+                </div>
+            </div>
+
             <div id="aadhaar-view" class="view hidden">
                 <div class="box">
-                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd; padding-bottom: 10px;">🆔 Aadhaar Card Form</h3>
+                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd;">🆔 Aadhaar Manual Entry</h3>
                     <div class="grid-3">
-                        <div><label>Aadhar No.</label><input type="text" id="a_no" placeholder="Aadharcard No..."></div>
-                        <div><label>Name</label><input type="text" id="a_name" placeholder="Raju Kumar"></div>
-                        <div><label>Father Name</label><input type="text" id="a_father" placeholder="Shyam Singh"></div>
-                        <div><label>House No</label><input type="text" id="a_house"></div>
-                        <div><label>Post Office</label><input type="text" id="a_post"></div>
-                        <div><label>Pin Code</label><input type="text" id="a_pin"></div>
-                        <div><label>State</label><input type="text" id="a_state"></div>
-                        <div><label>City</label><input type="text" id="a_city"></div>
-                        <div><label>DOB</label><input type="text" id="a_dob" placeholder="DD/MM/YYYY"></div>
+                        <div><label>Aadhar No.</label><input type="text" id="a_no"></div>
+                        <div><label>Full Name (English)</label><input type="text" id="a_name"></div>
+                        <div><label>Naam (Hindi)</label><input type="text" id="a_name_hi"></div>
+                        <div><label>Father/Husband (English)</label><input type="text" id="a_father"></div>
+                        <div><label>Pita/Pati Ka Naam (Hindi)</label><input type="text" id="a_father_hi"></div>
+                        <div><label>Date of Birth</label><input type="text" id="a_dob"></div>
                     </div>
-                    <label>Full Address</label>
-                    <textarea id="a_addr" rows="2"></textarea>
-                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Submit & Download</button>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div><label>Address (English)</label><textarea id="a_addr_en" rows="3"></textarea></div>
+                        <div><label>Pata (Hindi)</label><textarea id="a_addr_hi" rows="3"></textarea></div>
+                    </div>
+                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Save & Download</button>
                 </div>
             </div>
 
+            <div id="dash-view" class="view"><div class="box"><h3>Namaste!</h3><p>Sabhi services active hain.</p></div></div>
             <div id="history-view" class="view hidden">
-                <div class="box">
-                    <h3>📂 Saved Records (Jab tak aap delete na karein)</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Service</th><th>Name</th><th>ID No.</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="dash-view" class="view">
-                <div class="box"><h3>Namaste!</h3><p>Aapka data hamesha surakshit rahega.</p></div>
+                <div class="box"><h3>📂 Saved Records</h3><table><thead><tr><th>Type</th><th>Name</th><th>ID No.</th><th>Action</th></tr></thead><tbody id="historyBody"></tbody></table></div>
             </div>
         </div>
     </div>
@@ -123,8 +154,7 @@
 
         function doRegister() {
             const m = document.getElementById('r_mob').value;
-            const user = { name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value };
-            localStorage.setItem("user_" + m, JSON.stringify(user));
+            localStorage.setItem("user_" + m, JSON.stringify({ name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value }));
             alert("Account Registered!"); toggleAuth('login');
         }
 
@@ -149,28 +179,20 @@
         }
 
         function saveData(type) {
-            const entry = {
-                type: type,
-                name: document.getElementById('a_name').value,
-                id_no: document.getElementById('a_no').value,
-                date: new Date().toLocaleDateString()
-            };
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            history.push(entry);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            alert("Data Saved! Downloading...");
+            let name = (type === 'Aadhaar') ? document.getElementById('a_name').value : document.getElementById('v_name_en').value;
+            let id_no = (type === 'Aadhaar') ? document.getElementById('a_no').value : document.getElementById('v_epic').value;
+            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            h.push({ type, name, id_no });
+            localStorage.setItem('fclub_history', JSON.stringify(h));
             loadHistory();
-            window.print(); // Browser download option
+            window.print();
         }
 
         function loadHistory() {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
+            let h = JSON.parse(localStorage.getItem('fclub_history') || '[]');
             let html = '';
-            history.forEach((item, index) => {
-                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td>
-                    <button class="action-btn" style="background:orange;" onclick="editEntry(${index})">Edit</button>
-                    <button class="action-btn" style="background:red;" onclick="deleteEntry(${index})">Del</button>
-                </td></tr>`;
+            h.forEach((item, i) => {
+                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td><button onclick="deleteEntry(${i})" style="background:red;color:white;border:none;padding:5px;">Del</button></td></tr>`;
             });
             document.getElementById('historyBody').innerHTML = html;
         }
@@ -180,15 +202,6 @@
             h.splice(i, 1);
             localStorage.setItem('fclub_history', JSON.stringify(h));
             loadHistory();
-        }
-
-        function editEntry(i) {
-            let h = JSON.parse(localStorage.getItem('fclub_history'));
-            let item = h[i];
-            document.getElementById('a_name').value = item.name;
-            document.getElementById('a_no').value = item.id_no;
-            nav('aadhaar');
-            deleteEntry(i);
         }
     </script>
 </body>
