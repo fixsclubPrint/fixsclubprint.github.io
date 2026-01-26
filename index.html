@@ -33,7 +33,7 @@
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit Number"></div>
-            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" placeholder="Raju Kumar" oninput="translateFields()"></div>
+            <div class="form-group"><label> Full Name </label><input type="text" id="name_en" placeholder="Raju Kumar" oninput="translateFields()"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" placeholder="Father Name" oninput="syncAddress()"></div>
         </div>
         <div class="row">
@@ -54,8 +54,10 @@
         <div class="row">
             <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi" placeholder="Auto Fill"></div>
             <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi" value="पुरुष"></div>
-            <div class="form-group"><label>Select Local Language</label>
+            <div class="form-group">
+     <label>Select Local Language</label>
                 <select id="lang_select" onchange="translateFields()">
+                    <option value="">  Select Language </option>
                     <option value="hi">HINDI (हिंदी)</option>
                     <option value="gu">GUJARATI (ગુજરાતી)</option>
                     <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
@@ -63,7 +65,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address </label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
         </div>
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2" placeholder="Auto Fill Address"></textarea></div>
