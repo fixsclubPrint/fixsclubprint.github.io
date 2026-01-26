@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Portal</title>
+    <title>FixsClub Print | Official Master Portal</title>
     
     <style>
+        /* --- पोर्टल की बेसिक स्टाइलिंग --- */
         :root { 
             --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
             --success: #5cb85c; --warning-yellow: #fff9c4;
@@ -24,34 +25,39 @@
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
         .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
         .menu-item:hover { background: #34495e; }
-        
-        .submenu { background: #1a252f; display: none; }
-        .submenu div { padding: 12px 40px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #2c3e50; color: #bdc3c7; }
-        .submenu div:hover { color: white; background: var(--active-blue); }
-
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
-        .special-btn { color: white; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; cursor: pointer; margin: 5px 15px; font-size: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        /* Submenu Styling */
+        .submenu { display: none; background: rgba(0, 0, 0, 0.2); }
+        .sub-item { padding: 12px 20px 12px 45px; cursor: pointer; font-size: 14px; display: flex; align-items: center; transition: 0.2s; color: #ecf0f1; background: #34495e; border-bottom: 1px solid #2c3e50; }
+        .sub-item:hover, .sub-active { background: #1c2833 !important; border-left: 4px solid #fff; }
+        .arrow { font-size: 10px; transition: transform 0.3s; }
+        .rotate { transform: rotate(180deg); }
 
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { padding: 25px; }
         .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         
-        /* Form Styling */
-        .row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
-        .col { flex: 1; min-width: 250px; display: flex; flex-direction: column; }
-        label { font-size: 12px; color: #5d6d7e; margin-bottom: 5px; font-weight: 600; }
-        input, select, textarea { padding: 10px 15px; border: 1px solid #ced4da; border-radius: 25px; outline: none; font-size: 14px; }
-        textarea { border-radius: 15px; height: 60px; resize: none; }
-        
-        .btn { padding: 12px 25px; border: none; border-radius: 25px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
         .hidden { display: none !important; }
 
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-        .s-card { padding: 20px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; }
-
-        #paymentOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; display:flex; align-items:center; justify-content:center; }
+        /* --- यहाँ से आपका ओरिजिनल फॉर्म डिज़ाइन शुरू है --- */
+        .row { display: flex; flex-wrap: wrap; gap: 25px; margin-bottom: 20px; }
+        .col { flex: 1; min-width: 300px; display: flex; flex-direction: column; }
+        label { font-size: 13px; margin-bottom: 8px; color: #5d6d7e; padding-left: 5px; }
+        input[type="text"], input[type="date"], select, textarea { 
+            padding: 12px 20px; border: 1px solid #ced4da; border-radius: 25px; 
+            font-size: 14px; background-color: #fff; color: #333; outline: none; transition: border-color 0.2s; 
+        }
+        input::placeholder { color: #a0aec0; font-size: 12px; }
+        .address-box { flex: 2; }
+        textarea { border-radius: 15px; height: 60px; resize: vertical; }
+        .file-input-wrapper { display: flex; align-items: center; border: 1px solid #ced4da; border-radius: 25px; padding: 5px 15px; background: #fff; }
+        .submit-btn { 
+            background-color: #5cb85c; color: white; border: none; padding: 12px 60px; 
+            border-radius: 25px; font-size: 16px; font-weight: 500; cursor: pointer; 
+            margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: fit-content;
+        }
     </style>
 </head>
 <body>
@@ -64,354 +70,110 @@
         <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9998; display: flex; align-items: center; justify-content: center;">
             <div id="loginBox" class="box" style="width: 350px; text-align: center;">
                 <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-                <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
-                <input type="password" id="l_pass" placeholder="पासवर्ड">
-                <button class="btn" style="background: var(--active-blue);" onclick="doLogin()">लॉगिन करें</button>
-                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">नया अकाउंट बनाएँ</p>
-            </div>
-            <div id="regBox" class="box hidden" style="width: 350px; text-align: center;">
-                <h2>रजिस्ट्रेशन</h2>
-                <input type="text" id="r_name" placeholder="पूरा नाम">
-                <input type="text" id="r_mob" placeholder="मोबाइल नंबर">
-                <input type="password" id="r_pass" placeholder="पासवर्ड">
-                <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
-                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">लॉगिन करें</p>
+                <input type="text" id="l_mob" placeholder="मोबाइल नंबर" style="width: 100%; margin-bottom: 15px; border-radius: 5px;">
+                <input type="password" id="l_pass" placeholder="पासवर्ड" style="width: 100%; margin-bottom: 15px; border-radius: 5px;">
+                <button class="submit-btn" style="width: 100%;" onclick="doLogin()">लॉगिन करें</button>
             </div>
         </div>
 
         <div id="sidebar" class="sidebar hidden">
-            <div class="sidebar-header">FixsClub Print</div>
+            <div class="sidebar-header">FixsClub Master</div>
             
-            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/')">🔗 CSC CONNECT</div>
-            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">🆔 myAADHAAR</div>
-
             <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
             
-            <div class="menu-item" onclick="toggleSub('aadhaar-sub')"><span>🆔 AADHAAR PRINT</span> <span>▼</span></div>
+            <div class="menu-item" onclick="toggleSub('aadhaar-sub', 'arr1')">
+                <span>🆔 AADHAAR PRINT</span> 
+                <span id="arr1" class="arrow">▼</span>
+            </div>
             <div id="aadhaar-sub" class="submenu">
-                <div onclick="nav('aadhaar-manual')">➤ Manual</div>
+                <div class="sub-item" onclick="nav('aadhaar-manual'); setActiveSub(this)">➤ &nbsp; Manual</div>
             </div>
 
             <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER ID PRINT</span></div>
-            
-            <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
-            <div class="menu-item" style="color:#a29bfe" onclick="window.open('https://serviceonline.bihar.gov.in/')"><span>📄 RTPS Bihar</span></div>
-            <div class="menu-item" style="color:#fab1a0" onclick="window.open('https://beneficiary.nha.gov.in/')"><span>🏥 Ayushman Portal</span></div>
-
-            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
-            <div class="menu-item" onclick="nav('support')" style="margin-top: auto;"><span>🎧 HELP & SUPPORT</span></div>
-            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;"><span>🔒 LOGOUT</span></div>
         </div>
 
         <div id="mainArea" class="main-content hidden">
-            <div class="top-nav"><span id="welcomeMsg">नमस्ते</span></div>
+            <div class="top-nav">
+                <span id="welcomeMsg">नमस्ते</span>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
+            </div>
 
             <div class="container">
                 <div id="dash-view" class="view">
-                    <div class="box">
-                        <h3>सेवाएं 👋</h3>
-                        <div class="card-grid">
-                            <div class="s-card" style="background: var(--msme-teal);" onclick="window.open('https://udyamregistration.gov.in/')"><b>MSME Udyam</b></div>
-                            <div class="s-card" style="background: var(--eshram-color);" onclick="window.open('https://register.eshram.gov.in/')"><b>e-Shram Card</b></div>
-                        </div>
-                    </div>
-                
+                    <div class="box"><h3>Welcome to FixsClub</h3><p>कृपया मेनू से सेवा चुनें।</p></div>
+                </div>
 
                 <div id="aadhaar-manual-view" class="view hidden">
                     <div class="box">
-                        <h3 style="color: var(--uidai-blue);">Aadhaar Manual Entry</h3>
-                        <div class="row">
-                        </div>  <!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form Design</title>
-    <style>
-        /* Basic Setup */
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 40px;
-            color: #4a5568;
-        }
-
-        .form-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Layout Grid */
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            margin-bottom: 20px;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Labels and Inputs */
-        label {
-            font-size: 13px;
-            margin-bottom: 8px;
-            color: #5d6d7e;
-            padding-left: 5px;
-        }
-
-        input[type="text"], 
-        input[type="date"], 
-        select, 
-        textarea {
-            padding: 12px 20px;
-            border: 1px solid #ced4da;
-            border-radius: 25px; /* Perfect Rounding like Image */
-            font-size: 14px;
-            background-color: #fff;
-            color: #333;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input::placeholder {
-            color: #a0aec0;
-            font-size: 12px;
-        }
-
-        input:focus {
-            border-color: #4a90e2;
-        }
-
-        /* Special Sizing */
-        .address-box {
-            flex: 2; /* Bada box for address */
-        }
-
-        textarea {
-            border-radius: 15px;
-            height: 60px;
-            resize: vertical;
-        }
-
-        /* File Upload Styling */
-        .file-input-wrapper {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ced4da;
-            border-radius: 25px;
-            padding: 5px 15px;
-            background: #fff;
-        }
-
-        /* Submit Button */
-        .submit-btn {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            padding: 12px 60px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .submit-btn:hover {
-            background-color: #4cae4c;
-        }
-
-        /* Responsive for Mobile */
-        @media (max-width: 768px) {
-            .col { flex: 100%; }
-            body { padding: 20px; }
-        }
-    </style>
-</head>
-<body>
-
-<div class="form-container">
-    <form action="#">
-        
-        <div class="row">
-            <div class="col">
-                <label>Aadhar Card No.</label>
-                <input type="text" placeholder="Aadharcard No..">
-            </div>
-            <div class="col">
-                <label>Name</label>
-                <input type="text" placeholder="Example : Raju Kumar">
-            </div>
-            <div class="col">
-                <label>Father Name</label>
-                <input type="text" placeholder="Example : Shyam Singh">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <label>House No</label>
-                <input type="text" placeholder="House No">
-            </div>
-            <div class="col">
-                <label>Gali, Locality</label>
-                <input type="text" placeholder="Gali, Locality, Panchayat">
-            </div>
-            <div class="col">
-                <label>Post Office</label>
-                <input type="text" placeholder="Post Office">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <label>State</label>
-                <input type="text" placeholder="State">
-            </div>
-            <div class="col">
-                <label>City</label>
-                <input type="text" placeholder="City">
-            </div>
-            <div class="col">
-                <label>Pin code</label>
-                <input type="text" placeholder="pincode">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <label>Date Of Birth</label>
-                <input type="text" placeholder="26/07/1992">
-            </div>
-            <div class="col">
-                <label>Date Of Birth Local</label>
-                <input type="text" placeholder="Auto Fill" readonly>
-            </div>
-            <div class="col">
-                <label>Select Gender</label>
-                <select>
-                    <option>GENDER</option>
-                    <option>MALE</option>
-                    <option>FEMALE</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col" style="max-width: 33.3%;">
-                <label>Gender Local</label>
-                <input type="text">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col address-box">
-                <label>Address</label>
-                <textarea placeholder="S/O : Mo Rahim, khurdaha, Jakhauli, Faizabad, Uttar Pradesh, 878987"></textarea>
-            </div>
-            <div class="col">
-                <label>Select Image</label>
-                <div class="file-input-wrapper">
-                    <input type="file">
+                        <form action="#">
+                            <div class="row">
+                                <div class="col"><label>Aadhar Card No.</label><input type="text" placeholder="Aadharcard No.."></div>
+                                <div class="col"><label>Name</label><input type="text" placeholder="Example : Raju Kumar"></div>
+                                <div class="col"><label>Father Name</label><input type="text" placeholder="Example : Shyam Singh"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>House No</label><input type="text" placeholder="House No"></div>
+                                <div class="col"><label>Gali, Locality</label><input type="text" placeholder="Gali, Locality, Panchayat"></div>
+                                <div class="col"><label>Post Office</label><input type="text" placeholder="Post Office"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>State</label><input type="text" placeholder="State"></div>
+                                <div class="col"><label>City</label><input type="text" placeholder="City"></div>
+                                <div class="col"><label>Pin code</label><input type="text" placeholder="pincode"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>Date Of Birth</label><input type="text" placeholder="26/07/1992"></div>
+                                <div class="col"><label>Date Of Birth Local</label><input type="text" placeholder="Auto Fill" readonly></div>
+                                <div class="col"><label>Select Gender</label>
+                                    <select><option>GENDER</option><option>MALE</option><option>FEMALE</option></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="max-width: 33.3%;"><label>Gender Local</label><input type="text"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col address-box"><label>Address</label><textarea placeholder="S/O : Mo Rahim, khurdaha, Jakhauli, Faizabad, Uttar Pradesh, 878987"></textarea></div>
+                                <div class="col"><label>Select Image</label><div class="file-input-wrapper"><input type="file"></div></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>Select Local Language</label><select><option>SELECT</option><option>HINDI</option><option>BENGALI</option></select></div>
+                                <div class="col"><label>Name (Local Language)</label><input type="text"></div>
+                                <div class="col address-box"><label>Address (Local Language)</label><textarea></textarea></div>
+                            </div>
+                            <button type="submit" class="submit-btn">Submit</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                <label>Select Local Language</label>
-                <select>
-                    <option>SELECT</option>
-                    <option>HINDI</option>
-                    <option>BENGALI</option>
-                </select>
-            </div>
-            <div class="col">
-                <label>Name (Local Language)</label>
-                <input type="text">
-            </div>
-            <div class="col address-box">
-                <label>Address (Local Language)</label>
-                <textarea></textarea>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-btn">Submit</button>
-    </form>
-</div>
-
-</body>
-</html> 
-
-                <div id="admin-view" class="view hidden"><div class="box"><h3>Admin Control</h3><input type="text" id="act_mob" placeholder="Mobile"><button class="btn" style="background:var(--active-blue)">Activate</button></div></div>
-                <div id="support-view" class="view hidden"><div class="box"><h3>Support</h3><textarea placeholder="Message..."></textarea><button class="btn" style="background:var(--active-blue)">Send</button></div></div>
-                <div id="voter-view" class="view hidden"><div class="box"><h3>Voter Print</h3><input type="text" placeholder="EPIC No"><button class="btn" style="background:red">Print</button></div></div>
+                <div id="voter-view" class="view hidden"><div class="box"><h3>Voter Print Coming Soon</h3></div></div>
             </div>
         </div>
     </div>
 
     <script>
-        const MASTER_MOB = "9693101077";
-        const MASTER_PASS = "Yadav@957272";
-        const UPI_ID = "Q973860146@ybl";
-
-        function toggleAuth(t) {
-            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
-        }
-
-        function doRegister() {
-            const mob = document.getElementById('r_mob').value;
-            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime() };
-            localStorage.setItem('user_' + mob, JSON.stringify(userData));
-            alert("सफल! लॉगिन करें।"); toggleAuth('login');
-        }
-
         function doLogin() {
-            const mob = document.getElementById('l_mob').value;
-            const pass = document.getElementById('l_pass').value;
-            if (mob === MASTER_MOB && pass === MASTER_PASS) {
-                document.getElementById('adminLink').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "नमस्ते एडमिन";
-                showPortal(); return;
-            }
-            const data = localStorage.getItem('user_' + mob);
-            if (data && JSON.parse(data).password === pass) { 
-                checkSubscription(JSON.parse(data)); 
-            } else { alert("गलत पासवर्ड!"); }
-        }
-
-        function checkSubscription(user) {
-            if (new Date().getTime() - user.regDate > (7 * 24 * 60 * 60 * 1000)) { showPaymentModal(); return; }
-            document.getElementById('welcomeMsg').innerText = "स्वागत है, " + user.name;
-            showPortal();
-        }
-
-        function showPortal() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('sidebar').classList.remove('hidden');
             document.getElementById('mainArea').classList.remove('hidden');
         }
 
-        function toggleSub(id) {
-            const s = document.getElementById(id);
-            s.style.display = (s.style.display === 'block') ? 'none' : 'block';
-        }
-
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id + '-view').classList.remove('hidden');
+            const target = document.getElementById(id + '-view');
+            if(target) target.classList.remove('hidden');
         }
 
-        function showPaymentModal() {
-            const upi = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
-            document.body.insertAdjacentHTML('beforeend', `<div id="paymentOverlay"><div class="box" style="text-align:center;"><h2>ट्रायल समाप्त!</h2><p>₹100 पे करें</p><a href="${upi}" class="btn" style="background:#673ab7; text-decoration:none; display:block; color:white;">अभी पे करें</a></div></div>`);
+        function toggleSub(id, arrowId) {
+            const sub = document.getElementById(id);
+            const arrow = document.getElementById(arrowId);
+            const isOpen = sub.style.display === "block";
+            sub.style.display = isOpen ? "none" : "block";
+            arrow.classList.toggle('rotate', !isOpen);
+        }
+
+        function setActiveSub(el) {
+            document.querySelectorAll('.sub-item').forEach(s => s.classList.remove('sub-active'));
+            el.classList.add('sub-active');
         }
     </script>
 </body>
