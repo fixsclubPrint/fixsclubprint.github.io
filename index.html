@@ -2,100 +2,56 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Master Print Portal</title>
+    <title>FixsClub Master Print Portal - Smart Autofill</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #fcfcfc; margin: 0; padding: 20px; color: #555; }
-        .form-container { background: #fff; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        
-        /* Grid Layout like Image */
-        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fcfcfc; padding: 20px; }
+        .form-container { background: #fff; max-width: 1200px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
         .form-group { display: flex; flex-direction: column; }
-        
-        label { font-size: 13px; margin-bottom: 8px; font-weight: 500; color: #666; }
-        input, select, textarea { 
-            padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 20px; 
-            font-size: 14px; outline: none; transition: 0.3s; color: #444;
-        }
-        input::placeholder { color: #ccc; }
-        input:focus { border-color: #80bdff; }
-
-        /* Full Width and Special Sections */
-        .full-row { grid-column: span 3; }
-        .address-section { grid-column: span 2; }
-        .image-section { grid-column: span 1; }
-
-        textarea { resize: none; border-radius: 15px; }
-
-        .submit-btn {
-            background-color: #5cb85c; color: white; border: none;
-            padding: 12px 60px; border-radius: 10px; font-size: 16px;
-            cursor: pointer; margin-top: 30px; width: fit-content;
-        }
-        .submit-btn:hover { background-color: #4cae4c; }
+        label { font-size: 13px; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input, select, textarea { padding: 12px 15px; border: 1px solid #ccc; border-radius: 25px; font-size: 14px; outline: none; }
+        input:focus { border-color: #27ae60; }
+        .submit-btn { background-color: #5cb85c; color: white; border: none; padding: 12px 60px; border-radius: 30px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
+    <h2 style="color: #1a237e; border-bottom: 2px solid #eee; padding-bottom: 10px;">Smart Aadhaar Portal</h2>
     <form id="printForm">
         <div class="row">
             <div class="form-group">
                 <label>Aadhar Card No.</label>
-                <input type="text" id="a_num" placeholder="Aadharcard No.." maxlength="12" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" id="a_num" maxlength="12" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
             </div>
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" id="name_en" placeholder="Example : Raju Kumar" onkeyup="translateField('name_en', 'name_hi')">
+                <label>Name (English)</label>
+                <input type="text" id="name_en" onkeyup="translateField('name_en', 'name_hi')">
             </div>
             <div class="form-group">
-                <label>Father Name</label>
-                <input type="text" id="fname_en" placeholder="Example : Shyam Singh" onkeyup="translateField('fname_en', 'fname_hi'); syncAddress();">
+                <label>Father Name (English)</label>
+                <input type="text" id="fname_en" onkeyup="translateField('fname_en', 'fname_hi'); syncAddress();">
             </div>
         </div>
 
         <div class="row">
-            <div class="form-group">
-                <label>House No</label>
-                <input type="text" id="h_no" placeholder="House No" onkeyup="syncAddress()">
-            </div>
-            <div class="form-group">
-                <label>Gali, Locality</label>
-                <input type="text" id="gali" placeholder="Gali, Locality, Panchayat" onkeyup="syncAddress()">
-            </div>
-            <div class="form-group">
-                <label>Post Office</label>
-                <input type="text" id="po" placeholder="Post Office" onkeyup="syncAddress()">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label>State</label>
-                <input type="text" id="state" placeholder="State" onkeyup="syncAddress()">
-            </div>
-            <div class="form-group">
-                <label>City</label>
-                <input type="text" id="city" placeholder="City" onkeyup="syncAddress()">
-            </div>
-            <div class="form-group">
-                <label>Pin code</label>
-                <input type="text" id="pin" placeholder="pincode" onkeyup="syncAddress()">
-            </div>
+            <div class="form-group"><label>House No</label><input type="text" id="h_no" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Gali, Locality</label><input type="text" id="gali" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Post Office</label><input type="text" id="po" onkeyup="syncAddress()"></div>
         </div>
 
         <div class="row">
             <div class="form-group">
                 <label>Date Of Birth</label>
-                <input type="date" id="dob">
+                <input type="date" id="dob" onchange="syncDOB()">
             </div>
             <div class="form-group">
                 <label>Date Of Birth Local</label>
-                <input type="text" placeholder="Auto Fill" id="dob_local">
+                <input type="text" id="dob_local" placeholder="Auto Fill Date">
             </div>
             <div class="form-group">
                 <label>Select Gender</label>
-                <select id="gender" onchange="syncAddress()">
+                <select id="gender" onchange="syncAddress(); updateGenderLocal();">
                     <option value="MALE">MALE</option>
                     <option value="FEMALE">FEMALE</option>
                 </select>
@@ -105,23 +61,8 @@
         <div class="row">
             <div class="form-group">
                 <label>Gender Local</label>
-                <input type="text" id="gender_local" placeholder="MALE">
+                <input type="text" id="gender_local" placeholder="पुरुष / महिला">
             </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group address-section">
-                <label>Address</label>
-                <textarea id="addr_en" rows="3" placeholder="S/O : Mo Rahim, khurdaha, Jakhauli, Faizabad, Uttar Pradesh, 224001" onkeyup="translateField('addr_en', 'addr_hi')"></textarea>
-            </div>
-            <div class="form-group image-section">
-                <label>Select Image</label>
-                <input type="file" style="border:none; padding-left:0;">
-                <input type="text" style="margin-top:10px;" placeholder="Local Name">
-            </div>
-        </div>
-
-        <div class="row">
             <div class="form-group">
                 <label>Select Local Language</label>
                 <select id="lang_select" onchange="translateAll()">
@@ -130,65 +71,95 @@
                     <option value="pa">PUNJABI</option>
                 </select>
             </div>
+        </div>
+
+        <div class="row" style="grid-template-columns: 2fr 1fr;">
             <div class="form-group">
-                <label>Name (Local Language)</label>
-                <input type="text" id="name_hi" placeholder="HINDI      GUJARATI">
+                <label>Full Address (English) - Editable</label>
+                <textarea id="addr_en" rows="3" onkeyup="translateField('addr_en', 'addr_hi')"></textarea>
             </div>
             <div class="form-group">
-                <label>Address (Local Language)</label>
-                <textarea id="addr_hi" rows="3" placeholder="स्थानीय भाषा में पता"></textarea>
+                <label>Name (Local Language)</label>
+                <input type="text" id="name_hi">
+                <label style="margin-top:10px;">Select Photo</label>
+                <input type="file" style="border:none;">
             </div>
         </div>
 
-        <button type="button" class="submit-btn">Submit</button>
+        <div class="form-group">
+            <label>Address (Local Language)</label>
+            <textarea id="addr_hi" rows="3"></textarea>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <button type="button" class="submit-btn" onclick="alert('Saving Data...')">Submit & Print</button>
+        </div>
     </form>
 </div>
 
 <script>
-    // Address Sync logic with S/O and W/O
+    // 1. Date of Birth Sync Function
+    function syncDOB() {
+        let dobValue = document.getElementById('dob').value; // format: YYYY-MM-DD
+        if(dobValue) {
+            let parts = dobValue.split('-');
+            let formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0]; // format: DD/MM/YYYY
+            document.getElementById('dob_local').value = formattedDate;
+        }
+    }
+
+    // 2. Gender Local Translation
+    async function updateGenderLocal() {
+        let gender = document.getElementById('gender').value;
+        let lang = document.getElementById('lang_select').value;
+        let target = document.getElementById('gender_local');
+        
+        if(lang === 'hi') {
+            target.value = (gender === "MALE") ? "पुरुष" : "महिला";
+        } else {
+            // Other languages ke liye Google Translate use karein
+            translateTextManual(gender, 'gender_local');
+        }
+    }
+
+    // 3. Address Sync with S/O & W/O
     function syncAddress() {
         let gender = document.getElementById('gender').value;
         let father = document.getElementById('fname_en').value;
         let hno = document.getElementById('h_no').value;
         let gali = document.getElementById('gali').value;
         let po = document.getElementById('po').value;
-        let city = document.getElementById('city').value;
-        let state = document.getElementById('state').value;
-        let pin = document.getElementById('pin').value;
-
-        // Smart Prefix based on Gender
+        
         let prefix = (gender === "FEMALE") ? "W/O: " : "S/O: ";
+        let full = prefix + father + ", " + hno + ", " + gali + ", " + po;
         
-        let fullAddr = prefix + father;
-        if(hno) fullAddr += ", " + hno;
-        if(gali) fullAddr += ", " + gali;
-        if(po) fullAddr += ", " + po;
-        if(city) fullAddr += ", " + city;
-        if(state) fullAddr += ", " + state;
-        if(pin) fullAddr += ", " + pin;
-
-        document.getElementById('addr_en').value = fullAddr;
-        
-        // Auto translate address whenever it updates
+        document.getElementById('addr_en').value = full;
         translateField('addr_en', 'addr_hi');
     }
 
-    // Google Translation Logic
+    // 4. Translation Logic
     async function translateField(srcId, tarId) {
         let text = document.getElementById(srcId).value;
         let lang = document.getElementById('lang_select').value;
         if(!text.trim()) return;
-
         try {
             const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
             const data = await res.json();
             document.getElementById(tarId).value = data[0][0][0];
-        } catch (e) { console.log("Translation delay..."); }
+        } catch (e) { console.log("API Error"); }
+    }
+
+    async function translateTextManual(text, tarId) {
+        let lang = document.getElementById('lang_select').value;
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
+        const data = await res.json();
+        document.getElementById(tarId).value = data[0][0][0];
     }
 
     function translateAll() {
         translateField('name_en', 'name_hi');
         translateField('addr_en', 'addr_hi');
+        updateGenderLocal();
     }
 </script>
 
