@@ -82,6 +82,75 @@
 
             <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
             <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR PRINT</span></div>
+
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;"><span>🔒 LOGOUT</span></div>
+        </div>
+
+        <div id="mainArea" class="main-content hidden">
+            <div class="top-nav">
+                <span id="welcomeMsg">नमस्ते, FixsClub में आपका स्वागत है</span>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
+            </div>
+
+            <div class="container">
+                <div id="dash-view" class="view">
+                    <div class="box">
+                        <h3 style="margin-top:0;">हमारी मुख्य सेवाएं 👋</h3>
+                        <div class="card-grid">
+                            <div class="s-card" style="background: var(--msme-teal);">MSME Registration</div>
+                            <div class="s-card" style="background: var(--rtps-color);">RTPS Certificates</div>
+                            <div class="s-card" style="background: var(--eshram-color);">e-Shram Services</div>
+                            <div class="s-card" style="background: var(--uidai-blue);">Aadhaar Services</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="aadhaar-manual-view" class="view hidden">
+                    <div class="box">
+                        <h3 style="border-bottom: 2px solid #eee; padding-bottom:10px;">Aadhaar Manual Print</h3>
+                        <form action="#">
+                            <div class="row">
+                                <div class="col"><label>Aadhar Card No.</label><input type="text" placeholder="Aadharcard No.."></div>
+                                <div class="col"><label>Name</label><input type="text" placeholder="Example : Raju Kumar"></div>
+                                <div class="col"><label>Father Name</label><input type="text" placeholder="Example : Shyam Singh"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>House No</label><input type="text" placeholder="House No"></div>
+                                <div class="col"><label>Gali, Locality</label><input type="text" placeholder="Gali, Locality, Panchayat"></div>
+                                <div class="col"><label>Post Office</label><input type="text" placeholder="Post Office"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>State</label><input type="text" placeholder="State"></div>
+                                <div class="col"><label>City</label><input type="text" placeholder="City"></div>
+                                <div class="col"><label>Pin code</label><input type="text" placeholder="pincode"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label>Date Of Birth</label><input type="text" placeholder="26/07/1992"></div>
+                                <div class="col"><label>Date Of Birth Local</label><input type="text" placeholder="Auto Fill" readonly></div>
+                                <div class="col"><label>Select Gender</label>
+                                    <select><option>GENDER</option><option>MALE</option><option>FEMALE</option></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col address-box">
+                                    <label>Address</label>
+                                    <textarea placeholder="S/O : Mo Rahim, Faizabad, UP..."></textarea>
+                                </div>
+                                <div class="col">
+                                    <label>Select Image</label>
+                                    <input type="file" style="border: 1px solid #ced4da; padding: 8px; border-radius: 25px;">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Select Local Language</label>
+                                    <select><option>SELECT</option><option>HINDI</option><option>BENGALI</option></select>
+                                </div>
+                                <div class="col"><label>Name (Local Language)</label><input type="text"></div>
+                                <div class="col address-box"><label>Address (Local Language)</label><textarea></textarea></div>
+                            </div>
+                            <button type="submit" class="submit-btn">Submit Details</button>
+            YADAV
             <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER ID PRINT</span></div>
             
             <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
