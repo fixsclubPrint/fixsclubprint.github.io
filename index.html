@@ -10,9 +10,18 @@
 
     <style>
         :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #27ae60; --danger: #e74c3c; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; transition: 0.3s; }
+        /* 3D Animation Style */
+        @keyframes glow3d {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #f1c40f; transform: scale(1); }
+            50% { text-shadow: 0 0 10px #fff, 0 0 20px #ffeb3b, 0 0 40px #ffc107; transform: scale(1.02); }
+            100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #f1c40f; transform: scale(1); }
+        }
+        .animate-3d { display: inline-block; color: #ffffff; font-weight: bold; font-size: 18px; animation: glow3d 2s infinite ease-in-out; white-space: nowrap; padding: 5px 0; }
+
+        .app-container { display: flex; flex-grow: 1; overflow: hidden; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
         .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
         .menu-item:hover { background: #34495e; }
@@ -26,114 +35,97 @@
 
         input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn:hover { opacity: 0.8; }
-
-        /* Payment Modal Styling */
-        #paymentOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; display:flex; justify-content:center; align-items:center; color: #333; }
         
-        @media print {
-            body * { visibility: hidden; }
-            #printCard, #printCard * { visibility: visible; }
-            #printCard { position: absolute; left: 0; top: 0; display: block !important; }
-            .card { width: 325px; height: 205px; border: 1px solid #000; position: relative; margin-bottom: 20px; background: #fff; float: left; margin-right: 10px;}
-        }
+        #paymentOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; display:flex; justify-content:center; align-items:center; }
     </style>
 </head>
 <body>
 
-    <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-        <div id="loginBox" class="box" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
-            <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Naya account? Create Account</p>
-        </div>
-        <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
-            <h2 style="color: var(--success);">Register User</h2>
-            <input type="text" id="r_name" placeholder="Full Name">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="email" id="r_email" placeholder="Email ID">
-            <input type="password" id="r_pass" placeholder="Set Password">
-            <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
-            <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Wapas Login Karein</p>
-        </div>
+    <div style="background: #1a237e; border-bottom: 2px solid #f1c40f; overflow: hidden; position: relative; z-index: 10001;">
+        <marquee behavior="scroll" direction="left" scrollamount="8">
+            <span class="animate-3d">
+                🚀 FixsClub Portal: Bina CSC ID ke sabhi sevaon ka labh lein — ✨ Sabhi naye users ke liye 7 DIN KA TRIAL BILKUL FREE HAI! — 🛠️ 7 din baad portal repairing fee ₹100 dena hoga — 📲 Support ke liye Telegram par sampark karein.
+            </span>
+        </marquee>
     </div>
 
-    <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FixsClub Portal</div>
-        <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
-        <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR MANUAL</span></div>
-        <div class="menu-item" onclick="nav('history')"><span>📂 SAVED HISTORY</span></div>
-        <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
-        <div class="menu-item" onclick="nav('support')" style="margin-top: auto; border-top: 1px solid #444;"><span>🎧 HELP & SUPPORT</span></div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675;"><span>🔒 LOGOUT</span></div>
-    </div>
-
-    <div id="mainArea" class="main-content hidden">
-        <div class="top-nav">
-            <span id="welcomeMsg">Welcome</span>
-            <div id="statusTag" style="background:#27ae60; color:white; padding:5px 10px; border-radius:4px; font-size:12px;">Active</div>
-        </div>
-
-        <div class="container">
-            <div id="dash-view" class="view">
-                <div class="box">
-                    <h3>Namaste!</h3>
-                    <p>FixsClub HD Aadhaar Tool mein aapka swagat hai. Neeche diye gaye menu se kaam shuru karein.</p>
-                </div>
+    <div class="app-container">
+        <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+            <div id="loginBox" class="box" style="width: 380px; text-align: center;">
+                <h2 style="color: var(--active-blue);">FixsClub Login</h2>
+                <input type="text" id="l_mob" placeholder="Mobile Number">
+                <input type="password" id="l_pass" placeholder="Password">
+                <button class="btn" style="background: var(--active-blue); width: 100%;" onclick="doLogin()">Login</button>
+                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Create Account</p>
             </div>
-
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3 style="color: var(--active-blue);">🆔 Aadhaar Manual Entry</h3>
-                    <input type="text" id="a_no" placeholder="Aadhar No (0000 0000 0000)">
-                    <input type="text" id="a_name_en" placeholder="Name in English">
-                    <input type="text" id="a_name_hi" placeholder="नाम (Hindi)">
-                    <input type="text" id="a_dob" placeholder="DOB (DD/MM/YYYY)">
-                    <select id="a_gender"><option>Male</option><option>Female</option></select>
-                    <textarea id="a_addr_en" placeholder="Address (English)"></textarea>
-                    <textarea id="a_addr_hi" placeholder="पता (Hindi)"></textarea>
-                    <input type="file" id="a_pic" accept="image/*">
-                    <button class="btn" style="background: var(--success);" onclick="processAadhaar()">Submit & Print</button>
-                </div>
-            </div>
-
-            <div id="admin-view" class="view hidden">
-                <div class="box">
-                    <h3>👑 Master Admin Control</h3>
-                    <p>User ka Mobile Number dalkar uska 30 din ka recharge active karein.</p>
-                    <input type="text" id="act_mob" placeholder="User Mobile Number">
-                    <button class="btn" style="background:var(--active-blue);" onclick="activateUserManual()">Activate 30 Days</button>
-                    <hr>
-                    <div id="admin-msg-box"><h4>User Messages</h4><p>Messages loading...</p></div>
-                </div>
-            </div>
-
-            <div id="support-view" class="view hidden">
-                <div class="box">
-                    <h3>🎧 Help & Support</h3>
-                    <p>Koi dikkat ho toh humein message karein:</p>
-                    <textarea id="supportMsg" placeholder="Apni samasya yahan likhein..."></textarea>
-                    <button class="btn" style="background:var(--active-blue);" onclick="sendMessage()">Send to Admin</button>
-                </div>
+            <div id="regBox" class="box hidden" style="width: 380px; text-align: center;">
+                <h2 style="color: var(--success);">Register User</h2>
+                <input type="text" id="r_name" placeholder="Full Name">
+                <input type="text" id="r_mob" placeholder="Mobile Number">
+                <input type="email" id="r_email" placeholder="Email ID">
+                <input type="password" id="r_pass" placeholder="Set Password">
+                <button class="btn" style="background: var(--success); width: 100%;" onclick="doRegister()">Register Now</button>
+                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">Wapas Login Karein</p>
             </div>
         </div>
-    </div>
 
-    <div id="printCard" class="hidden">
-        <div class="card" style="padding:10px;">
-            <img id="p_img" src="" style="width:70px; height:85px; float:left; margin-right:10px; border:1px solid #ccc;">
-            <div style="font-size:12px;">
-                <b id="p_name_hi"></b><br><span id="p_name_en"></span><br>
-                DOB: <span id="p_dob"></span><br>Gender: <span id="p_gender"></span>
+        <div id="sidebar" class="sidebar hidden">
+            <div class="sidebar-header">FixsClub Portal</div>
+            <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
+            <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR MANUAL</span></div>
+            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
+            <div class="menu-item" onclick="nav('support')" style="margin-top: auto; border-top: 1px solid #444;"><span>🎧 HELP & SUPPORT</span></div>
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;"><span>🔒 LOGOUT</span></div>
+        </div>
+
+        <div id="mainArea" class="main-content hidden">
+            <div class="top-nav">
+                <span id="welcomeMsg">Welcome</span>
+                <div id="statusTag" style="background:#27ae60; color:white; padding:5px 10px; border-radius:4px; font-size:12px;">Active</div>
             </div>
-            <div id="p_uida" style="position:absolute; bottom:10px; width:100%; text-align:center; font-weight:bold; font-size:18px;"></div>
+
+            <div class="container">
+                <div id="dash-view" class="view">
+                    <div class="box"><h3>Namaste!</h3><p>FixsClub HD Aadhaar Tool taiyar hai.</p></div>
+                </div>
+
+                <div id="aadhaar-view" class="view hidden">
+                    <div class="box">
+                        <h3 style="color: var(--active-blue);">🆔 Aadhaar Manual Entry</h3>
+                        <input type="text" id="a_no" placeholder="Aadhar No">
+                        <input type="text" id="a_name_en" placeholder="Name English">
+                        <input type="text" id="a_name_hi" placeholder="नाम (Hindi)">
+                        <input type="text" id="a_dob" placeholder="DOB">
+                        <select id="a_gender"><option>Male</option><option>Female</option></select>
+                        <textarea id="a_addr_en" placeholder="Address English"></textarea>
+                        <textarea id="a_addr_hi" placeholder="पता Hindi"></textarea>
+                        <input type="file" id="a_pic" accept="image/*">
+                        <button class="btn" style="background: var(--success);" onclick="processAadhaar()">Print Aadhaar</button>
+                    </div>
+                </div>
+
+                <div id="admin-view" class="view hidden">
+                    <div class="box">
+                        <h3>👑 Master Admin Control</h3>
+                        <input type="text" id="act_mob" placeholder="Mobile to Activate">
+                        <button class="btn" style="background:var(--active-blue);" onclick="activateUserManual()">Activate 30 Days</button>
+                        <hr>
+                        <div id="admin-msg-box"><h4>User Messages</h4></div>
+                    </div>
+                </div>
+
+                <div id="support-view" class="view hidden">
+                    <div class="box">
+                        <h3>🎧 Support Center</h3>
+                        <textarea id="supportMsg" placeholder="Apni samasya likhein..."></textarea>
+                        <button class="btn" style="background:var(--active-blue);" onclick="sendMessage()">Send to Admin</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // MASTER CONFIG
         const MASTER_MOB = "9693101077";
         const MASTER_PASS = "Yadav@957272";
         const UPI_ID = "Q973860146@ybl";
@@ -153,7 +145,7 @@
                 lastPaymentDate: null
             };
             localStorage.setItem('user_' + mob, JSON.stringify(userData));
-            alert("Registration Successful! Please Login.");
+            alert("Registered! Now Login.");
             toggleAuth('login');
         }
 
@@ -161,9 +153,8 @@
             const mob = document.getElementById('l_mob').value;
             const pass = document.getElementById('l_pass').value;
 
-            // Bypass Master Admin
             if (mob === MASTER_MOB && pass === MASTER_PASS) {
-                document.getElementById('welcomeMsg').innerText = "Admin: Master Access";
+                document.getElementById('welcomeMsg').innerText = "Admin: Master Bypass";
                 document.getElementById('adminLink').classList.remove('hidden');
                 showPortal();
                 loadAdminMessages();
@@ -176,7 +167,7 @@
                 if (user.password === pass) {
                     checkSubscription(user);
                 } else { alert("Galat Password!"); }
-            } else { alert("Account nahi mila!"); }
+            } else { alert("User nahi mila!"); }
         }
 
         function checkSubscription(user) {
@@ -184,14 +175,13 @@
             const sevenDays = 7 * 24 * 60 * 60 * 1000;
             const thirtyDays = 30 * 24 * 60 * 60 * 1000;
 
-            // 7 Din Trial Check
             if (now - user.regDate > sevenDays) {
                 if (!user.lastPaymentDate || (now - user.lastPaymentDate > thirtyDays)) {
                     showPaymentModal();
                     return;
                 }
             }
-            document.getElementById('welcomeMsg').innerText = "Swagat hai, " + user.name;
+            document.getElementById('welcomeMsg').innerText = "Welcome, " + user.name;
             showPortal();
         }
 
@@ -209,8 +199,7 @@
                         <h2 style="color:red;">Trial Expired!</h2>
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiLink)}">
                         <p>Agle 30 din ke liye ₹100 pay karein.</p>
-                        <a href="${upiLink}" class="btn" style="background:#673ab7; display:block; text-decoration:none;">Pay Now (UPI)</a>
-                        <p style="font-size:10px; margin-top:10px;">Payment ke baad Screenshot Telegram par bhejein.</p>
+                        <a href="${upiLink}" class="btn" style="background:#673ab7; display:block; text-decoration:none; color:white;">Pay with PhonePe/UPI</a>
                     </div>
                 </div>`;
             document.body.insertAdjacentHTML('beforeend', html);
@@ -219,7 +208,6 @@
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(id + '-view').classList.remove('hidden');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
         }
 
         function sendMessage() {
@@ -228,40 +216,3 @@
             let msgs = JSON.parse(localStorage.getItem('portal_messages') || '[]');
             msgs.push({ mob, msg, time: new Date().toLocaleString() });
             localStorage.setItem('portal_messages', JSON.stringify(msgs));
-            alert("Message Admin ko bhej diya gaya!");
-            document.getElementById('supportMsg').value = "";
-        }
-
-        function loadAdminMessages() {
-            let msgs = JSON.parse(localStorage.getItem('portal_messages') || '[]');
-            let html = msgs.map(m => `<div style="border-bottom:1px solid #ddd; padding:5px;"><b>${m.mob}:</b> ${m.msg}</div>`).join('');
-            document.getElementById('admin-msg-box').innerHTML = html || "No messages.";
-        }
-
-        function activateUserManual() {
-            const mob = document.getElementById('act_mob').value;
-            let data = localStorage.getItem('user_' + mob);
-            if(data) {
-                let user = JSON.parse(data);
-                user.lastPaymentDate = new Date().getTime();
-                localStorage.setItem('user_' + mob, JSON.stringify(user));
-                alert("User " + mob + " activated for 30 days!");
-            } else { alert("User not found!"); }
-        }
-
-        function processAadhaar() {
-            document.getElementById('p_name_hi').innerText = document.getElementById('a_name_hi').value;
-            document.getElementById('p_name_en').innerText = document.getElementById('a_name_en').value;
-            document.getElementById('p_uida').innerText = document.getElementById('a_no').value;
-            // Photo handling
-            const file = document.getElementById('a_pic').files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => { 
-                document.getElementById('p_img').src = e.target.result;
-                setTimeout(() => { window.print(); }, 500);
-            };
-            if(file) reader.readAsDataURL(file); else alert("Photo upload karein!");
-        }
-    </script>
-</body>
-</html>
