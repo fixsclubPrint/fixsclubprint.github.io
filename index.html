@@ -81,7 +81,233 @@
             <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/', '_blank')">🆔 myAADHAAR</div>
 
             <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
-            <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR PRINT</span></div>
+            <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR PRINT</span></div> <!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form Design</title>
+    <style>
+        /* Basic Setup */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 40px;
+            color: #4a5568;
+        }
+
+        .form-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Labels and Inputs */
+        label {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #5d6d7e;
+            padding-left: 5px;
+        }
+
+        input[type="text"], 
+        input[type="date"], 
+        select, 
+        textarea {
+            padding: 12px 20px;
+            border: 1px solid #ced4da;
+            border-radius: 25px; /* Perfect Rounding like Image */
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+            font-size: 12px;
+        }
+
+        input:focus {
+            border-color: #4a90e2;
+        }
+
+        /* Special Sizing */
+        .address-box {
+            flex: 2; /* Bada box for address */
+        }
+
+        textarea {
+            border-radius: 15px;
+            height: 60px;
+            resize: vertical;
+        }
+
+        /* File Upload Styling */
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ced4da;
+            border-radius: 25px;
+            padding: 5px 15px;
+            background: #fff;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 12px 60px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .submit-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Responsive for Mobile */
+        @media (max-width: 768px) {
+            .col { flex: 100%; }
+            body { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <form action="#">
+        
+        <div class="row">
+            <div class="col">
+                <label>Aadhar Card No.</label>
+                <input type="text" placeholder="Aadharcard No..">
+            </div>
+            <div class="col">
+                <label>Name</label>
+                <input type="text" placeholder="Example : Raju Kumar">
+            </div>
+            <div class="col">
+                <label>Father Name</label>
+                <input type="text" placeholder="Example : Shyam Singh">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>House No</label>
+                <input type="text" placeholder="House No">
+            </div>
+            <div class="col">
+                <label>Gali, Locality</label>
+                <input type="text" placeholder="Gali, Locality, Panchayat">
+            </div>
+            <div class="col">
+                <label>Post Office</label>
+                <input type="text" placeholder="Post Office">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>State</label>
+                <input type="text" placeholder="State">
+            </div>
+            <div class="col">
+                <label>City</label>
+                <input type="text" placeholder="City">
+            </div>
+            <div class="col">
+                <label>Pin code</label>
+                <input type="text" placeholder="pincode">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>Date Of Birth</label>
+                <input type="text" placeholder="26/07/1992">
+            </div>
+            <div class="col">
+                <label>Date Of Birth Local</label>
+                <input type="text" placeholder="Auto Fill" readonly>
+            </div>
+            <div class="col">
+                <label>Select Gender</label>
+                <select>
+                    <option>GENDER</option>
+                    <option>MALE</option>
+                    <option>FEMALE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col" style="max-width: 33.3%;">
+                <label>Gender Local</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col address-box">
+                <label>Address</label>
+                <textarea placeholder="S/O : Mo Rahim, khurdaha, Jakhauli, Faizabad, Uttar Pradesh, 878987"></textarea>
+            </div>
+            <div class="col">
+                <label>Select Image</label>
+                <div class="file-input-wrapper">
+                    <input type="file">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label>Select Local Language</label>
+                <select>
+                    <option>SELECT</option>
+                    <option>HINDI</option>
+                    <option>BENGALI</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>Name (Local Language)</label>
+                <input type="text">
+            </div>
+            <div class="col address-box">
+                <label>Address (Local Language)</label>
+                <textarea></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
             <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER ID PRINT</span></div>
             
             <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
