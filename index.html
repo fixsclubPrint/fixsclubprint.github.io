@@ -6,7 +6,6 @@
     <title>FixsClub Print | Official Master Portal</title>
     
     <style>
-        /* --- पोर्टल की बेसिक स्टाइलिंग --- */
         :root { 
             --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
             --success: #5cb85c; --warning-yellow: #fff9c4;
@@ -15,55 +14,62 @@
         }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
+        /* Top Notice Bar */
         .top-notice { background: var(--warning-yellow); border-bottom: 2px solid #fbc02d; padding: 8px 0; z-index: 1001; }
         .top-notice marquee { color: #455a64; font-weight: bold; font-size: 15px; }
 
         .app-container { display: flex; flex-grow: 1; overflow: hidden; }
         
-        /* Sidebar */
+        /* Sidebar Layout */
         .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 20px; font-weight: bold; border-bottom: 1px solid #34495e; color: #fff; }
+        
         .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
         .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
-        /* Submenu Styling */
+        /* Submenu Style (Image Based) */
         .submenu { display: none; background: rgba(0, 0, 0, 0.2); }
         .sub-item { padding: 12px 20px 12px 45px; cursor: pointer; font-size: 14px; display: flex; align-items: center; transition: 0.2s; color: #ecf0f1; background: #34495e; border-bottom: 1px solid #2c3e50; }
         .sub-item:hover, .sub-active { background: #1c2833 !important; border-left: 4px solid #fff; }
+        
         .arrow { font-size: 10px; transition: transform 0.3s; }
         .rotate { transform: rotate(180deg); }
 
+        /* Main Area Styles */
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { padding: 25px; }
         .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         
-        .hidden { display: none !important; }
+        /* Card Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .s-card { padding: 25px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; text-align: center; font-weight: bold; }
+        .s-card:hover { transform: translateY(-5px); }
 
-        /* --- यहाँ से आपका ओरिजिनल फॉर्म डिज़ाइन शुरू है --- */
+        /* Aadhaar Form Layout (Your Original) */
         .row { display: flex; flex-wrap: wrap; gap: 25px; margin-bottom: 20px; }
         .col { flex: 1; min-width: 300px; display: flex; flex-direction: column; }
-        label { font-size: 13px; margin-bottom: 8px; color: #5d6d7e; padding-left: 5px; }
+        label { font-size: 13px; margin-bottom: 8px; color: #5d6d7e; padding-left: 5px; font-weight: bold;}
         input[type="text"], input[type="date"], select, textarea { 
             padding: 12px 20px; border: 1px solid #ced4da; border-radius: 25px; 
-            font-size: 14px; background-color: #fff; color: #333; outline: none; transition: border-color 0.2s; 
+            font-size: 14px; background-color: #fff; color: #333; outline: none; 
         }
-        input::placeholder { color: #a0aec0; font-size: 12px; }
         .address-box { flex: 2; }
         textarea { border-radius: 15px; height: 60px; resize: vertical; }
-        .file-input-wrapper { display: flex; align-items: center; border: 1px solid #ced4da; border-radius: 25px; padding: 5px 15px; background: #fff; }
         .submit-btn { 
             background-color: #5cb85c; color: white; border: none; padding: 12px 60px; 
-            border-radius: 25px; font-size: 16px; font-weight: 500; cursor: pointer; 
-            margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: fit-content;
+            border-radius: 25px; font-size: 16px; cursor: pointer; font-weight: 500; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: fit-content;
         }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <div class="top-notice">
-        <marquee>🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा।</marquee>
+        <marquee>🚀 FixsClub Print में आपका स्वागत है। बिना CSC ID के सभी सेवाओं का लाभ लें। | सहायता के लिए सपोर्ट पर संपर्क करें।</marquee>
     </div>
 
     <div class="app-container">
@@ -77,10 +83,12 @@
         </div>
 
         <div id="sidebar" class="sidebar hidden">
-            <div class="sidebar-header">FixsClub Master</div>
+            <div class="sidebar-header">FixsClub Print</div>
             
-            <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
-            
+            <div class="menu-item active-nav" id="btn-dash" onclick="nav('dash')">
+                <span>🏠 HOME / DASHBOARD</span>
+            </div>
+
             <div class="menu-item" onclick="toggleSub('aadhaar-sub', 'arr1')">
                 <span>🆔 AADHAAR PRINT</span> 
                 <span id="arr1" class="arrow">▼</span>
@@ -90,21 +98,36 @@
             </div>
 
             <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER ID PRINT</span></div>
+            
+            <div style="padding: 15px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
+            <div class="menu-item" onclick="window.open('https://serviceonline.bihar.gov.in/')">📄 RTPS Bihar</div>
+            <div class="menu-item" onclick="window.open('https://beneficiary.nha.gov.in/')">🏥 Ayushman Portal</div>
+
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;"><span>🔒 LOGOUT</span></div>
         </div>
 
         <div id="mainArea" class="main-content hidden">
             <div class="top-nav">
-                <span id="welcomeMsg">नमस्ते</span>
+                <span id="welcomeMsg">नमस्ते, FixsClub में आपका स्वागत है</span>
                 <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
             </div>
 
             <div class="container">
                 <div id="dash-view" class="view">
-                    <div class="box"><h3>Welcome to FixsClub</h3><p>कृपया मेनू से सेवा चुनें।</p></div>
+                    <div class="box">
+                        <h3 style="margin-top:0;">हमारी मुख्य सेवाएं 👋</h3>
+                        <div class="card-grid">
+                            <div class="s-card" style="background: var(--msme-teal);">MSME Registration</div>
+                            <div class="s-card" style="background: var(--rtps-color);">RTPS Certificates</div>
+                            <div class="s-card" style="background: var(--eshram-color);">e-Shram Services</div>
+                            <div class="s-card" style="background: var(--uidai-blue);">Aadhaar Services</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="aadhaar-manual-view" class="view hidden">
                     <div class="box">
+                        <h3 style="border-bottom: 2px solid #eee; padding-bottom:10px;">Aadhaar Manual Print</h3>
                         <form action="#">
                             <div class="row">
                                 <div class="col"><label>Aadhar Card No.</label><input type="text" placeholder="Aadharcard No.."></div>
@@ -129,38 +152,59 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col" style="max-width: 33.3%;"><label>Gender Local</label><input type="text"></div>
+                                <div class="col address-box">
+                                    <label>Address</label>
+                                    <textarea placeholder="S/O : Mo Rahim, Faizabad, UP..."></textarea>
+                                </div>
+                                <div class="col">
+                                    <label>Select Image</label>
+                                    <input type="file" style="border: 1px solid #ced4da; padding: 8px; border-radius: 25px;">
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col address-box"><label>Address</label><textarea placeholder="S/O : Mo Rahim, khurdaha, Jakhauli, Faizabad, Uttar Pradesh, 878987"></textarea></div>
-                                <div class="col"><label>Select Image</label><div class="file-input-wrapper"><input type="file"></div></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><label>Select Local Language</label><select><option>SELECT</option><option>HINDI</option><option>BENGALI</option></select></div>
+                                <div class="col">
+                                    <label>Select Local Language</label>
+                                    <select><option>SELECT</option><option>HINDI</option><option>BENGALI</option></select>
+                                </div>
                                 <div class="col"><label>Name (Local Language)</label><input type="text"></div>
                                 <div class="col address-box"><label>Address (Local Language)</label><textarea></textarea></div>
                             </div>
-                            <button type="submit" class="submit-btn">Submit</button>
+                            <button type="submit" class="submit-btn">Submit Details</button>
                         </form>
                     </div>
                 </div>
 
-                <div id="voter-view" class="view hidden"><div class="box"><h3>Voter Print Coming Soon</h3></div></div>
+                <div id="voter-view" class="view hidden">
+                    <div class="box"><h3>Voter Print Section</h3><p>यह सेवा अभी उपलब्ध नहीं है।</p></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        const MASTER_MOB = "9693101077";
+        const MASTER_PASS = "Yadav@957272";
+
         function doLogin() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('sidebar').classList.remove('hidden');
-            document.getElementById('mainArea').classList.remove('hidden');
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('mainArea').classList.remove('hidden');
+            } else { alert("गलत आईडी या पासवर्ड!"); }
         }
 
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
+            
             const target = document.getElementById(id + '-view');
             if(target) target.classList.remove('hidden');
+
+            if(id === 'dash') {
+                document.getElementById('btn-dash').classList.add('active-nav');
+            }
         }
 
         function toggleSub(id, arrowId) {
