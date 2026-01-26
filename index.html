@@ -1,43 +1,42 @@
-<div style="background: #fff9c4; border-bottom: 1px solid #fbc02d; padding: 5px;">
-    <marquee behavior="scroll" direction="left" style="color: #455a64; font-weight: bold;">
-        बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। पोर्टल पर रजिस्ट्रेशन बिल्कुल मुफ्त है। सहायता के लिए टेलीग्राम पर संपर्क करें।
-30 दिन के बाद आपको ₹100 Fee देना पड़ेगा पोर्टल रिपेयरिंग के लिए 
-    </marquee>
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Portal</title>
+    <title>FixsClub Print | Official Master Portal</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
     <style>
-        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #5cb85c; }
+        :root { --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; --success: #27ae60; --danger: #e74c3c; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; transition: 0.3s; }
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
         .menu-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
         .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
-        /* Main Content */
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; }
         .container { padding: 20px; }
         .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .hidden { display: none !important; }
 
-        /* Form Grid (As per Screenshot 52002.jpg) */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { opacity: 0.8; }
+
+        /* Payment Modal Styling */
+        #paymentOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; display:flex; justify-content:center; align-items:center; color: #333; }
         
-        /* History Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
-        th { background: var(--active-blue); color: white; }
-        .action-btn { padding: 5px 10px; border-radius: 3px; border: none; cursor: pointer; color: white; margin-right: 5px; }
+        @media print {
+            body * { visibility: hidden; }
+            #printCard, #printCard * { visibility: visible; }
+            #printCard { position: absolute; left: 0; top: 0; display: block !important; }
+            .card { width: 325px; height: 205px; border: 1px solid #000; position: relative; margin-bottom: 20px; background: #fff; float: left; margin-right: 10px;}
+        }
     </style>
 </head>
 <body>
@@ -65,132 +64,204 @@
         <div class="sidebar-header">FixsClub Portal</div>
         <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
         <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR MANUAL</span></div>
-        <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER MANUAL</span></div>
-        <div class="menu-item" onclick="nav('pan')"><span>💳 PAN ADVANCE</span></div>
         <div class="menu-item" onclick="nav('history')"><span>📂 SAVED HISTORY</span></div>
-        <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;"><span>🔒 LOGOUT</span></div>
+        <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
+        <div class="menu-item" onclick="nav('support')" style="margin-top: auto; border-top: 1px solid #444;"><span>🎧 HELP & SUPPORT</span></div>
+        <div class="menu-item" onclick="location.reload()" style="color: #ff7675;"><span>🔒 LOGOUT</span></div>
     </div>
 
     <div id="mainArea" class="main-content hidden">
         <div class="top-nav">
             <span id="welcomeMsg">Welcome</span>
-            <div id="timer" style="background:red; color:white; padding:5px 10px; border-radius:4px;">30:00</div>
+            <div id="statusTag" style="background:#27ae60; color:white; padding:5px 10px; border-radius:4px; font-size:12px;">Active</div>
         </div>
 
         <div class="container">
+            <div id="dash-view" class="view">
+                <div class="box">
+                    <h3>Namaste!</h3>
+                    <p>FixsClub HD Aadhaar Tool mein aapka swagat hai. Neeche diye gaye menu se kaam shuru karein.</p>
+                </div>
+            </div>
+
             <div id="aadhaar-view" class="view hidden">
                 <div class="box">
-                    <h3 style="color: var(--active-blue); border-bottom: 2px solid #ddd; padding-bottom: 10px;">🆔 Aadhaar Card Form</h3>
-                    <div class="grid-3">
-                        <div><label>Aadhar No.</label><input type="text" id="a_no" placeholder="Aadharcard No..."></div>
-                        <div><label>Name</label><input type="text" id="a_name" placeholder="Raju Kumar"></div>
-                        <div><label>Father Name</label><input type="text" id="a_father" placeholder="Shyam Singh"></div>
-                        <div><label>House No</label><input type="text" id="a_house"></div>
-                        <div><label>Post Office</label><input type="text" id="a_post"></div>
-                        <div><label>Pin Code</label><input type="text" id="a_pin"></div>
-                        <div><label>State</label><input type="text" id="a_state"></div>
-                        <div><label>City</label><input type="text" id="a_city"></div>
-                        <div><label>DOB</label><input type="text" id="a_dob" placeholder="DD/MM/YYYY"></div>
-                    </div>
-                    <label>Full Address</label>
-                    <textarea id="a_addr" rows="2"></textarea>
-                    <button class="btn" style="background: var(--success);" onclick="saveData('Aadhaar')">Submit & Download</button>
+                    <h3 style="color: var(--active-blue);">🆔 Aadhaar Manual Entry</h3>
+                    <input type="text" id="a_no" placeholder="Aadhar No (0000 0000 0000)">
+                    <input type="text" id="a_name_en" placeholder="Name in English">
+                    <input type="text" id="a_name_hi" placeholder="नाम (Hindi)">
+                    <input type="text" id="a_dob" placeholder="DOB (DD/MM/YYYY)">
+                    <select id="a_gender"><option>Male</option><option>Female</option></select>
+                    <textarea id="a_addr_en" placeholder="Address (English)"></textarea>
+                    <textarea id="a_addr_hi" placeholder="पता (Hindi)"></textarea>
+                    <input type="file" id="a_pic" accept="image/*">
+                    <button class="btn" style="background: var(--success);" onclick="processAadhaar()">Submit & Print</button>
                 </div>
             </div>
 
-            <div id="history-view" class="view hidden">
+            <div id="admin-view" class="view hidden">
                 <div class="box">
-                    <h3>📂 Saved Records (Jab tak aap delete na karein)</h3>
-                    <table>
-                        <thead>
-                            <tr><th>Service</th><th>Name</th><th>ID No.</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="historyBody"></tbody>
-                    </table>
+                    <h3>👑 Master Admin Control</h3>
+                    <p>User ka Mobile Number dalkar uska 30 din ka recharge active karein.</p>
+                    <input type="text" id="act_mob" placeholder="User Mobile Number">
+                    <button class="btn" style="background:var(--active-blue);" onclick="activateUserManual()">Activate 30 Days</button>
+                    <hr>
+                    <div id="admin-msg-box"><h4>User Messages</h4><p>Messages loading...</p></div>
                 </div>
             </div>
 
-            <div id="dash-view" class="view">
-                <div class="box"><h3>Namaste!</h3><p>Aapka data hamesha surakshit rahega.</p></div>
+            <div id="support-view" class="view hidden">
+                <div class="box">
+                    <h3>🎧 Help & Support</h3>
+                    <p>Koi dikkat ho toh humein message karein:</p>
+                    <textarea id="supportMsg" placeholder="Apni samasya yahan likhein..."></textarea>
+                    <button class="btn" style="background:var(--active-blue);" onclick="sendMessage()">Send to Admin</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <div id="printCard" class="hidden">
+        <div class="card" style="padding:10px;">
+            <img id="p_img" src="" style="width:70px; height:85px; float:left; margin-right:10px; border:1px solid #ccc;">
+            <div style="font-size:12px;">
+                <b id="p_name_hi"></b><br><span id="p_name_en"></span><br>
+                DOB: <span id="p_dob"></span><br>Gender: <span id="p_gender"></span>
+            </div>
+            <div id="p_uida" style="position:absolute; bottom:10px; width:100%; text-align:center; font-weight:bold; font-size:18px;"></div>
+        </div>
+    </div>
+
     <script>
+        // MASTER CONFIG
+        const MASTER_MOB = "9693101077";
+        const MASTER_PASS = "Yadav@957272";
+        const UPI_ID = "Q973860146@ybl";
+
         function toggleAuth(t) {
             document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
             document.getElementById('regBox').classList.toggle('hidden', t === 'login');
         }
 
         function doRegister() {
-            const m = document.getElementById('r_mob').value;
-            const user = { name: document.getElementById('r_name').value, pass: document.getElementById('r_pass').value };
-            localStorage.setItem("user_" + m, JSON.stringify(user));
-            alert("Account Registered!"); toggleAuth('login');
+            const mob = document.getElementById('r_mob').value;
+            const userData = {
+                name: document.getElementById('r_name').value,
+                mobile: mob,
+                password: document.getElementById('r_pass').value,
+                regDate: new Date().getTime(),
+                lastPaymentDate: null
+            };
+            localStorage.setItem('user_' + mob, JSON.stringify(userData));
+            alert("Registration Successful! Please Login.");
+            toggleAuth('login');
         }
 
         function doLogin() {
-            const m = document.getElementById('l_mob').value;
-            const p = document.getElementById('l_pass').value;
-            const u = JSON.parse(localStorage.getItem("user_" + m));
-            if ((m === "9693101077" && p === "Yadav@957272") || (u && u.pass === p)) {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('mainArea').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "Welcome, " + (u ? u.name : "Admin");
-                loadHistory();
-            } else { alert("Login Failed!"); }
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+
+            // Bypass Master Admin
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                document.getElementById('welcomeMsg').innerText = "Admin: Master Access";
+                document.getElementById('adminLink').classList.remove('hidden');
+                showPortal();
+                loadAdminMessages();
+                return;
+            }
+
+            const data = localStorage.getItem('user_' + mob);
+            if (data) {
+                const user = JSON.parse(data);
+                if (user.password === pass) {
+                    checkSubscription(user);
+                } else { alert("Galat Password!"); }
+            } else { alert("Account nahi mila!"); }
+        }
+
+        function checkSubscription(user) {
+            const now = new Date().getTime();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+            const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+
+            // 7 Din Trial Check
+            if (now - user.regDate > sevenDays) {
+                if (!user.lastPaymentDate || (now - user.lastPaymentDate > thirtyDays)) {
+                    showPaymentModal();
+                    return;
+                }
+            }
+            document.getElementById('welcomeMsg').innerText = "Swagat hai, " + user.name;
+            showPortal();
+        }
+
+        function showPortal() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mainArea').classList.remove('hidden');
+        }
+
+        function showPaymentModal() {
+            const upiLink = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
+            const html = `
+                <div id="paymentOverlay">
+                    <div style="background:white; padding:30px; border-radius:15px; text-align:center; width:300px;">
+                        <h2 style="color:red;">Trial Expired!</h2>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiLink)}">
+                        <p>Agle 30 din ke liye ₹100 pay karein.</p>
+                        <a href="${upiLink}" class="btn" style="background:#673ab7; display:block; text-decoration:none;">Pay Now (UPI)</a>
+                        <p style="font-size:10px; margin-top:10px;">Payment ke baad Screenshot Telegram par bhejein.</p>
+                    </div>
+                </div>`;
+            document.body.insertAdjacentHTML('beforeend', html);
         }
 
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(id + '-view').classList.remove('hidden');
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
         }
 
-        function saveData(type) {
-            const entry = {
-                type: type,
-                name: document.getElementById('a_name').value,
-                id_no: document.getElementById('a_no').value,
-                date: new Date().toLocaleDateString()
+        function sendMessage() {
+            const msg = document.getElementById('supportMsg').value;
+            const mob = document.getElementById('l_mob').value || "Unknown";
+            let msgs = JSON.parse(localStorage.getItem('portal_messages') || '[]');
+            msgs.push({ mob, msg, time: new Date().toLocaleString() });
+            localStorage.setItem('portal_messages', JSON.stringify(msgs));
+            alert("Message Admin ko bhej diya gaya!");
+            document.getElementById('supportMsg').value = "";
+        }
+
+        function loadAdminMessages() {
+            let msgs = JSON.parse(localStorage.getItem('portal_messages') || '[]');
+            let html = msgs.map(m => `<div style="border-bottom:1px solid #ddd; padding:5px;"><b>${m.mob}:</b> ${m.msg}</div>`).join('');
+            document.getElementById('admin-msg-box').innerHTML = html || "No messages.";
+        }
+
+        function activateUserManual() {
+            const mob = document.getElementById('act_mob').value;
+            let data = localStorage.getItem('user_' + mob);
+            if(data) {
+                let user = JSON.parse(data);
+                user.lastPaymentDate = new Date().getTime();
+                localStorage.setItem('user_' + mob, JSON.stringify(user));
+                alert("User " + mob + " activated for 30 days!");
+            } else { alert("User not found!"); }
+        }
+
+        function processAadhaar() {
+            document.getElementById('p_name_hi').innerText = document.getElementById('a_name_hi').value;
+            document.getElementById('p_name_en').innerText = document.getElementById('a_name_en').value;
+            document.getElementById('p_uida').innerText = document.getElementById('a_no').value;
+            // Photo handling
+            const file = document.getElementById('a_pic').files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => { 
+                document.getElementById('p_img').src = e.target.result;
+                setTimeout(() => { window.print(); }, 500);
             };
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            history.push(entry);
-            localStorage.setItem('fclub_history', JSON.stringify(history));
-            alert("Data Saved! Downloading...");
-            loadHistory();
-            window.print(); // Browser download option
-        }
-
-        function loadHistory() {
-            let history = JSON.parse(localStorage.getItem('fclub_history') || '[]');
-            let html = '';
-            history.forEach((item, index) => {
-                html += `<tr><td>${item.type}</td><td>${item.name}</td><td>${item.id_no}</td><td>
-                    <button class="action-btn" style="background:orange;" onclick="editEntry(${index})">Edit</button>
-                    <button class="action-btn" style="background:red;" onclick="deleteEntry(${index})">Del</button>
-                </td></tr>`;
-            });
-            document.getElementById('historyBody').innerHTML = html;
-        }
-
-        function deleteEntry(i) {
-            let h = JSON.parse(localStorage.getItem('fclub_history'));
-            h.splice(i, 1);
-            localStorage.setItem('fclub_history', JSON.stringify(h));
-            loadHistory();
-        }
-
-        function editEntry(i) {
-            let h = JSON.parse(localStorage.getItem('fclub_history'));
-            let item = h[i];
-            document.getElementById('a_name').value = item.name;
-            document.getElementById('a_no').value = item.id_no;
-            nav('aadhaar');
-            deleteEntry(i);
+            if(file) reader.readAsDataURL(file); else alert("Photo upload karein!");
         }
     </script>
 </body>
-    </html>
+</html>
