@@ -115,4 +115,77 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) { document.getElementById('view_photo').src = e.target.result; };
-            reader.
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Sync Address in English
+    function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
+        let addr = prefix + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('gali').value + ", " + document.getElementById('po').value + ", " + document.getElementById('city').value + ", " + document.getElementById('state').value + " - " + document.getElementById('pin').value;
+        document.getElementById('addr_en').value = addr;
+        if(document.getElementById('lang_select').value) translateFields();
+    }
+
+    // Sync DOB Format
+    function syncDOB() {
+        let val = document.getElementById('dob').value;
+        if(val) {
+            let d = val.split('-');
+            document.getElementById('c_dob').innerText = d[2]+'/'+d[1]+'/'+d[0];
+        }
+    }
+
+    // Translation Function
+    async function translateFields() {
+        let lang = document.getElementById('lang_select').value;
+        if(!lang) return;
+        
+        translateText(document.getElementById('name_en').value, 'name_hi', lang);
+        translateText(document.getElementById('addr_en').value, 'addr_hi', lang);
+        document.getElementById('gender_hi').value = (document.getElementById('gender').value === "MALE") ? "पुरुष" : "महिला";
+    }
+
+    async function translateText(text, targetId, lang) {
+        if(!text.trim()) return;
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
+            const data = await res.json();
+            document.getElementById(targetId).value = data[0][0][0];
+        } catch (e) { console.log("Translation Error"); }
+    }
+
+    // Space in Aadhaar Number (4-4 digit)
+    function formatAadhaar(num) {
+        return num.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    // Final Generation
+    function generateFinalCard() {
+        let aNum = document.getElementById('a_num').value;
+        let formattedNum = formatAadhaar(aNum);
+
+        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
+        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+        
+        // Display with Spaces
+        document.getElementById('c_num').innerText = formattedNum;
+        document.getElementById('c_num_back').innerText = formattedNum;
+        
+        document.getElementById('c_addr_hi').innerText = document.getElementById('addr_hi').value;
+        document.getElementById('c_addr_en').innerText = document.getElementById('addr_en').value;
+        
+        // QR Code (using original number)
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { text: aNum, width: 85, height: 85 });
+        
+        document.getElementById('print-area').style.display = 'flex';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+
+</body>
+</html>
