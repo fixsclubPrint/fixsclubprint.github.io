@@ -1,51 +1,55 @@
-<!-- Replace your entire #print-area content with something like this -->
-
-<div id="print-area" style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
-    <!-- Front side - New minimal design -->
-    <div class="aadhaar-box" style="height: 210px; background: #fff; border: 1px solid #444; border-radius: 6px; overflow: hidden; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
-        <!-- Header - simpler now -->
-        <div style="height: 45px; background: linear-gradient(to right, #ff9933, #ffffff, #138808); display: flex; align-items: center; justify-content: space-between; padding: 0 12px;">
-            <div style="font-size: 11px; font-weight: bold; color: #000;">
-                Government of India<br>भारत सरकार
-            </div>
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1024px-Aadhaar_Logo.svg.png" width="38" alt="Aadhaar Logo">
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Aadhaar Card Template</title>
+    <style>
+        /* Aadhaar Card styles */
+        .aadhaar-card {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #000;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+        .aadhaar-header {
+            background-color: #FF9933;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+        }
+        .aadhaar-details {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="aadhaar-card">
+        <div class="aadhaar-header">
+            <h2>Aadhaar Card</h2>
         </div>
-        
-        <!-- Main content: Only photo + big QR -->
-        <div style="display: flex; justify-content: center; align-items: center; height: 165px; gap: 25px; padding: 0 20px;">
-            <!-- Photo - larger and centered/left -->
-            <img id="view_photo" style="width: 105px; height: 125px; object-fit: cover; border: 1.5px solid #333; border-radius: 4px;" alt="Resident Photo">
-            
-            <!-- Large secure QR code -->
-            <div id="qrcode" style="width: 115px; height: 115px; background: #fff; border: 1px solid #aaa; padding: 4px; border-radius: 4px;"></div>
-        </div>
-        
-        <!-- Tiny footer -->
-        <div style="position: absolute; bottom: 4px; width: 100%; text-align: center; font-size: 9px; color: #555;">
-            www.uidai.gov.in | 1947
-        </div>
-    </div>
-
-    <!-- Back side - usually very minimal or almost plain -->
-    <div class="aadhaar-box" style="height: 210px; background: #f8f9fa; border: 1px solid #444; border-radius: 6px; position: relative;">
-        <div style="padding: 12px; font-size: 10px; color: #333;">
-            <strong>Unique Identification Authority of India</strong><br>
-            भारतीय विशिष्ट पहचान प्राधिकरण<br><br>
-            This is the reverse side of your Aadhaar card.<br>
-            All personal details are securely embedded in the QR code.<br>
-            Do not share photo or QR with unknown persons.
-        </div>
-        <div style="position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-size: 9px; color: #777;">
-            help@uidai.gov.in | Toll Free: 1947
+        <div class="aadhaar-details">
+            <p>Name: <span id="name"></span></p>
+            <p>Aadhaar Number: <span id="aadhaar-number"></span></p>
+            <p>Date of Birth: <span id="dob"></span></p>
+            <p>Address: <span id="address"></span></p>
         </div>
     </div>
-</div> document.getElementById('qrcode').innerHTML = "";
-let qrContent = `AADHAAR SECURE QR\nUID:\( {rawNum}\nName: \){document.getElementById('name_en').value}\nDOB:\( {document.getElementById('c_dob').innerText}\nGender: \){document.getElementById('gender').value}\nAddr:${document.getElementById('addr_en').value}`;
-new QRCode(document.getElementById("qrcode"), {
-    text: qrContent,
-    width: 115,
-    height: 115,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H   // Higher error correction for security look
-});
+
+    <script>
+        // Sample data
+        const aadhaarData = {
+            name: "John Doe",
+            aadhaarNumber: "1234 5678 9012",
+            dob: "01/01/1990",
+            address: "123, Main Street, Delhi"
+        };
+
+        // Populate Aadhaar Card data
+        document.getElementById("name").innerText = aadhaarData.name;
+        document.getElementById("aadhaar-number").innerText = aadhaarData.aadhaarNumber;
+        document.getElementById("dob").innerText = aadhaarData.dob;
+        document.getElementById("address").innerText = aadhaarData.address;
+    </script>
+</body>
+</html>
