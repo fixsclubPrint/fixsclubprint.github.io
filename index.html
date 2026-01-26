@@ -180,4 +180,13 @@
 
         document.getElementById('qrcode').innerHTML = "";
         new QRCode(document.getElementById("qrcode"), { 
-            text: "UID:" + rawNum
+            text: "UID:" + rawNum + "\nName:" + document.getElementById('name_en').value, 
+            width: 82, height: 82, correctLevel : QRCode.CorrectLevel.M 
+        });
+        
+        document.getElementById('print-area').style.display = 'flex';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+</body>
+</html>
