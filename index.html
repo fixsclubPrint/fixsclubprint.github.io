@@ -17,14 +17,16 @@
         .card-header { width: 100%; height: 35px; border-bottom: 1px solid #ddd; padding: 2px 5px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .photo-frame { width: 68px; height: 82px; border: 1px solid #000; position: absolute; left: 10px; top: 45px; object-fit: cover; }
         
-        /* Front Details */
+        /* Front Details Updated for Soft Look */
         .details { position: absolute; left: 85px; top: 40px; font-size: 10px; line-height: 1.3; color: #333; }
         #c_name_hi { display: none; font-weight: 500; font-size: 11px; color: #333; }
+        #c_dob_label { font-weight: 500; color: #333; } /* DOB label made lighter */
+        #c_dob { color: #333; } /* DOB text made lighter */
         
-        /* Back Address Section */
-        .address-box { padding: 10px; font-size: 8.5px; width: 195px; color: #000; line-height: 1.2; }
-        #label_addr_hi { display: none; font-weight: bold; }
-        #c_addr_hi { display: none; margin-bottom: 4px; }
+        /* Back Address Section Updated */
+        .address-box { position: absolute; left: 10px; top: 40px; font-size: 8.5px; width: 195px; color: #333; line-height: 1.1; }
+        #label_addr_hi { display: none; font-weight: 500; margin-bottom: 0px; }
+        #c_addr_hi { display: none; margin-bottom: 2px; margin-top: -1px; }
 
         .aadhaar-num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 17px; font-weight: bold; letter-spacing: 1.5px; }
         .card-footer { position: absolute; bottom: 0; width: 100%; height: 22px; background: #fff; border-top: 1px solid red; color: red; text-align: center; font-size: 11px; font-weight: bold; line-height: 22px; }
@@ -91,7 +93,7 @@
         <div class="details">
             <span id="c_name_hi"></span>
             <span id="c_name_en"></span><br>
-            <span style="font-weight: bold;">जन्म तिथि / DOB: </span><span id="c_dob"></span><br>
+            <span id="c_dob_label">जन्म तिथि / DOB: </span><span id="c_dob"></span><br>
             <span id="c_gender_hi"></span><span id="slash_gen" style="display:none;"> / </span><span id="c_gender_en"></span>
         </div>
         <div class="aadhaar-num" id="c_num"></div>
@@ -101,9 +103,9 @@
     <div class="aadhaar-box">
         <div class="card-header"><span style="font-size:7px; font-weight:bold;">Unique Identification Authority of India</span></div>
         <div class="address-box">
-            <span id="label_addr_hi">पता:</span><br>
-            <span id="c_addr_hi"></span>
-            <span style="font-weight:bold;">Address:</span><br>
+            <span id="label_addr_hi">पता:</span>
+            <div id="c_addr_hi"></div>
+            <span style="font-weight:500;">Address:</span><br>
             <span id="c_addr_en"></span>
         </div>
         <div id="qrcode" class="qr-position"></div>
@@ -123,69 +125,4 @@
     function syncAddress() {
         let g = document.getElementById('gender').value;
         let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
-        let addr = prefix + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('gali').value + ", " + document.getElementById('po').value + ", " + document.getElementById('city').value + ", " + document.getElementById('state').value + " - " + document.getElementById('pin').value;
-        document.getElementById('addr_en').value = addr;
-    }
-
-    function syncDOB() {
-        let val = document.getElementById('dob').value;
-        if(val) {
-            let d = val.split('-');
-            document.getElementById('c_dob').innerText = d[2]+'/'+d[1]+'/'+d[0];
-        }
-    }
-
-    async function translateFields() {
-        let lang = document.getElementById('lang_select').value;
-        if(!lang) return;
-        translateText(document.getElementById('name_en').value, 'name_hi', lang);
-        translateText(document.getElementById('addr_en').value, 'addr_hi', lang);
-        let gEn = document.getElementById('gender').value;
-        document.getElementById('gender_hi').value = (gEn === "MALE") ? "पुरुष" : "महिला";
-    }
-
-    async function translateText(text, targetId, lang) {
-        if(!text.trim()) return;
-        try {
-            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
-            const data = await res.json();
-            document.getElementById(targetId).value = data[0][0][0];
-        } catch (e) { }
-    }
-
-    function generateFinalCard() {
-        let lang = document.getElementById('lang_select').value;
-        let rawNum = document.getElementById('a_num').value;
-        let formattedNum = rawNum.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
-        
-        if(lang) {
-            document.getElementById('c_name_hi').style.display = 'block';
-            document.getElementById('c_gender_hi').style.display = 'inline';
-            document.getElementById('slash_gen').style.display = 'inline';
-            document.getElementById('label_addr_hi').style.display = 'block';
-            document.getElementById('c_addr_hi').style.display = 'block';
-        }
-
-        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
-        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
-        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
-        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
-        document.getElementById('c_num').innerText = formattedNum;
-        document.getElementById('c_num_back').innerText = formattedNum;
-        document.getElementById('c_addr_hi').innerText = document.getElementById('addr_hi').value;
-        document.getElementById('c_addr_en').innerText = document.getElementById('addr_en').value;
-
-        // Optimized QR Data for Instant Scanning
-        document.getElementById('qrcode').innerHTML = "";
-        let qrContent = "UID: " + rawNum + "\nName: " + document.getElementById('name_en').value + "\nDOB: " + document.getElementById('c_dob').innerText;
-        new QRCode(document.getElementById("qrcode"), { 
-            text: qrContent, width: 85, height: 85, 
-            correctLevel : QRCode.CorrectLevel.M 
-        });
-        
-        document.getElementById('print-area').style.display = 'flex';
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-</script>
-</body>
-</html>
+        let addr = prefix + document.
