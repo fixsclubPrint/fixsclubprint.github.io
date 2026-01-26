@@ -2,121 +2,137 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Card Portal</title>
+    <title>Original Aadhaar Manual Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
-        .form-container { background: #fff; max-width: 1100px; margin: 0 auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        
-        /* Layout as per image 52455.jpg */
-        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; padding: 20px; }
+        .form-container { background: #fff; max-width: 1100px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
-        label { font-size: 13px; color: #666; margin-bottom: 8px; font-weight: 500; }
+        label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
+        input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; outline: none; background: #fff; }
         
-        input, select, textarea { 
-            padding: 12px; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 8px; 
-            font-size: 14px; 
-            outline: none; 
-            transition: border 0.3s;
-        }
-        input:focus { border-color: #5cb85c; }
-
-        /* Green Submit Button */
-        .btn-submit { 
-            background: #5cb85c; 
-            color: white; 
-            border: none; 
-            padding: 14px 60px; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 16px; 
-            width: fit-content;
-            margin-top: 10px;
+        #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        
+        /* असली आधार डिजाइन */
+        .aadhaar-box { 
+            width: 325px; height: 205px; background: white; border: 1px solid #999; 
+            position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
         }
 
-        /* Result Display Side-by-Side */
-        #print-area { display: none; justify-content: center; gap: 25px; padding: 40px; background: #fff; margin-top: 30px; }
-        .aadhaar-box { width: 325px; height: 205px; border: 1px solid #ccc; position: relative; background: white; overflow: hidden; border-radius: 4px; }
+        /* तिरंगा हेडर पट्टी */
+        .card-header { 
+            width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; 
+            display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; 
+            background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%);
+        }
         
-        /* Card Styles */
-        .card-header { height: 38px; border-bottom: 1px solid #eee; padding: 0 10px; display: flex; justify-content: space-between; align-items: center; }
-        .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 48px; border: none; object-fit: cover; }
-        .details { position: absolute; left: 90px; top: 48px; font-size: 10px; line-height: 1.3; font-weight: bold; }
-        .aadhaar-num { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 19px; font-weight: bold; letter-spacing: 1px; }
-        .card-footer { position: absolute; bottom: 0; width: 100%; height: 26px; border-top: 1.5px solid #ff0000; text-align: center; line-height: 26px; font-size: 12px; font-weight: bold; }
-        .red-txt { color: #ff0000; }
+        .photo-frame { width: 68px; height: 82px; border: 1px solid #000; position: absolute; left: 12px; top: 48px; object-fit: cover; background: #f9f9f9; }
+        
+        .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #000; font-weight: 600; }
+        #c_name_hi { display: block; font-size: 11.5px; margin-bottom: 1px; }
+        
+        .address-box { position: absolute; left: 12px; top: 45px; font-size: 8.8px; width: 200px; color: #333; line-height: 1.15; font-weight: 500; }
 
-        .address-box { position: absolute; left: 12px; top: 48px; font-size: 8px; width: 180px; line-height: 1.2; font-weight: 500; }
-        .qr-pos { position: absolute; right: 12px; top: 45px; width: 90px; height: 90px; }
+        .aadhaar-num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1.5px; color: #000; }
+        
+        /* नीचे की लाल पट्टी */
+        .card-footer { 
+            position: absolute; bottom: 0; width: 100%; height: 24px; 
+            background: #fff; border-top: 1.5px solid #ff0000; color: #ff0000; 
+            text-align: center; font-size: 12px; font-weight: bold; line-height: 24px; 
+        }
+        
+        .qr-position { position: absolute; right: 12px; top: 48px; width: 85px; height: 85px; padding: 2px; background: #fff; border: 1px solid #eee; }
+        
+        .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; transition: 0.3s; }
+        .btn-gen:hover { background: #219150; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <form id="aadhaarForm">
+    <h2 style="text-align: center; color: #1a237e; margin-top: 0;">Aadhaar Card Manual Portal</h2>
+    <form id="masterForm">
         <div class="row">
-            <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" placeholder="Aadharcard No..." maxlength="14" oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"></div>
-            <div class="form-group"><label>Name</label><input type="text" id="name_en" placeholder="Example : Raju Kumar"></div>
-            <div class="form-group"><label>Father Name</label><input type="text" id="fname_en" placeholder="Example : Shyam Singh"></div>
+            <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12"></div>
+            <div class="form-group"><label>Full Name </label><input type="text" id="name_en" onkeyup="translateFields()"></div>
+            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" onkeyup="syncAddress()"></div>
         </div>
-        
         <div class="row">
-            <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob"></div>
-            <div class="form-group"><label>Select Gender</label><select id="gender"><option value="GENDER">GENDER</option><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
-            <div class="form-group"><label>Select Local Language</label>
-                <select id="lang_select">
+            <div class="form-group"><label>House No</label><input type="text" id="h_no" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Village/City</label><input type="text" id="gali" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Post Office</label><input type="text" id="po" onkeyup="syncAddress()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>District</label><input type="text" id="city" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>State</label><input type="text" id="state" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Pin code</label><input type="text" id="pin" onkeyup="syncAddress()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob" onchange="syncDOB()"></div>
+            <div class="form-group"><label>Select Gender</label><select id="gender" onchange="syncAddress(); translateFields();"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
+            <div class="form-group"><label>Resident Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
+        </div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address </label><textarea id="addr_en" rows="2" onkeyup="translateFields()"></textarea></div></div>
+
+        <div class="row" style="border-top: 2px solid #eee; padding-top: 15px;">
+            <div class="form-group">
+                <label>Select Local Language</label>
+                <select id="lang_select" onchange="translateFields()">
+                    <option value="">  Select Language </option>
                     <option value="hi">HINDI (हिंदी)</option>
-                    <option value="gu">GUJARATI (ગુજરાતી)</option>
+                    <value="gu">GUJARATI (ગુજરાતી)</option>
                     <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
+                    <option value="mr">MARATHI (मराठी)</option>
+                    <option value="bn">BENGALI (বাংলা)</option>
+                    <option value="ta">TAMIL (தமிழ்)</option>
+                    <option value="te">TELUGU (తెలుగు)</option>
+                    <option value="kn">KANNADA (ಕನ್ನಡ)</option>
+                    <option value="ml">MALAYALAM (മലയാളം)</option>
+                    <option value="or">ODIA (ଓଡ଼ିଆ)</option>
+option>
                 </select>
             </div>
+            <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi"></div>
+            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi"></div>
         </div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
 
-        <div class="row" style="grid-template-columns: 2fr 1fr;">
-            <div class="form-group"><label>Address</label><textarea id="addr_en" rows="3" placeholder="S/O : Mo Rahim..."></textarea></div>
-            <div class="form-group"><label>Select Image</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
-        </div>
-
-        <div class="row">
-            <div class="form-group"><label>Name (Local Language)</label><input type="text" id="name_hi"></div>
-            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi" placeholder="Gender Local"></div>
-            <div class="form-group"><label>Address (Local Language)</label><textarea id="addr_hi" rows="1"></textarea></div>
-        </div>
-        
-        <button type="button" class="btn-submit" onclick="generateAndDownload()">Submit</button>
+        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar Card</button>
     </form>
 </div>
 
 <div id="print-area">
     <div class="aadhaar-box">
         <div class="card-header">
-            <div style="font-size:7px; font-weight:bold;">भारत सरकार / Government of India</div>
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1024px-Aadhaar_Logo.svg.png" width="20">
+            <div style="font-size:8px; font-weight:bold; color:#000; line-height:1.1;">भारत सरकार<br>Government of India</div>
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1024px-Aadhaar_Logo.svg.png" width="25">
         </div>
         <img id="view_photo" class="photo-frame">
         <div class="details">
-            <span id="disp_name_hi" style="display:block; font-size:11px;"></span>
-            <span id="disp_name_en"></span><br>
-            जन्म तिथि / DOB: <span id="disp_dob"></span><br>
-            <span id="disp_gen_hi"></span> / <span id="disp_gen_en"></span>
+            <span id="c_name_hi"></span>
+            <span id="c_name_en"></span><br>
+            <span id="c_dob_label">जन्म तिथि / DOB: </span><span id="c_dob"></span><br>
+            <span id="c_gender_hi"></span><span id="slash_gen" style="display:none;"> / </span><span id="c_gender_en"></span>
         </div>
-        <div class="aadhaar-num" id="disp_num_f"></div>
-        <div class="card-footer">मेरा <span class="red-txt">आधार</span>, मेरी पहचान</div>
+        <div class="aadhaar-num" id="c_num"></div>
+        <div class="card-footer">मेरा आधार, मेरी पहचान</div>
     </div>
 
     <div class="aadhaar-box">
-        <div class="card-header"><div style="font-size:7px; font-weight:bold;">Unique Identification Authority of India</div></div>
-        <div class="address-box">
-            <b>पता:</b> <span id="disp_addr_hi"></span><br><br>
-            <b>Address:</b> <span id="disp_addr_en"></span>
+        <div class="card-header">
+            <div style="font-size:7px; font-weight:bold; color:#000;">भारतीय विशिष्ट पहचान प्राधिकरण<br>Unique Identification Authority of India</div>
         </div>
-        <div id="qrcode" class="qr-pos"></div>
-        <div class="aadhaar-num" id="disp_num_b" style="font-size:12px; bottom:15px; color:#666;"></div>
-        <div class="card-footer" style="font-size:8px; border-top:1px solid #ccc; color:#444;">1947 | help@uidai.gov.in | www.uidai.gov.in</div>
+        <div class="address-box">
+            <span id="label_addr_hi" style="font-weight:bold;">पता:</span>
+            <div id="c_addr_hi"></div>
+            <span style="font-weight:bold;">Address:</span><br>
+            <span id="c_addr_en"></span>
+        </div>
+        <div id="qrcode" class="qr-position"></div>
+        <div class="aadhaar-num" id="c_num_back" style="font-size:12px; bottom:15px; letter-spacing:0.5px;"></div>
+        <div class="card-footer" style="font-size:10px;">1947 | help@uidai.gov.in | www.uidai.gov.in</div>
     </div>
 </div>
 
@@ -124,39 +140,83 @@
     function previewImg(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            reader.onload = e => document.getElementById('view_photo').src = e.target.result;
+            reader.onload = function(e) { document.getElementById('view_photo').src = e.target.result; };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    async function generateAndDownload() {
-        const num = document.getElementById('a_num').value;
-        const name = document.getElementById('name_en').value;
+    function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
+        let addr = prefix + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('gali').value + ", " + document.getElementById('po').value + ", " + document.getElementById('city').value + ", " + document.getElementById('state').value + " - " + document.getElementById('pin').value;
+        document.getElementById('addr_en').value = addr;
         
-        document.getElementById('disp_name_hi').innerText = document.getElementById('name_hi').value;
-        document.getElementById('disp_name_en').innerText = name;
-        document.getElementById('disp_dob').innerText = document.getElementById('dob').value.split('-').reverse().join('/');
-        document.getElementById('disp_gen_hi').innerText = document.getElementById('gender_hi').value;
-        document.getElementById('disp_gen_en').innerText = document.getElementById('gender').value;
-        document.getElementById('disp_num_f').innerText = num;
-        document.getElementById('disp_num_b').innerText = num;
-        document.getElementById('disp_addr_hi').innerText = document.getElementById('addr_hi').value;
-        document.getElementById('disp_addr_en').innerText = document.getElementById('addr_en').value;
+        let lang = document.getElementById('lang_select').value;
+        if(lang) { translateText(addr, 'addr_hi', lang); }
+    }
+
+    function syncDOB() {
+        let val = document.getElementById('dob').value;
+        if(val) {
+            let d = val.split('-');
+            document.getElementById('c_dob').innerText = d[2]+'/'+d[1]+'/'+d[0];
+        }
+    }
+
+    async function translateFields() {
+        let lang = document.getElementById('lang_select').value;
+        if(!lang) return;
+        
+        translateText(document.getElementById('name_en').value, 'name_hi', lang);
+        translateText(document.getElementById('addr_en').value, 'addr_hi', lang);
+        
+        let gEn = document.getElementById('gender').value;
+        let genders_hi = {"hi":"पुरुष", "gu":"પુરુષ", "pa":"ਪੁਰুষ", "mr":"पुरुष", "ta":"ஆண்"};
+        let genders_f_hi = {"hi":"महिला", "gu":"મહિલા", "pa":"ਮਹਿલા", "mr":"महिला", "ta":"பெண்"};
+        
+        document.getElementById('gender_hi').value = (gEn === "MALE") ? (genders_hi[lang] || "पुरुष") : (genders_f_hi[lang] || "महिला");
+    }
+
+    async function translateText(text, targetId, lang) {
+        if(!text || !text.trim()) return;
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
+            const data = await res.json();
+            document.getElementById(targetId).value = data[0][0][0];
+        } catch (e) { console.log("Translation error"); }
+    }
+
+    function generateFinalCard() {
+        let lang = document.getElementById('lang_select').value;
+        let rawNum = document.getElementById('a_num').value;
+        let formattedNum = rawNum.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
+        
+        if(lang) {
+            document.getElementById('c_name_hi').style.display = 'block';
+            document.getElementById('c_gender_hi').style.display = 'inline';
+            document.getElementById('slash_gen').style.display = 'inline';
+            document.getElementById('label_addr_hi').style.display = 'inline-block';
+            document.getElementById('c_addr_hi').style.display = 'block';
+        }
+
+        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
+        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+        document.getElementById('c_num').innerText = formattedNum;
+        document.getElementById('c_num_back').innerText = formattedNum;
+        document.getElementById('c_addr_hi').innerText = document.getElementById('addr_hi').value;
+        document.getElementById('c_addr_en').innerText = document.getElementById('addr_en').value;
 
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: "UID:"+num.replace(/\s/g,''), width: 90, height: 90 });
+        let qrContent = "UID: " + rawNum + "\nName: " + document.getElementById('name_en').value + "\nDOB: " + document.getElementById('c_dob').innerText;
+        new QRCode(document.getElementById("qrcode"), { 
+            text: qrContent, width: 85, height: 85, 
+            correctLevel : QRCode.CorrectLevel.M 
+        });
         
-        const printArea = document.getElementById('print-area');
-        printArea.style.display = 'flex';
-
-        // Auto Download
-        const opt = {
-            margin: 10,
-            filename: name + '_Aadhaar.pdf',
-            html2canvas: { scale: 3 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(printArea).save();
+        document.getElementById('print-area').style.display = 'flex';
+        window.scrollTo(0, document.body.scrollHeight);
     }
 </script>
 </body>
