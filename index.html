@@ -149,7 +149,7 @@
             const pass = document.getElementById('l_pass').value;
             if (mob === MASTER_MOB && pass === MASTER_PASS) {
                 document.getElementById('adminLink').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "नमस्ते मास्टर एडमिन";
+                document.getElementById('welcomeMsg').innerText = "नमस्ते ";
                 showPortal(); return;
             }
             const data = localStorage.getItem('user_' + mob);
