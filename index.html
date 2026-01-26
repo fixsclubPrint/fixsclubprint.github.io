@@ -7,7 +7,7 @@
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; padding: 20px; }
         .form-container { background: #fff; max-width: 1000px; margin: 0 auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
-        .header-title { text-align: center; color: #1a237e; margin-bottom: 20px; font-size: 24px; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .header-title { text-align: center; color: #1a237e; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
         .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
         label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
@@ -18,14 +18,17 @@
         .card-header { width: 100%; height: 35px; border-bottom: 0.6px solid #eee; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .photo-frame { width: 68px; height: 82px; border: 0.5px solid #000; position: absolute; left: 12px; top: 45px; object-fit: cover; }
         
+        /* Front side stays exactly as requested */
         .details { position: absolute; left: 90px; top: 42px; font-size: 10.5px; line-height: 1.4; color: #333; }
+        #c_name_hi_display { font-weight: 500; font-size: 12.5px; color: #333; }
+        
         .address-box { position: absolute; left: 12px; top: 40px; font-size: 9px; width: 190px; color: #333; line-height: 1.3; }
         .aadhaar-num { position: absolute; bottom: 28px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 2px; color: #000; }
         .card-footer { position: absolute; bottom: 0; width: 100%; height: 22px; background: #fff; border-top: 1px solid #d32f2f; color: #d32f2f; text-align: center; font-size: 11px; font-weight: bold; line-height: 22px; }
         .qr-position { position: absolute; right: 12px; top: 42px; width: 85px; height: 85px; padding: 2px; background: #fff; border: 0.5px solid #eee; }
         
-        .btn-gen { background: #2e7d32; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px;}
-        .btn-print { background: #1565c0; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; display: none; margin-top: 10px;}
+        .btn-gen { background: #2e7d32; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; }
+        .btn-print { background: #1565c0; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; display: none; margin-top: 10px; }
 
         @media print {
             body * { visibility: hidden; }
@@ -40,42 +43,38 @@
     <div class="header-title">Aadhaar Card Manual</div>
     <form id="masterForm">
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;">
-                <label style="color: #d32f2f;">1. Select Language First (पहले भाषा चुनें)</label>
-                <select id="lang_select" style="border: 2px solid #ff9800;">
+            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12"></div>
+            <div class="form-group"><label>Full Name (English)</label><input type="text" id="name_en" oninput="syncAuto()"></div>
+            <div class="form-group"><label>Husband Name</label><input type="text" id="fname_en" oninput="syncAuto()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>House No / Gali</label><input type="text" id="h_no" oninput="syncAuto()"></div>
+            <div class="form-group"><label>Village / Post</label><input type="text" id="gali" oninput="syncAuto()"></div>
+            <div class="form-group"><label>District / City</label><input type="text" id="city" oninput="syncAuto()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAuto()"></div>
+            <div class="form-group"><label>Pin code</label><input type="text" id="pin" oninput="syncAuto()"></div>
+            <div class="form-group"><label>Date Of Birth (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="01/01/1999"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Gender</label><select id="gender" onchange="syncAuto()"><option value="FEMALE">FEMALE / महिला</option><option value="MALE">MALE / पुरुष</option></select></div>
+            <div class="form-group"><label>Upload Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
+            <div class="form-group">
+                <label>Select Language</label>
+                <select id="lang_select" onchange="syncAuto()">
                     <option value="hi">HINDI (हिंदी)</option>
                     <option value="gu">GUJARATI (ગુજરાતી)</option>
                     <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
                     <option value="mr">MARATHI (मराठी)</option>
-                    <option value="bn">BENGALI (বাংলা)</option>
                 </select>
             </div>
         </div>
-
-        <div class="row">
-            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12" placeholder="0000 0000 0000"></div>
-            <div class="form-group"><label>Full Name (English)</label><input type="text" id="name_en" oninput="autoFill()"></div>
-            <div class="form-group"><label>Husband Name</label><input type="text" id="fname_en" oninput="autoFill()"></div>
-        </div>
-        <div class="row">
-            <div class="form-group"><label>House No / Gali</label><input type="text" id="h_no" oninput="autoFill()"></div>
-            <div class="form-group"><label>Village / Post</label><input type="text" id="gali" oninput="autoFill()"></div>
-            <div class="form-group"><label>District / City</label><input type="text" id="city" oninput="autoFill()"></div>
-        </div>
-        <div class="row">
-            <div class="form-group"><label>State</label><input type="text" id="state" oninput="autoFill()"></div>
-            <div class="form-group"><label>Pin code</label><input type="text" id="pin" oninput="autoFill()"></div>
-            <div class="form-group"><label>Date Of Birth (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="01/01/1999"></div>
-        </div>
-        <div class="row">
-            <div class="form-group"><label>Gender</label><select id="gender" onchange="autoFill()"><option value="FEMALE">FEMALE / महिला</option><option value="MALE">MALE / पुरुष</option></select></div>
-            <div class="form-group"><label>Upload Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
-        </div>
         
         <div class="row" style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
-            <div class="form-group"><label>Local Name (Auto)</label><input type="text" id="name_hi" readonly></div>
-            <div class="form-group"><label>Local Gender (Auto)</label><input type="text" id="gender_hi" readonly></div>
-            <div class="form-group"><label>Local Address (Auto)</label><textarea id="addr_hi" rows="2" readonly></textarea></div>
+            <div class="form-group"><label>Local Name (Auto)</label><input type="text" id="name_hi"></div>
+            <div class="form-group"><label>Local Gender (Auto)</label><input type="text" id="gender_hi"></div>
+            <div class="form-group"><label>Local Address (Auto)</label><textarea id="addr_hi" rows="2"></textarea></div>
         </div>
 
         <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Card</button>
@@ -91,8 +90,8 @@
         </div>
         <img id="view_photo" class="photo-frame">
         <div class="details">
-            <div id="c_name_hi_display" style="font-weight: 500; font-size: 12.5px; color: #333;"></div>
-            <div id="c_name_en_display" style="font-size: 11px;"></div>
+            <div id="c_name_hi_display"></div>
+            <div id="c_name_en_display"></div>
             <div>जन्म तिथि / DOB: <span id="c_dob_display"></span></div>
             <div><span id="c_gender_hi_display"></span> / <span id="c_gender_en_display"></span></div>
         </div>
@@ -122,8 +121,7 @@
         }
     }
 
-    // Main Automatic Fill Logic
-    async function autoFill() {
+    async function syncAuto() {
         let lang = document.getElementById('lang_select').value;
         let nameEn = document.getElementById('name_en').value;
         let fname = document.getElementById('fname_en').value;
@@ -134,17 +132,12 @@
         let pin = document.getElementById('pin').value;
         let gender = document.getElementById('gender').value;
 
-        // Auto Gender
-        document.getElementById('gender_hi').value = (gender === "MALE") ? "पुरुष" : "महिला";
-
-        // Auto Translate Name
         if(nameEn) translateText(nameEn, 'name_hi', lang);
-
-        // Auto Translate Address (W/O & पत्नी Format)
-        if(fname || hno || city) {
-            let combinedAddr = "पत्नी: " + fname + ", " + hno + ", " + gali + ", " + city + ", " + state + " - " + pin;
-            translateText(combinedAddr, 'addr_hi', lang);
-        }
+        
+        let rawAddr = "पत्नी: " + fname + ", " + hno + ", " + gali + ", " + city + ", " + state + " - " + pin;
+        translateText(rawAddr, 'addr_hi', lang);
+        
+        document.getElementById('gender_hi').value = (gender === "MALE") ? "पुरुष" : "महिला";
     }
 
     async function translateText(text, targetId, lang) {
@@ -175,10 +168,7 @@
         document.getElementById('c_addr_en_display').innerText = "W/O: " + fname + ", " + hno + ", " + gali + ", " + city + ", " + state + " - " + pin;
 
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { 
-            text: "UID:" + document.getElementById('a_num').value, 
-            width: 85, height: 85 
-        });
+        new QRCode(document.getElementById("qrcode"), { text: "UID:" + document.getElementById('a_num').value, width: 85, height: 85 });
         
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('downloadBtn').style.display = 'block';
