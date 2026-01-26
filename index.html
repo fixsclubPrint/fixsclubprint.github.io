@@ -1,4 +1,4 @@
-Aur jab adress mein add<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,6 @@ Aur jab adress mein add<!DOCTYPE html>
         label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select, textarea { padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; outline: none; }
         
-        /* Address box size thoda bada kiya gaya hai */
         textarea { border-radius: 15px; min-height: 60px; }
 
         .form-photo-preview { 
@@ -20,13 +19,16 @@ Aur jab adress mein add<!DOCTYPE html>
             margin-top: 5px; display: none; background-size: cover; background-position: center;
         }
 
-        /* Aadhaar Preview Layout */
+        /* Aadhaar Card Style */
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; }
         .card-header { width: 100%; height: 35px; border-bottom: 1px solid #ddd; padding: 2px 5px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .photo-frame { width: 68px; height: 82px; border: 1px solid #000; position: absolute; left: 10px; top: 45px; }
         .details { position: absolute; left: 85px; top: 45px; font-size: 9px; line-height: 1.2; }
-        .aadhaar-num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 1px; }
+        
+        /* Aadhaar Number formatting */
+        .aadhaar-num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 17px; font-weight: bold; letter-spacing: 1px; color: #000; }
+        
         .card-footer { position: absolute; bottom: 0; width: 100%; height: 20px; background: #fff; border-top: 1px solid red; color: red; text-align: center; font-size: 10px; font-weight: bold; line-height: 20px; }
         .qr-position { position: absolute; right: 10px; top: 45px; width: 85px; height: 85px; }
         
@@ -38,7 +40,10 @@ Aur jab adress mein add<!DOCTYPE html>
 <div class="form-container">
     <form id="masterForm">
         <div class="row">
-            <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12"></div>
+            <div class="form-group">
+                <label>Aadhar Card No.</label>
+                <input type="text" id="a_num" maxlength="14" placeholder="0000 0000 0000" oninput="formatAadhar(this)">
+            </div>
             <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" onkeyup="translateFields()"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" onkeyup="syncAddress()"></div>
         </div>
@@ -57,3 +62,118 @@ Aur jab adress mein add<!DOCTYPE html>
 
         <div class="row">
             <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob" onchange="syncDOB()"></div>
+            <div class="form-group">
+                <label>Select Gender</label>
+                <select id="gender" onchange="syncAddress(); translateFields();">
+                    <option value="MALE">MALE</option><option value="FEMALE">FEMALE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Resident Photo</label>
+                <input type="file" id="photo_input" onchange="previewImg(this)">
+                <div id="form_photo_box" class="form-photo-preview"></div>
+            </div>
+        </div>
+
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (English)</label><textarea id="addr_en" onkeyup="translateFields()"></textarea></div></div>
+
+        <div class="row" style="border-top: 1px solid #eee; padding-top: 15px;">
+            <div class="form-group">
+                <label>Select Local Language</label>
+                <select id="lang_select" onchange="translateFields()">
+                    <option value="">-- SELECT --</option>
+                    <option value="hi">HINDI</option><option value="gu">GUJARATI</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi"></div>
+            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi"></div>
+        </div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (Local)</label><textarea id="addr_hi"></textarea></div></div>
+
+        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar Card</button>
+    </form>
+</div>
+
+<div id="print-area">
+    <div class="aadhaar-box">
+        <div class="card-header"><span style="font-size:8px; font-weight:bold; color:green;">भारत सरकार / Govt of India</span><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1024px-Aadhaar_Logo.svg.png" width="25"></div>
+        <img id="view_photo" class="photo-frame">
+        <div class="details">
+            <b id="c_name_hi" style="font-size:10px;"></b><br>
+            <span id="c_name_en"></span><br>
+            जन्म तिथि/DOB: <span id="c_dob"></span><br>
+            <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
+        </div>
+        <div class="aadhaar-num" id="c_num"></div>
+        <div class="card-footer">मेरा आधार, मेरी पहचान</div>
+    </div>
+    <div class="aadhaar-box">
+        <div class="card-header"><span style="font-size:7px; font-weight:bold;">Unique Identification Authority of India</span></div>
+        <div style="padding:10px; font-size:8.5px; width:190px;"><b>Address:</b><br><span id="c_addr_hi"></span><br><span id="c_addr_en"></span></div>
+        <div id="qrcode" class="qr-position"></div>
+        <div class="aadhaar-num" id="c_num_back" style="font-size:13px; bottom:15px;"></div>
+    </div>
+</div>
+
+<script>
+    // 1. Aadhaar Number Formatter (Har 4 digit ke baad space)
+    function formatAadhar(input) {
+        let value = input.value.replace(/\D/g, ''); // Sirf numbers rakhega
+        let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+        input.value = formatted;
+    }
+
+    function previewImg(input) { 
+        if (input.files && input.files[0]) { 
+            var r = new FileReader(); 
+            r.onload = function(e) { 
+                document.getElementById('view_photo').src = e.target.result; 
+                let box = document.getElementById('form_photo_box');
+                box.style.display = "block";
+                box.style.backgroundImage = "url(" + e.target.result + ")";
+            }; 
+            r.readAsDataURL(input.files[0]); 
+        } 
+    }
+    
+    function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
+        let parts = [
+            document.getElementById('fname_en').value.trim(),
+            document.getElementById('h_no').value.trim(),
+            document.getElementById('gali').value.trim(),
+            document.getElementById('po').value.trim(),
+            document.getElementById('city').value.trim(),
+            document.getElementById('state').value.trim(),
+            document.getElementById('pin').value.trim()
+        ].filter(part => part !== "");
+
+        let addr = prefix + parts.join(", "); 
+        document.getElementById('addr_en').value = addr;
+        if(document.getElementById('lang_select').value) translateFields();
+    }
+
+    function syncDOB() { 
+        let d = document.getElementById('dob').value.split('-'); 
+        if(d.length > 1) document.getElementById('c_dob').innerText = d[2]+'/'+d[1]+'/'+d[0]; 
+    }
+
+    async function translateFields() {
+        let lang = document.getElementById('lang_select').value; if(!lang) return;
+        translateText(document.getElementById('name_en').value, 'name_hi', lang);
+        translateText(document.getElementById('addr_en').value, 'addr_hi', lang);
+        document.getElementById('gender_hi').value = (document.getElementById('gender').value === "MALE") ? "पुरुष" : "महिला";
+    }
+
+    async function translateText(text, targetId, lang) {
+        if(!text.trim()) return;
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
+        const data = await res.json(); document.getElementById(targetId).value = data[0][0][0];
+    }
+
+    function generateFinalCard() {
+        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
+        document.getElementById
