@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - AutoFill Fixed</title>
+    <title>Aadhaar Manual Portal - Final Set</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -33,14 +33,22 @@
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit Number"></div>
-            <div class="form-group"><label> Full Name </label><input type="text" id="name_en" placeholder="Raju Kumar" oninput="translateFields()"></div>
+            <div class="form-group"><label>Full Name (English)</label><input type="text" id="name_en" placeholder="Raju Kumar" oninput="translateFields()"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" placeholder="Father Name" oninput="syncAddress()"></div>
         </div>
+        
         <div class="row">
             <div class="form-group"><label>House No/Gali</label><input type="text" id="h_no" placeholder="House No" oninput="syncAddress()"></div>
             <div class="form-group"><label>Village/City</label><input type="text" id="v_city" placeholder="Village" oninput="syncAddress()"></div>
-            <div class="form-group"><label>Post Office & District</label><input type="text" id="dist_state" placeholder="Post, Dist, State" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Post Office</label><input type="text" id="post_office" placeholder="Post Office" oninput="syncAddress()"></div>
         </div>
+
+        <div class="row">
+            <div class="form-group"><label>District</label><input type="text" id="district" placeholder="District" oninput="syncAddress()"></div>
+            <div class="form-group"><label>State</label><input type="text" id="state" placeholder="State" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Pin Code</label><input type="text" id="pincode" placeholder="Pin Code" oninput="syncAddress()"></div>
+        </div>
+
         <div class="row">
             <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob"></div>
             <div class="form-group"><label>Gender</label>
@@ -51,21 +59,21 @@
             </div>
             <div class="form-group"><label>Resident Photo</label><input type="file" accept="image/*" onchange="previewImg(this)" class="no-border-input"></div>
         </div>
+
         <div class="row">
             <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi" placeholder="Auto Fill"></div>
             <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi" value="पुरुष"></div>
-            <div class="form-group">
-     <label>Select Local Language</label>
+            <div class="form-group"><label>Select Local Language</label>
                 <select id="lang_select" onchange="translateFields()">
-                    <option value="">  Select Language </option>
                     <option value="hi">HINDI (हिंदी)</option>
                     <option value="gu">GUJARATI (ગુજરાતી)</option>
                     <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
                 </select>
             </div>
         </div>
+
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address </label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
         </div>
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2" placeholder="Auto Fill Address"></textarea></div>
@@ -107,7 +115,6 @@
         }
     }
 
-    // जेंडर को तुरंत ऑटो-फिल करने के लिए
     function updateGenderLocal() {
         let gEn = document.getElementById('gender').value;
         let lang = document.getElementById('lang_select').value;
@@ -118,7 +125,19 @@
     function syncAddress() {
         let g = document.getElementById('gender').value;
         let prefixEn = (g === "FEMALE") ? "W/O: " : "S/O: ";
-        let addrEn = prefixEn + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('v_city').value + ", " + document.getElementById('dist_state').value;
+        
+        let addrParts = [
+            document.getElementById('fname_en').value,
+            document.getElementById('h_no').value,
+            document.getElementById('v_city').value,
+            document.getElementById('post_office').value,
+            document.getElementById('district').value,
+            document.getElementById('state').value,
+            document.getElementById('pincode').value
+        ];
+        
+        // Filter empty parts and join with comma
+        let addrEn = prefixEn + addrParts.filter(part => part.trim() !== "").join(", ");
         document.getElementById('addr_en').value = addrEn;
         translateFields();
     }
@@ -129,19 +148,16 @@
         let gEn = document.getElementById('gender').value;
         let addrBase = document.getElementById('addr_en').value;
 
-        // Name Translation
         if(name) {
             fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(name)}`)
             .then(res => res.json()).then(data => { document.getElementById('name_hi').value = data[0][0][0]; });
         }
         
-        // Address Translation with Prefix
         if(addrBase) {
             let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः: ";
             fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(addrBase)}`)
             .then(res => res.json()).then(data => { 
                 let translatedAddr = data[0][0][0];
-                // S/O or W/O को हिंदी में रिप्लेस करना
                 translatedAddr = translatedAddr.replace("एस / ओ:", prefixHi).replace("W/O:", prefixHi);
                 document.getElementById('addr_hi').value = translatedAddr;
             });
@@ -149,13 +165,9 @@
         updateGenderLocal();
     }
 
-    function formatAadhar(num) {
-        return num.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
-    }
-
     function generateFinalCard() {
         let rawNum = document.getElementById('a_num').value;
-        let formattedNum = formatAadhar(rawNum);
+        let formattedNum = rawNum.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
         let dob = document.getElementById('dob').value.split('-').reverse().join('/');
         
         document.getElementById('c_num').innerText = formattedNum;
