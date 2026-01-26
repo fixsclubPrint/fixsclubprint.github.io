@@ -13,6 +13,9 @@
         label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; outline: none; background: #fff; }
         .no-border-input { border: none !important; padding: 5px 0 !important; }
+        
+        /* Local fields को हाइड करने के लिए */
+        .hidden-field { display: none; }
 
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
@@ -33,7 +36,7 @@
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit Number"></div>
-            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" oninput="translateFields()"></div>
+            <div class="form-group"><label>Full Name (English)</label><input type="text" id="name_en" oninput="translateFields()"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
         </div>
         
@@ -60,22 +63,25 @@
             <div class="form-group"><label>Resident Photo</label><input type="file" accept="image/*" onchange="previewImg(this)" class="no-border-input"></div>
         </div>
 
+        <input type="hidden" id="name_hi">
+        <input type="hidden" id="gender_hi">
+
         <div class="row">
-            <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi"></div>
-            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi"></div>
             <div class="form-group">
                 <label>Select Local Language</label>
                 <select id="lang_select" onchange="translateFields()">
-                    <option value="hi">HINDI (आत्मजः/अर्धांगिनी)</option>
+                    <option value="">-- Select Language --</option>
+                    <option value="hi">HINDI (आत्मजः/अर्धांगिनी:)</option>
                     <option value="gu">GUJARATI</option>
                     <option value="pa">PUNJABI</option>
                 </select>
             </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Full Address (English)</label>
+                <textarea id="addr_en" rows="1" oninput="translateFields()"></textarea>
+            </div>
         </div>
 
-        <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
-        </div>
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div>
         </div>
@@ -134,6 +140,8 @@
 
     async function translateFields() {
         let lang = document.getElementById('lang_select').value;
+        if(!lang) return;
+        
         let name = document.getElementById('name_en').value;
         let gEn = document.getElementById('gender').value;
         let addrBase = document.getElementById('addr_en').value;
@@ -179,11 +187,5 @@
             html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(canvas => {
                 let link = document.createElement('a');
                 link.download = document.getElementById('name_en').value + '_Aadhaar.png';
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            });
-        }, 1200);
-    }
-</script>
-</body>
-</html>
+                link.href = canvas.toData
+                
