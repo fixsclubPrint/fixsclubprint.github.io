@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Original Style Aadhaar Portal</title>
+    <title>Original Aadhaar Manual Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; padding: 20px; }
@@ -14,13 +14,13 @@
         
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; }
         
-        /* असली आधार जैसा डिजाइन */
+        /* असली आधार डिजाइन */
         .aadhaar-box { 
             width: 325px; height: 205px; background: white; border: 1px solid #999; 
-            position: relative; overflow: hidden; border-radius: 5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
         }
 
-        /* तिरंगा हेडर */
+        /* तिरंगा हेडर पट्टी */
         .card-header { 
             width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; 
             display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; 
@@ -29,14 +29,14 @@
         
         .photo-frame { width: 68px; height: 82px; border: 1px solid #000; position: absolute; left: 12px; top: 48px; object-fit: cover; background: #f9f9f9; }
         
-        .details { position: absolute; left: 90px; top: 48px; font-size: 10px; line-height: 1.3; color: #000; font-weight: 600; }
-        #c_name_hi { display: block; font-size: 11px; margin-bottom: 1px; }
+        .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #000; font-weight: 600; }
+        #c_name_hi { display: block; font-size: 11.5px; margin-bottom: 1px; }
         
-        .address-box { position: absolute; left: 12px; top: 45px; font-size: 8.5px; width: 200px; color: #333; line-height: 1.1; font-weight: 500; }
+        .address-box { position: absolute; left: 12px; top: 45px; font-size: 8.8px; width: 200px; color: #333; line-height: 1.15; font-weight: 500; }
 
         .aadhaar-num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1.5px; color: #000; }
         
-        /* लाल फूटर पट्टी */
+        /* नीचे की लाल पट्टी */
         .card-footer { 
             position: absolute; bottom: 0; width: 100%; height: 24px; 
             background: #fff; border-top: 1.5px solid #ff0000; color: #ff0000; 
@@ -45,7 +45,8 @@
         
         .qr-position { position: absolute; right: 12px; top: 48px; width: 85px; height: 85px; padding: 2px; background: #fff; border: 1px solid #eee; }
         
-        .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
+        .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; transition: 0.3s; }
+        .btn-gen:hover { background: #219150; }
     </style>
 </head>
 <body>
@@ -83,6 +84,8 @@
                     <option value="hi">HINDI (हिंदी)</option>
                     <option value="gu">GUJARATI (ગુજરાતી)</option>
                     <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
+                    <option value="mr">MARATHI (मराठी)</option>
+                    <option value="ta">TAMIL (தமிழ்)</option>
                 </select>
             </div>
             <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi"></div>
@@ -128,7 +131,6 @@
 </div>
 
 <script>
-    // आपका पूरा ओरिजिनल लॉजिक (Logic) यहाँ है, मैंने कुछ नहीं बदला
     function previewImg(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -142,8 +144,9 @@
         let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
         let addr = prefix + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('gali').value + ", " + document.getElementById('po').value + ", " + document.getElementById('city').value + ", " + document.getElementById('state').value + " - " + document.getElementById('pin').value;
         document.getElementById('addr_en').value = addr;
+        
         let lang = document.getElementById('lang_select').value;
-        if(lang) translateText(addr, 'addr_hi', lang);
+        if(lang) { translateText(addr, 'addr_hi', lang); }
     }
 
     function syncDOB() {
@@ -157,10 +160,15 @@
     async function translateFields() {
         let lang = document.getElementById('lang_select').value;
         if(!lang) return;
+        
         translateText(document.getElementById('name_en').value, 'name_hi', lang);
         translateText(document.getElementById('addr_en').value, 'addr_hi', lang);
+        
         let gEn = document.getElementById('gender').value;
-        document.getElementById('gender_hi').value = (gEn === "MALE") ? "पुरुष" : "महिला";
+        let genders_hi = {"hi":"पुरुष", "gu":"પુરુષ", "pa":"ਪੁਰুষ", "mr":"पुरुष", "ta":"ஆண்"};
+        let genders_f_hi = {"hi":"महिला", "gu":"મહિલા", "pa":"ਮਹਿલા", "mr":"महिला", "ta":"பெண்"};
+        
+        document.getElementById('gender_hi').value = (gEn === "MALE") ? (genders_hi[lang] || "पुरुष") : (genders_f_hi[lang] || "महिला");
     }
 
     async function translateText(text, targetId, lang) {
@@ -196,7 +204,10 @@
 
         document.getElementById('qrcode').innerHTML = "";
         let qrContent = "UID: " + rawNum + "\nName: " + document.getElementById('name_en').value + "\nDOB: " + document.getElementById('c_dob').innerText;
-        new QRCode(document.getElementById("qrcode"), { text: qrContent, width: 85, height: 85 });
+        new QRCode(document.getElementById("qrcode"), { 
+            text: qrContent, width: 85, height: 85, 
+            correctLevel : QRCode.CorrectLevel.M 
+        });
         
         document.getElementById('print-area').style.display = 'flex';
         window.scrollTo(0, document.body.scrollHeight);
