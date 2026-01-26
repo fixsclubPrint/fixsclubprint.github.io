@@ -2,14 +2,14 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Multi-Language Portal</title>
+    <title>Aadhaar Pro Click-to-Translate Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f7; padding: 20px; }
         .form-container { background: #fff; max-width: 1100px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
-        label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; transition: 0.3s; }
+        label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; outline: none; }
         
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; }
@@ -22,70 +22,180 @@
         .qr-position { position: absolute; right: 10px; top: 42px; width: 85px; height: 85px; }
         
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
+        .lang-section { background: #f0f4ff; padding: 15px; border-radius: 10px; border: 1px solid #d1d9ff; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Data Entry</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal (Auto-Fill on Click)</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12"></div>
-            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" onkeyup="translateFields()"></div>
+            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" onkeyup="syncAddress()"></div>
         </div>
 
         <div class="row">
-            <div class="form-group"><label>House No</label><input type="text" id="h_no" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Gali/Locality</label><input type="text" id="gali" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Post Office</label><input type="text" id="po" onkeyup="syncAddress()"></div>
-        </div>
-
-        <div class="row">
-            <div class="form-group"><label>City</label><input type="text" id="city" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>State</label><input type="text" id="state" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Pin code</label><input type="text" id="pin" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>House No / PO</label><input type="text" id="h_no" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Gali / City</label><input type="text" id="city" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>State & Pin</label><input type="text" id="state" onkeyup="syncAddress()"></div>
         </div>
 
         <div class="row">
             <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob" onchange="syncDOB()"></div>
             <div class="form-group">
-                <label>Select Gender</label>
-                <select id="gender" onchange="syncAddress(); translateFields();">
+                <label>Gender</label>
+                <select id="gender" onchange="syncAddress()">
                     <option value="MALE">MALE</option>
                     <option value="FEMALE">FEMALE</option>
                 </select>
             </div>
-            <div class="form-group"><label>Resident Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
+            <div class="form-group"><label>Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
         </div>
 
-        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (English)</label><textarea id="addr_en" rows="2" onkeyup="translateFields()"></textarea></div></div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
 
-        <div class="row" style="border-top: 2px solid #eee; padding-top: 15px; margin-top: 10px; background: #f9f9f9; padding: 10px; border-radius: 8px;">
-            <div class="form-group">
-                <label>Choose Language</label>
-                <select id="lang_select" onchange="updateLabels(); translateFields();">
-                    <option value="hi">HINDI (हिंदी)</option>
-                    <option value="gu">GUJARATI (ગુજરાતી)</option>
-                    <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
-                    <option value="mr">MARATHI (मराठी)</option>
-                    <option value="ta">TAMIL (தமிழ்)</option>
-                </select>
+        <div class="lang-section">
+            <div class="row">
+                <div class="form-group">
+                    <label style="color: #1a237e;">Click to Select Language & Auto-Fill</label>
+                    <select id="lang_select" onchange="processTranslation()">
+                        <option value="">-- SELECT LANGUAGE --</option>
+                        <option value="hi">HINDI (हिंदी)</option>
+                        <option value="gu">GUJARATI (ગુજરાતી)</option>
+                        <option value="pa">PUNJABI (ਪੰਜਾਬੀ)</option>
+                        <option value="mr">MARATHI (मराठी)</option>
+                        <option value="ta">TAMIL (தமிழ்)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="lbl_name_local">Name (Local)</label>
+                    <input type="text" id="name_local" placeholder="Auto-fills on click">
+                </div>
+                <div class="form-group">
+                    <label id="lbl_gender_local">Gender (Local)</label>
+                    <input type="text" id="gender_local">
+                </div>
             </div>
-            <div class="form-group">
-                <label id="lbl_name_local">Name (Local)</label>
-                <input type="text" id="name_local">
-            </div>
-            <div class="form-group">
-                <label id="lbl_gender_local">Gender (Local)</label>
-                <input type="text" id="gender_local">
+            <div class="row">
+                <div class="form-group" style="grid-column: span 3;">
+                    <label id="lbl_addr_local">Address (Local Language)</label>
+                    <textarea id="addr_local" rows="2" placeholder="Auto-fills on click"></textarea>
+                </div>
             </div>
         </div>
-        <div class="row" style="background: #f9f9f9; padding: 0 10px 10px 10px; border-radius: 8px;">
-            <div class="form-group" style="grid-column: span 3;">
-                <label id="lbl_addr_local">Address (Local)</label>
-                <textarea id="addr_local" rows="2"></textarea>
-            </div>
-        </div>
 
-        <button type="button" class="btn-gen" onclick="generateFinalCard()">
+        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar Card</button>
+    </form>
+</div>
+
+<div id="print-area">
+    <div class="aadhaar-box">
+        <div class="card-header">
+            <span style="font-size:8px; font-weight:bold; color:green;">भारत सरकार / Govt of India</span>
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1024px-Aadhaar_Logo.svg.png" width="25">
+        </div>
+        <img id="view_photo" class="photo-frame">
+        <div class="details">
+            <b id="c_name_local" style="font-size: 10px;"></b><br>
+            <span id="c_name_en"></span><br>
+            <b>जन्म तिथि / DOB: </b><span id="c_dob"></span><br>
+            <span id="c_gender_local"></span> / <span id="c_gender_en"></span>
+        </div>
+        <div class="aadhaar-num" id="c_num"></div>
+        <div class="card-footer">मेरा आधार, मेरी पहचान</div>
+    </div>
+
+    <div class="aadhaar-box">
+        <div class="card-header"><span style="font-size:7px; font-weight:bold;">Unique Identification Authority of India</span></div>
+        <div style="padding:10px; font-size:8.5px; width:195px; color:#000;">
+            <b>Address:</b><br>
+            <span id="c_addr_local"></span><br>
+            <span id="c_addr_en"></span>
+        </div>
+        <div id="qrcode" class="qr-position"></div>
+        <div class="aadhaar-num" id="c_num_back" style="font-size:12px; bottom:15px;"></div>
+    </div>
+</div>
+
+<script>
+    function previewImg(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) { document.getElementById('view_photo').src = e.target.result; };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
+        let addr = prefix + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('city').value + ", " + document.getElementById('state').value;
+        document.getElementById('addr_en').value = addr;
+    }
+
+    function syncDOB() {
+        let val = document.getElementById('dob').value;
+        if(val) {
+            let d = val.split('-');
+            document.getElementById('c_dob').innerText = d[2]+'/'+d[1]+'/'+d[0];
+        }
+    }
+
+    // Jab user language chunta hai, tabhi yeh function chalta hai
+    async function processTranslation() {
+        let lang = document.getElementById('lang_select').value;
+        if(!lang) return;
+
+        // Labels change karna
+        let sel = document.getElementById('lang_select');
+        let langName = sel.options[sel.selectedIndex].text.split(' ')[0];
+        document.getElementById('lbl_name_local').innerText = "Name (" + langName + ")";
+        document.getElementById('lbl_addr_local').innerText = "Address (" + langName + ")";
+
+        // Translation call karna (Auto-fill)
+        translateText(document.getElementById('name_en').value, 'name_local', lang);
+        translateText(document.getElementById('addr_en').value, 'addr_local', lang);
+        
+        // Gender translation logic
+        let gEn = document.getElementById('gender').value;
+        let gTrans = { "hi": "पुरुष", "pa": "ਪੁਰਸ਼", "gu": "પુરુષ", "mr": "पुरुष", "ta": "ஆண்" };
+        let gTransF = { "hi": "महिला", "pa": "ਔਰਤ", "gu": "સ્ત્રી", "mr": "महिला", "ta": "பெண்" };
+        document.getElementById('gender_local').value = (gEn === "MALE") ? (gTrans[lang] || "MALE") : (gTransF[lang] || "FEMALE");
+    }
+
+    async function translateText(text, targetId, lang) {
+        if(!text.trim()) return;
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(text)}`);
+            const data = await res.json();
+            document.getElementById(targetId).value = data[0][0][0];
+        } catch (e) { alert("Error in translation. Please check internet."); }
+    }
+
+    function generateFinalCard() {
+        let rawNum = document.getElementById('a_num').value;
+        let formattedNum = rawNum.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+        
+        document.getElementById('c_name_local').innerText = document.getElementById('name_local').value;
+        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_gender_local').innerText = document.getElementById('gender_local').value;
+        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+        document.getElementById('c_num').innerText = formattedNum;
+        document.getElementById('c_num_back').innerText = formattedNum;
+        document.getElementById('c_addr_local').innerText = document.getElementById('addr_local').value;
+        document.getElementById('c_addr_en').innerText = document.getElementById('addr_en').value;
+
+        // Google Scanner Data
+        let qrData = "UID:" + rawNum + "\nName:" + document.getElementById('name_en').value + "\nDOB:" + document.getElementById('c_dob').innerText + "\nAddress:" + document.getElementById('addr_en').value;
+        
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { text: qrData, width: 85, height: 85, correctLevel : QRCode.CorrectLevel.M });
+        
+        document.getElementById('print-area').style.display = 'flex';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+</body>
+</html>
