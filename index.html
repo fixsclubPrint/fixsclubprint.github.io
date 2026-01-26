@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Final Pro</title>
+    <title>Aadhaar Manual Portal - Form Layout</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -13,8 +13,7 @@
         label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; outline: none; background: #fff; }
         
-        /* फोटो इनपुट की काली पट्टी हटाने के लिए */
-        .no-border-input { border: none !important; padding: 5px 0 !important; background: transparent !important; }
+        .no-border-input { border: none !important; padding: 5px 0 !important; }
 
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         
@@ -29,16 +28,10 @@
         }
         .photo-frame { width: 68px; height: 82px; border: 1px solid #000; position: absolute; left: 12px; top: 48px; object-fit: cover; }
         .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #000; font-weight: 600; }
-        
-        /* एड्रेस बॉक्स: QR बड़ा होने के कारण इसकी विड्थ कम की गई है */
         .address-box { position: absolute; left: 12px; top: 45px; font-size: 8.8px; width: 180px; color: #333; line-height: 1.15; font-weight: 500; }
-        
         .aadhaar-num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         .card-footer { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #ff0000; color: #ff0000; text-align: center; font-size: 12px; font-weight: bold; line-height: 24px; background: #fff; }
-        
-        /* बड़ा QR कोड पोजीशन */
         .qr-position-back { position: absolute; right: 10px; top: 42px; width: 115px; height: 115px; }
-        
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; transition: 0.3s; }
     </style>
 </head>
@@ -49,19 +42,18 @@
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit Number"></div>
-            <div class="form-group"><label>Full Name (English)</label><input type="text" id="name_en" onkeyup="translateFields()"></div>
-            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" placeholder="Raju Kumar" onkeyup="translateFields()"></div>
+            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" placeholder="Father Name" onkeyup="syncAddress()"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>House No/Gali</label><input type="text" id="h_no" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Village/City</label><input type="text" id="v_city" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>District & State</label><input type="text" id="dist_state" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>House No/Gali</label><input type="text" id="h_no" placeholder="House No" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Village/City</label><input type="text" id="v_city" placeholder="Village" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Post Office & District</label><input type="text" id="dist_state" placeholder="Post, Dist, State" onkeyup="syncAddress()"></div>
         </div>
         <div class="row">
             <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob"></div>
             <div class="form-group"><label>Gender</label><select id="gender" onchange="translateFields(); syncAddress();"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
-            <div class="form-group">
-                <label>Select Local Language</label>
+            <div class="form-group"><label>Select Local Language</label>
                 <select id="lang_select" onchange="translateFields()">
                     <option value="hi">HINDI (हिंदी)</option>
                     <option value="gu">GUJARATI (ગુજરાતી)</option>
@@ -101,7 +93,6 @@
             <div class="aadhaar-num" id="c_num"></div>
             <div class="card-footer">मेरा आधार, मेरी पहचान</div>
         </div>
-
         <div class="aadhaar-box" id="back-card">
             <div class="card-header" style="background: white; border-bottom: 1.5px solid #ff0000; height: 30px;">
                 <div style="font-size:9px; font-weight:bold; color:#ff0000; width:100%; text-align:center;">भारतीय विशिष्ट पहचान प्राधिकरण | UIDAI</div>
@@ -138,12 +129,10 @@
         let lang = document.getElementById('lang_select').value;
         let name = document.getElementById('name_en').value;
         let gEn = document.getElementById('gender').value;
-        
         let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः: ";
         let addrBase = document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('v_city').value + ", " + document.getElementById('dist_state').value;
 
         if(name) translateText(name, 'name_hi', lang);
-        
         try {
             const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(addrBase)}`);
             const data = await res.json();
@@ -162,15 +151,9 @@
         } catch (e) { }
     }
 
-    function formatAadhar(num) {
-        return num.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
-    }
-
     function generateFinalCard() {
         let rawNum = document.getElementById('a_num').value;
-        if(rawNum.length < 12) { alert("Please enter 12 digit Aadhaar number"); return; }
-        
-        let formattedNum = formatAadhar(rawNum);
+        let formattedNum = rawNum.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
         let dob = document.getElementById('dob').value.split('-').reverse().join('/');
         
         document.getElementById('c_num').innerText = formattedNum;
@@ -183,18 +166,13 @@
         document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
 
-        // Large QR Code Setup (115px)
         document.getElementById('qrcode').innerHTML = "";
-        let qrData = `UID: ${rawNum}\nName: ${document.getElementById('name_en').value}\nDOB: ${dob}\nAddress: ${document.getElementById('addr_en').value}`;
         new QRCode(document.getElementById("qrcode"), { 
-            text: qrData, 
-            width: 115, 
-            height: 115,
-            correctLevel : QRCode.CorrectLevel.H 
+            text: `UID: ${rawNum}\nName: ${document.getElementById('name_en').value}\nDOB: ${dob}\nAddress: ${document.getElementById('addr_en').value}`, 
+            width: 115, height: 115, correctLevel: QRCode.CorrectLevel.H 
         });
 
         document.getElementById('print-area').style.display = 'flex';
-
         setTimeout(() => {
             html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(canvas => {
                 let link = document.createElement('a');
