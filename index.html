@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Optimized Layout</title>
+    <title>Aadhaar Manual Portal - AutoFill Fixed</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -33,22 +33,27 @@
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar Card No.</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit Number"></div>
-            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" placeholder="Raju Kumar" onkeyup="translateFields()"></div>
-            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" placeholder="Father Name" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>Name (English)</label><input type="text" id="name_en" placeholder="Raju Kumar" oninput="translateFields()"></div>
+            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" placeholder="Father Name" oninput="syncAddress()"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>House No/Gali</label><input type="text" id="h_no" placeholder="House No" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Village/City</label><input type="text" id="v_city" placeholder="Village" onkeyup="syncAddress()"></div>
-            <div class="form-group"><label>Post Office & District</label><input type="text" id="dist_state" placeholder="Post, Dist, State" onkeyup="syncAddress()"></div>
+            <div class="form-group"><label>House No/Gali</label><input type="text" id="h_no" placeholder="House No" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Village/City</label><input type="text" id="v_city" placeholder="Village" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Post Office & District</label><input type="text" id="dist_state" placeholder="Post, Dist, State" oninput="syncAddress()"></div>
         </div>
         <div class="row">
             <div class="form-group"><label>Date Of Birth</label><input type="date" id="dob"></div>
-            <div class="form-group"><label>Gender</label><select id="gender" onchange="translateFields(); syncAddress();"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
+            <div class="form-group"><label>Gender</label>
+                <select id="gender" onchange="syncAddress(); updateGenderLocal();">
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                </select>
+            </div>
             <div class="form-group"><label>Resident Photo</label><input type="file" accept="image/*" onchange="previewImg(this)" class="no-border-input"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi"></div>
-            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi"></div>
+            <div class="form-group"><label>Name (Local)</label><input type="text" id="name_hi" placeholder="Auto Fill"></div>
+            <div class="form-group"><label>Gender (Local)</label><input type="text" id="gender_hi" value="पुरुष"></div>
             <div class="form-group"><label>Select Local Language</label>
                 <select id="lang_select" onchange="translateFields()">
                     <option value="hi">HINDI (हिंदी)</option>
@@ -58,10 +63,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2" onkeyup="translateFields()"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2" oninput="translateFields()"></textarea></div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2" placeholder="Auto Fill Address"></textarea></div>
         </div>
         <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate & Auto Download</button>
     </form>
@@ -70,10 +75,7 @@
 <div id="print-area">
     <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px;">
         <div class="aadhaar-box" id="front-card">
-            <div class="card-header">
-                <div style="font-size:8px; font-weight:bold; color:#000;">भारत सरकार / Govt. of India</div>
-                <div style="font-size:7px; font-weight:bold; text-align:right;">UIDAI</div>
-            </div>
+            <div class="card-header"><div style="font-size:8px; font-weight:bold; color:#000;">भारत सरकार / Govt. of India</div><div style="font-size:7px; font-weight:bold;">UIDAI</div></div>
             <img id="view_photo" class="photo-frame">
             <div class="details">
                 <span id="c_name_hi" style="font-size:11.5px; display:block;"></span>
@@ -85,13 +87,8 @@
             <div class="card-footer">मेरा आधार, मेरी पहचान</div>
         </div>
         <div class="aadhaar-box" id="back-card">
-            <div class="card-header" style="background: white; border-bottom: 1.5px solid #ff0000; height: 30px;">
-                <div style="font-size:9px; font-weight:bold; color:#ff0000; width:100%; text-align:center;">भारतीय विशिष्ट पहचान प्राधिकरण | UIDAI</div>
-            </div>
-            <div class="address-box">
-                <b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br>
-                <b>Address:</b> <br> <span id="cb_addr_en"></span>
-            </div>
+            <div class="card-header" style="background: white; border-bottom: 1.5px solid #ff0000; height: 30px;"><div style="font-size:9px; font-weight:bold; color:#ff0000; width:100%; text-align:center;">भारतीय विशिष्ट पहचान प्राधिकरण | UIDAI</div></div>
+            <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
             <div id="qrcode" class="qr-position-back"></div>
             <div class="aadhaar-num" id="c_num_back" style="bottom: 35px; font-size: 15px;"></div>
             <div class="card-footer" style="font-size: 10px;">1947 | help@uidai.gov.in | www.uidai.gov.in</div>
@@ -108,10 +105,83 @@
         }
     }
 
+    // जेंडर को तुरंत ऑटो-फिल करने के लिए
+    function updateGenderLocal() {
+        let gEn = document.getElementById('gender').value;
+        let lang = document.getElementById('lang_select').value;
+        let gLabels = {"hi": gEn=="MALE"?"पुरुष":"महिला", "gu": gEn=="MALE"?"પુરુષ":"મહિલા", "pa": gEn=="MALE"?"ਪੁਰਸ਼":"ਇਸਤਰੀ"};
+        document.getElementById('gender_hi').value = gLabels[lang] || (gEn=="MALE"?"पुरुष":"महिला");
+    }
+
     function syncAddress() {
         let g = document.getElementById('gender').value;
         let prefixEn = (g === "FEMALE") ? "W/O: " : "S/O: ";
         let addrEn = prefixEn + document.getElementById('fname_en').value + ", " + document.getElementById('h_no').value + ", " + document.getElementById('v_city').value + ", " + document.getElementById('dist_state').value;
         document.getElementById('addr_en').value = addrEn;
         translateFields();
+    }
+
+    async function translateFields() {
+        let lang = document.getElementById('lang_select').value;
+        let name = document.getElementById('name_en').value;
+        let gEn = document.getElementById('gender').value;
+        let addrBase = document.getElementById('addr_en').value;
+
+        // Name Translation
+        if(name) {
+            fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(name)}`)
+            .then(res => res.json()).then(data => { document.getElementById('name_hi').value = data[0][0][0]; });
+        }
         
+        // Address Translation with Prefix
+        if(addrBase) {
+            let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः: ";
+            fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(addrBase)}`)
+            .then(res => res.json()).then(data => { 
+                let translatedAddr = data[0][0][0];
+                // S/O or W/O को हिंदी में रिप्लेस करना
+                translatedAddr = translatedAddr.replace("एस / ओ:", prefixHi).replace("W/O:", prefixHi);
+                document.getElementById('addr_hi').value = translatedAddr;
+            });
+        }
+        updateGenderLocal();
+    }
+
+    function formatAadhar(num) {
+        return num.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function generateFinalCard() {
+        let rawNum = document.getElementById('a_num').value;
+        let formattedNum = formatAadhar(rawNum);
+        let dob = document.getElementById('dob').value.split('-').reverse().join('/');
+        
+        document.getElementById('c_num').innerText = formattedNum;
+        document.getElementById('c_num_back').innerText = formattedNum;
+        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('c_dob').innerText = dob;
+        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
+        document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
+        document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
+
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { 
+            text: `UID: ${rawNum}\nName: ${document.getElementById('name_en').value}\nDOB: ${dob}\nAddress: ${document.getElementById('addr_en').value}`, 
+            width: 115, height: 115, correctLevel: QRCode.CorrectLevel.H 
+        });
+
+        document.getElementById('print-area').style.display = 'flex';
+        setTimeout(() => {
+            html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = document.getElementById('name_en').value + '_Aadhaar.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }, 1200);
+    }
+</script>
+</body>
+</html>
