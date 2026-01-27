@@ -2,26 +2,22 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Layout Fixed</title>
+    <title>Aadhaar Manual Portal - Perfect Match</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; padding: 20px; }
         .form-container { background: #fff; max-width: 1100px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        
-        /* UPDATED: Is row mein teenon boxes ab barabar size ke honge */
-        .row-equal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
-        
         .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
         label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; outline: none; }
         
-        /* Card Design Settings */
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
         
+        /* Matching Color: Dark Red/Maroon from Header */
         :root { --aadhaar-red: #A52A2A; }
 
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
@@ -34,15 +30,36 @@
         #c_num { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         #c_num_back { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
 
-        .card-footer-custom { position: absolute; bottom: 0; width: 100%; height: 32px; background: #fff; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        /* --- UPDATED PATTI & LOGO STYLE --- */
+        .card-footer-custom { 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%; 
+            height: 32px; 
+            background: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
         .footer-top-line { border-top: 2.5px solid var(--aadhaar-red); width: 100%; } 
         .footer-bottom-bold-line { border-bottom: 3.5px solid #000; width: 100%; }
         
         .footer-text-front { font-size: 14px; font-weight: bold; color: #000; margin-top: 1px; }
         .footer-text-front span.red-text { color: var(--aadhaar-red); }
 
-        .footer-text-back { font-size: 9px; font-weight: bold; color: #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 5px; margin-bottom: 2px; }
-        .icon-box { color: var(--aadhaar-red); background: white; padding: 1px; border-radius: 2px; }
+        .footer-text-back { 
+            font-size: 9px; font-weight: bold; color: #000; 
+            display: flex; justify-content: space-evenly; align-items: center;
+            padding: 0 5px; margin-bottom: 2px;
+        }
+        /* Message Box Logo Style: Red with White details */
+        .icon-box {
+            color: var(--aadhaar-red);
+            background: white;
+            padding: 1px;
+            border-radius: 2px;
+        }
 
         .address-box { position: absolute; left: 12px; top: 38px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 42px; width: 105px; height: 105px; }
@@ -55,36 +72,30 @@
     <h2 style="text-align: center; color: #1a237e;">Aadhaar Card Portal</h2>
     <form id="masterForm">
         <div class="row">
-            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit"></div>
+            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
             <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
         </div>
-        
-        <div class="row-equal">
-            <div class="form-group"><label>House No/Gali/Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()" placeholder="Local Details"></div>
-            <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
-            <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
-        </div>
-
         <div class="row">
+            <div class="form-group" style="grid-column: span 2;"><label>House No/Gali/Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
             <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
             <div class="form-group"><label>Pincode</label><input type="number" id="pincode" oninput="if(this.value.length > 6) this.value = this.value.slice(0,6); syncAddress();"></div>
-            <div class="form-group"><label>DOB</label><input type="date" id="dob"></div>
         </div>
-        
         <div class="row">
+            <div class="form-group"><label>DOB</label><input type="date" id="dob"></div>
             <div class="form-group"><label>Gender</label><select id="gender" onchange="syncAddress();"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
             <div class="form-group"><label>Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
-            <div class="form-group" style="visibility: hidden;"><label>-</label><input type="text"></div>
         </div>
-
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Auto)</label><textarea id="addr_en" rows="2" readonly></textarea></div>
         </div>
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div>
         </div>
-        
         <input type="hidden" id="name_hi">
         <input type="hidden" id="gender_hi" value="पुरुष">
         <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate & Download</button>
@@ -140,7 +151,7 @@
         let n = document.getElementById('name_en').value;
         let a = document.getElementById('addr_en').value;
         if(n) fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(n)}`).then(res=>res.json()).then(d=>{document.getElementById('name_hi').value=d[0][0][0]});
-        if(a) fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(a)}`).then(res=>res.json()).then(d=>{document.getElementById('addr_hi').value=d[0][0][0].replace(/S\/O:|W\/O:|एस\/ओ:|डब्लੂ\/ओ:/gi, (document.getElementById('gender').value=="FEMALE"?"अर्धांगिनी: ":"आत्मजः: "))});
+        if(a) fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(a)}`).then(res=>res.json()).then(d=>{document.getElementById('addr_hi').value=d[0][0][0].replace(/S\/O:|W\/O:|एस\/ओ:|डब्लू\/ओ:/gi, (document.getElementById('gender').value=="FEMALE"?"अर्धांगिनी: ":"आत्मजः: "))});
     }
     function generateFinalCard() {
         let n = document.getElementById('a_num').value;
