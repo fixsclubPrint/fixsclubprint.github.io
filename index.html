@@ -1,12 +1,77 @@
-<div style="width: 325px; height: 205px; border: 1px solid #000; position: relative; font-family: sans-serif;">
-    <div style="background: #FF9933; height: 18px; text-align: center; font-weight: bold;">भारत सरकार</div>
-    <div style="background: #138808; height: 16px; text-align: center; color: #000; font-size: 10px;">Government of India</div>
-    
-    <div style="position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 15.5px; font-weight: bold; letter-spacing: 1.5px;">
-        1234 5678 9012
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .header-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #fff;
+    }
 
-    <div style="position: absolute; bottom: 0; width: 100%; height: 36px; border-top: 1.5px solid red; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 900;">
-        मेरा <span style="color:red; margin: 0 5px;">आधार</span>, मेरी पहचान
+    /* Emblem styling */
+    .emblem {
+        width: 50px;
+        height: auto;
+    }
+
+    .text-section {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 350px; /* Aapke hisaab se adjust karein */
+    }
+
+    /* Common Brush Style */
+    .brush {
+        position: relative;
+        padding: 2px 0;
+        text-align: center;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Orange Brush (Saffron) */
+    .brush-orange {
+        background: #FF9933;
+        color: #000;
+        font-size: 18px;
+        height: 24px;
+        border-radius: 50% 10% 40% 5% / 100% 0% 100% 0%; /* Brush look */
+        width: 100%;
+    }
+
+    /* Green Brush */
+    .brush-green {
+        background: #138808;
+        color: #000;
+        font-size: 16px;
+        height: 22px;
+        border-radius: 5% 40% 10% 50% / 0% 100% 0% 100%; /* Reverse brush look */
+        width: 95%; /* Halka chhota image ki tarah */
+    }
+
+    /* Letter Spacing for Government of India */
+    .gov-text {
+        letter-spacing: 0.5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="emblem">
+
+    <div class="text-section">
+        <div class="brush brush-orange">भारत सरकार</div>
+        
+        <div class="brush brush-green gov-text">Government of India</div>
     </div>
 </div>
+
+</body>
+</html>
