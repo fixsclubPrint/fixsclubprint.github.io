@@ -21,58 +21,58 @@
         .header-left { width: 24px; } .header-right { width: 45px; }
         .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* यहाँ परिवर्तन: गोल्डन येलो और ब्लू कलर */
+        /* यहाँ सिर्फ कलर बदला है - फ्रंट साइड */
         .brush-orange { 
-            background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%); 
+            background: #FF5722; /* डीप ऑरेंज/रेड */
             width: 95%; 
             height: 18px; 
             border-radius: 45% 15% 55% 10%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            color: #1a237e; /* डार्क ब्लू कलर */
+            color: #000; 
             font-size: 11.5px; 
-            font-weight: 900; 
-            border: 1px solid #FFA000;
-            text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8);
+            font-weight: 800; 
         }
         .brush-green { 
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%); /* डार्क ब्लू */
+            background: #4CAF50; /* ब्राइट ग्रीन */
             width: 90%; 
             height: 16px; 
             border-radius: 10% 45% 15% 55%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            color: #FFFFFF; /* व्हाइट कलर */
+            color: #000; 
             font-size: 9.5px; 
             font-weight: 700; 
-            margin-top: 2px;
-            border: 1px solid #0d47a1;
-            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3);
+            margin-top: 2px; 
         }
 
-        /* NEW: ऊपर नाम के लिए स्थान */
-        .name-header-section {
-            position: absolute;
-            top: 8px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            z-index: 10;
+        /* यहाँ सिर्फ कलर बदला है - बैक साइड */
+        .brush-orange-back { 
+            background: #FF5722; /* डीप ऑरेंज/रेड */
+            width: 100%; 
+            height: 16px; 
+            border-radius: 45% 15% 55% 10%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #000; 
+            font-size: 9.5px; 
+            font-weight: 800; 
         }
-        
-        .user-name-display {
-            font-size: 14px;
-            font-weight: 900;
-            color: #d32f2f; /* रेड कलर */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 1px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            border: 1px solid #ffcdd2;
+        .brush-green-back { 
+            background: #4CAF50; /* ब्राइट ग्रीन */
+            width: 95%; 
+            height: 14px; 
+            border-radius: 10% 45% 15% 55%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #000; 
+            font-size: 8px; 
+            font-weight: 700; 
+            margin-top: 2px; 
         }
 
         .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 36px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 900; letter-spacing: 0.2px; }
@@ -127,11 +127,7 @@
         </div>
         <div class="row">
             <div class="form-group"><label>Gender (Hindi)</label><input type="text" id="gender_hi" value="पुरुष"></div>
-            <!-- NEW: आपका नाम इंटरफेस में जोड़ने के लिए फील्ड -->
-            <div class="form-group" style="grid-column: span 2;">
-                <label>Your Name to Display (ऊपर दिखेगा)</label>
-                <input type="text" id="your_name" placeholder="Enter your name here">
-            </div>
+            <div class="form-group" style="grid-column: span 2;"><label>Photo</label><input type="file" id="photo_input" onchange="previewImg(this)"></div>
         </div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (Hindi)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
@@ -143,11 +139,6 @@
     <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px; border-radius: 10px;">
         <!-- Front Side -->
         <div class="aadhaar-box">
-            <!-- NEW: ऊपर नाम डिस्प्ले -->
-            <div class="name-header-section">
-                <div class="user-name-display" id="display_your_name">Your Name Here</div>
-            </div>
-            
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
                 <div class="header-center">
@@ -170,16 +161,12 @@
         
         <!-- Back Side -->
         <div class="aadhaar-box">
-            <!-- NEW: ऊपर नाम डिस्प्ले (बैक साइड) -->
-            <div class="name-header-section">
-                <div class="user-name-display" id="display_your_name_back">Your Name Here</div>
-            </div>
-            
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
                 <div class="header-center">
-                    <div class="brush-orange" style="font-size:9.5px; width:100%;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
-                    <div class="brush-green" style="font-size:8px; width:95%;">Unique Identification Authority of India</div>
+                    <!-- बैक साइड के लिए नए क्लासेस -->
+                    <div class="brush-orange-back">भारतीय विशिष्ट पहचान प्राधिकरण</div>
+                    <div class="brush-green-back">Unique Identification Authority of India</div>
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
@@ -223,15 +210,6 @@
     function generatePreview() {
         let r = document.getElementById('a_num').value;
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
-        
-        // NEW: आपका नाम सेट करना
-        let yourName = document.getElementById('your_name').value.trim();
-        if(!yourName) {
-            yourName = "Your Name Here"; // डिफ़ॉल्ट
-        }
-        document.getElementById('display_your_name').innerText = yourName;
-        document.getElementById('display_your_name_back').innerText = yourName;
-        
         let n = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num').innerText = n; 
         document.getElementById('c_num_back').innerText = n;
