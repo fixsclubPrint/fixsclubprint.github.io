@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Exact Image Design</title>
+    <title>Aadhaar Portal - Image Style Match</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -21,25 +21,14 @@
         .header-left { width: 24px; } .header-right { width: 45px; }
         .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 
-        /* EXACT BRUSH DESIGN FROM YOUR IMAGE */
-        .brush-saffron { 
-            background: #f1a366; /* Image color */
-            width: 85%; height: 16px; 
-            border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; 
-            display: flex; align-items: center; justify-content: center; 
-            color: #000; font-size: 11px; font-weight: 800; 
-            position: relative; margin-bottom: 1px;
-        }
-        .brush-green-long { 
-            background: #97cc9e; /* Image color */
-            width: 95%; height: 14px; 
-            border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; 
-            display: flex; align-items: center; justify-content: center; 
-            color: #000; font-size: 9px; font-weight: 700; 
-            margin-top: 1px;
-        }
+        .brush-saffron { background: #f1a366; width: 85%; height: 16px; border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; font-weight: 800; position: relative; margin-bottom: 1px; }
+        .brush-green-long { background: #97cc9e; width: 95%; height: 14px; border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9px; font-weight: 700; margin-top: 1px; }
 
         .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 28px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; letter-spacing: 0.2px; padding-bottom: 1px; }
+        
+        /* Pai (comma) thickness adjusted to be medium-thin and black */
+        .balanced-pai { font-weight: 600; color: #000; margin: 0 1px; font-size: 17px; position: relative; bottom: 0.5px; }
+
         .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .footer-item { display: flex; align-items: center; font-size: 8px; font-weight: 700; color: #000; }
         .footer-item i { margin-right: 3px; font-size: 9px; color: #000; }
@@ -92,7 +81,6 @@
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (Hindi)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
         <button type="button" class="btn-gen" onclick="generatePreview()">1. Preview Aadhaar</button>
     </form>
-    </form>
 </div>
 
 <div id="print-area">
@@ -109,7 +97,7 @@
             <img id="view_photo" class="photo-frame">
             <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
             <div id="c_num"></div>
-           <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span>, मेरी पहचान</div>
+            <div class="card-footer-red">मेरा <span style="color:red; margin:0 2px;">आधार</span><span class="balanced-pai">,</span> मेरी पहचान</div>
         </div>
         
         <div class="aadhaar-box">
@@ -135,7 +123,7 @@
 </div>
 
 <script>
-    // Functions remain same for logic
+    // Functions remain same for functionality
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
@@ -148,10 +136,13 @@
     
     async function syncAddress() {
         let g = document.getElementById('gender').value;
-        let rel_hi = (g === "MALE") ? "आत्मजः " : "अर्धांगिनी: ";
         let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
         document.getElementById('addr_en').value = rel_en + [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value].filter(x => x).join(', ');
-        if(document.getElementById('fname_en').value) { let t = await translateText(document.getElementById('addr_en').value.replace(rel_en, ""), 'hi'); document.getElementById('addr_hi').value = rel_hi + t; }
+        if(document.getElementById('fname_en').value) { 
+            let t = await translateText(document.getElementById('addr_en').value.replace(rel_en, ""), 'hi'); 
+            let rel_hi = (g === "MALE") ? "आत्मज: " : "पत्नी: ";
+            document.getElementById('addr_hi').value = rel_hi + t; 
+        }
     }
 
     async function translateFields() {
@@ -162,19 +153,26 @@
 
     function generatePreview() {
         let r = document.getElementById('a_num').value;
+        let name = document.getElementById('name_en').value;
+        let dob = document.getElementById('dob').value;
+        let addr = document.getElementById('addr_en').value;
+
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
+        
         document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
-        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_name_en').innerText = name;
         document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
-        document.getElementById('c_dob').innerText = document.getElementById('dob').value;
+        document.getElementById('c_dob').innerText = dob;
         document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
         document.getElementById('c_gender_hi').innerText = (document.getElementById('gender').value === "MALE") ? "पुरुष" : "महिला";
-        document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
+        document.getElementById('cb_addr_en').innerText = addr;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
+        // QR Code with full data
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: `UID: ${r}\nName: ${document.getElementById('name_en').value}`, width: 95, height: 95 });
+        let qrData = `UID: ${r}\nName: ${name}\nDOB: ${dob}\nAddress: ${addr}`;
+        new QRCode(document.getElementById("qrcode"), { text: qrData, width: 95, height: 95, correctLevel : QRCode.CorrectLevel.M });
         
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
