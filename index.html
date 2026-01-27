@@ -24,7 +24,6 @@
         .brush-orange { background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11.5px; font-weight: 800; }
         .brush-green { background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9.5px; font-weight: 700; margin-top: 2px; }
 
-        /* ADJUSTED: Front Footer Patti and Text position */
         .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 28px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; letter-spacing: 0.2px; padding-bottom: 1px; }
         
         .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
@@ -35,7 +34,6 @@
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
         .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
         
-        /* ADJUSTED: Front Aadhar Number moved lower */
         #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         
         .address-box { position: absolute; left: 12px; top: 58px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
@@ -62,7 +60,10 @@
         </div>
         <div class="row">
             <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
-            <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
+            <div class="form-group">
+                <label>Pincode</label>
+                <input type="text" id="pincode" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, ''); syncAddress()">
+            </div>
             <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
         </div>
         <div class="row">
@@ -120,7 +121,6 @@
 </div>
 
 <script>
-    // JavaScript code remains exactly the same as before
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
