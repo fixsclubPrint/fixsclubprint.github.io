@@ -2,119 +2,79 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Brush Design Check</title>
+    <title>Aadhaar Perfect Brush Coding</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background: #eef2f7; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 50px; 
-        }
+        body { font-family: 'Arial', sans-serif; background: #e0e0e0; display: flex; justify-content: center; padding: 50px; }
 
-        /* मुख्य कार्ड बॉक्स */
+        /* कार्ड का ढांचा */
         .aadhaar-box {
-            width: 325px; 
-            height: 205px; 
-            background: white; 
-            border: 0.5px solid #999;
-            position: relative; 
-            overflow: hidden; 
-            border-radius: 8px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 325px; height: 205px; background: white; 
+            border: 0.5px solid #aaa; position: relative; 
+            border-radius: 8px; overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        /* हेडर सेक्शन */
-        .header-container {
-            width: 100%; 
-            height: 60px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 5px 10px; 
-            box-sizing: border-box;
+        /* ब्रश कंटेनर */
+        .header-section {
+            display: flex; align-items: center; padding: 10px; gap: 8px;
         }
 
-        .header-center { 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            margin: 0 5px;
-        }
-
-        /* इमेज वाला केसरिया ब्रश इफेक्ट */
-        .brush-orange {
-            background: #f4b483; /* आपकी इमेज वाला कलर */
-            width: 100%; 
-            height: 22px; 
-            color: #000;
-            font-size: 13px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            /* ब्रश जैसा रफ किनारा */
-            clip-path: polygon(2% 15%, 15% 5%, 35% 12%, 55% 5%, 75% 10%, 98% 4%, 100% 50%, 97% 90%, 80% 80%, 55% 95%, 30% 85%, 0% 95%);
-        }
-
-        /* इमेज वाला हरा ब्रश इफेक्ट */
-        .brush-green {
-            background: #a5d6a7; /* आपकी इमेज वाला कलर */
-            width: 95%; 
-            height: 20px; 
-            color: #000;
-            font-size: 11px; 
-            font-weight: 600; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            margin-top: 3px;
-            /* ब्रश जैसा रफ किनारा */
-            clip-path: polygon(0% 15%, 20% 8%, 45% 15%, 70% 5%, 95% 12%, 100% 55%, 90% 92%, 65% 85%, 40% 98%, 15% 88%, 0% 85%);
-        }
-
-        /* लोगो और एम्बलेम की सेटिंग */
         .emblem { width: 22px; }
-        .aadhaar-logo { width: 42px; }
+        .aadhaar-logo { width: 45px; position: absolute; right: 10px; top: 12px; }
 
-        /* बाकी डिटेल्स (डमी) */
-        .photo-frame { width: 65px; height: 80px; position: absolute; left: 12px; top: 65px; border: 0.5px solid #ccc; background: #f0f0f0; }
-        .details { position: absolute; left: 85px; top: 68px; font-size: 10px; line-height: 1.3; font-weight: 600; }
-        .aadhaar-num { position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 2px; }
-        .footer-line { position: absolute; bottom: 0; width: 100%; height: 32px; border-top: 1.5px solid #ff0000; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: bold; }
+        .brush-container { flex-grow: 1; display: flex; flex-direction: column; gap: 3px; }
+
+        /* असली ब्रश कोडिंग */
+        .brush {
+            height: 22px; width: 180px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: #000; font-size: 13px;
+            position: relative;
+            /* दाईं तरफ से कटा हुआ इफेक्ट (Slanted Right) */
+            clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 90% 100%, 0% 100%);
+            /* किनारे रफ करने वाला फ़िल्टर */
+            filter: url(#rough-edge); 
+        }
+
+        .orange-brush { background: #f4b483; } /* आपका बताया हुआ कलर */
+        .green-brush { background: #a5d6a7; width: 170px; font-size: 11px; }
+
+        .details { position: absolute; left: 75px; top: 70px; font-size: 11px; font-weight: bold; line-height: 1.4; }
+        .footer { position: absolute; bottom: 0; width: 100%; height: 32px; border-top: 1.5px solid #ff0000; text-align: center; line-height: 32px; font-weight: 900; font-size: 16px; }
 
     </style>
 </head>
 <body>
 
-    <h3 style="color: #333;">Aadhaar Background Color & Design Check</h3>
+    <svg width="0" height="0">
+        <filter id="rough-edge">
+            <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="10" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+        </filter>
+    </svg>
 
     <div class="aadhaar-box">
-        <div class="header-container">
+        <div class="header-section">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="emblem">
-            <div class="header-center">
-                <div class="brush-orange">भारत सरकार</div>
-                <div class="brush-green">Government of India</div>
+            
+            <div class="brush-container">
+                <div class="brush orange-brush">भारत सरकार</div>
+                <div class="brush green-brush">Government of India</div>
             </div>
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="aadhaar-logo">
         </div>
 
-        <div class="photo-frame"></div>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="aadhaar-logo">
+
         <div class="details">
-            <b>नाम / Name</b><br>
+            नाम / Name: <br>
             जन्म तिथि / DOB: 01/01/1990<br>
             पुरुष / MALE
         </div>
 
-        <div class="aadhaar-num">0000 0000 0000</div>
-        <div class="footer-line">मेरा <span style="color:red; margin:0 4px;">आधार</span>, मेरी पहचान</div>
+        <div class="footer">
+            मेरा <span style="color:red;">आधार</span>, मेरी पहचान
+        </div>
     </div>
-
-    <p style="margin-top: 20px; font-size: 14px; color: #666;">
-        (नोट: ऊपर दिए गए ब्रश कलर्स <b>#f4b483</b> और <b>#a5d6a7</b> आपकी इमेज से मैच किए गए हैं।)
-    </p>
 
 </body>
 </html>
