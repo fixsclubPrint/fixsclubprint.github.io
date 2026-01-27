@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Final Stable</title>
+    <title>Aadhaar Manual Portal - Final Color Correction</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,27 +17,30 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
         
-        :root { --aadhaar-red: #A52A2A; }
+        /* EXACT COLOR FROM YOUR IMAGE */
+        :root { --aadhaar-red: #b33939; } /* Correct Red for Patti and 'Aadhaar' text */
 
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
         .card-header-back { background: white; border-bottom: 1.5px solid var(--aadhaar-red); height: 30px; display: flex; align-items: center; justify-content: center; color: var(--aadhaar-red); font-size: 9px; font-weight: bold; }
         
         .photo-frame { width: 68px; height: 82px; border: none; position: absolute; left: 12px; top: 48px; object-fit: cover; }
         .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
-        #c_name_hi { font-size: 11.5px; font-weight: 600; display: block; color: #111; }
         
         #c_num { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         #c_num_back { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
 
+        /* FOOTER PATTI */
         .card-footer-custom { position: absolute; bottom: 0; width: 100%; height: 32px; background: #fff; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .footer-top-line { border-top: 2.5px solid var(--aadhaar-red); width: 100%; } 
-        .footer-bottom-bold-line { border-bottom: 3.5px solid #000; width: 100%; }
+        .footer-top-line { border-top: 2px solid var(--aadhaar-red); width: 100%; } 
+        .footer-bottom-bold-line { border-bottom: 3px solid #000; width: 100%; }
         
         .footer-text-front { font-size: 14px; font-weight: bold; color: #000; margin-top: 1px; }
-        .footer-text-front span.red-text { color: var(--aadhaar-red); }
+        .footer-text-front span.red-text { color: var(--aadhaar-red); } /* Text Red color matched to Patti */
 
         .footer-text-back { font-size: 9px; font-weight: bold; color: #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 5px; margin-bottom: 2px; }
-        .icon-box { color: var(--aadhaar-red); background: white; padding: 1px; border-radius: 2px; }
+        
+        /* ICONS FIXED: Back to black outline as per image f298d6fd... */
+        .icon-style { color: #000; font-size: 10px; margin-right: 2px; }
 
         .address-box { position: absolute; left: 12px; top: 38px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 42px; width: 105px; height: 105px; }
@@ -50,13 +53,13 @@
     <h2 style="text-align: center; color: #1a237e;">Aadhaar Card Portal</h2>
     <form id="masterForm">
         <div class="row">
-            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12" placeholder="12 Digit"></div>
+            <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
-            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Father Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
         </div>
         
         <div class="row">
-            <div class="form-group"><label>House No/Gali/Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()" placeholder="Local Details"></div>
+            <div class="form-group"><label>House No/Gali/Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
             <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
             <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
         </div>
@@ -70,14 +73,13 @@
         <div class="row">
             <div class="form-group"><label>Gender</label><select id="gender" onchange="syncAddress();"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
             <div class="form-group"><label>Photo</label><input type="file" accept="image/*" onchange="previewImg(this)"></div>
-            <div class="form-group" style="visibility: hidden;"><label>-</label><input type="text"></div>
         </div>
 
         <div class="row">
             <div class="form-group" style="grid-column: span 3;"><label>Full Address (Auto)</label><textarea id="addr_en" rows="2" readonly></textarea></div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local)</label><textarea id="addr_hi" rows="2"></textarea></div>
         </div>
         
         <input type="hidden" id="name_hi">
@@ -92,7 +94,7 @@
             <div class="card-header"><div style="font-size:8px; font-weight:bold;">भारत सरकार / Govt. of India</div><div style="font-size:7px; font-weight:bold;">UIDAI</div></div>
             <img id="view_photo" class="photo-frame">
             <div class="details">
-                <span id="c_name_hi" style="display:block;"></span>
+                <span id="c_name_hi" style="display:block; font-weight:600;"></span>
                 <span id="c_name_en"></span><br>
                 जन्म तिथि / DOB: <span id="c_dob"></span><br>
                 <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
@@ -112,9 +114,9 @@
             <div class="card-footer-custom">
                 <div class="footer-top-line"></div>
                 <div class="footer-text-back">
-                    <span><i class="fa-solid fa-phone icon-box"></i> 1947</span> | 
-                    <span><i class="fa-solid fa-envelope icon-box"></i> help@uidai.gov.in</span> | 
-                    <span><i class="fa-solid fa-globe icon-box"></i> www.uidai.gov.in</span>
+                    <span><i class="fa-solid fa-phone icon-style"></i> 1947</span> | 
+                    <span><i class="fa-regular fa-envelope icon-style"></i> help@uidai.gov.in</span> | 
+                    <span><i class="fa-solid fa-globe icon-style"></i> www.uidai.gov.in</span>
                 </div>
                 <div class="footer-bottom-bold-line"></div>
             </div>
@@ -154,10 +156,4 @@
         document.getElementById('print-area').style.display = 'flex';
         setTimeout(() => {
             html2canvas(document.getElementById('capture-box'), { scale: 3, useCORS: true }).then(c => {
-                let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.click();
-            });
-        }, 1000);
-    }
-</script>
-</body>
-</html>
+                let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.
