@@ -60,7 +60,7 @@
         <div class="row">
             <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
             <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
-             <div class="form-group"><label>DOB (DDMMYYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY"></div>
+             <div class="form-group"><label>DOB (DDMMYYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
         </div>
         <div class="row">
             <div class="form-group"><label>Gender</label>
@@ -129,6 +129,12 @@
 </div>
 
 <script>
+    // --- DOB LOCKING LOGIC ---
+    document.getElementById('dob').addEventListener('input', function (e) {
+        let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,2})(\d{0,4})/);
+        e.target.value = !v[2] ? v[1] : v[1] + '/' + v[2] + (v[3] ? '/' + v[3] : '');
+    });
+
     function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
     
     async function translateText(t, l) { if(!t) return ""; try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
@@ -137,13 +143,9 @@
         let g = document.getElementById('gender').value;
         let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
         let rel_hi = (g === "MALE") ? "आत्मज: " : "अर्धांगिनी: ";
-        
         document.getElementById('gender_hi').value = (g === "MALE") ? "पुरुष" : "महिला";
-
         let addrBody = [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value].filter(x => x).join(', ');
-        
         document.getElementById('addr_en').value = rel_en + addrBody;
-        
         if(addrBody) { 
             let tBody = await translateText(addrBody, 'hi'); 
             document.getElementById('addr_hi').value = rel_hi + tBody; 
@@ -161,9 +163,7 @@
         let name = document.getElementById('name_en').value;
         let dob = document.getElementById('dob').value;
         let addr = document.getElementById('addr_en').value;
-
         if(r.length < 12) { alert("Aadhar No. invalid"); return; }
-        
         document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
         document.getElementById('c_name_en').innerText = name;
@@ -173,12 +173,9 @@
         document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
         document.getElementById('cb_addr_en').innerText = addr;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
-        
-        // Updated QR Code Logic with Name, DOB, Address
         document.getElementById('qrcode').innerHTML = "";
         let qrData = `UID: ${r}\nName: ${name}\nDOB: ${dob}\nAddress: ${addr}`;
         new QRCode(document.getElementById("qrcode"), { text: qrData, width: 95, height: 95, correctLevel : QRCode.CorrectLevel.M });
-        
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
     }
