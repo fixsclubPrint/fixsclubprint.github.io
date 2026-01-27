@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Final Color Correction</title>
+    <title>Aadhaar Portal - Restored & Fixed</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,8 +17,7 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
         
-        /* EXACT COLOR FROM YOUR IMAGE */
-        :root { --aadhaar-red: #b33939; } /* Correct Red for Patti and 'Aadhaar' text */
+        :root { --aadhaar-red: #b33939; } 
 
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
         .card-header-back { background: white; border-bottom: 1.5px solid var(--aadhaar-red); height: 30px; display: flex; align-items: center; justify-content: center; color: var(--aadhaar-red); font-size: 9px; font-weight: bold; }
@@ -29,18 +28,15 @@
         #c_num { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         #c_num_back { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
 
-        /* FOOTER PATTI */
         .card-footer-custom { position: absolute; bottom: 0; width: 100%; height: 32px; background: #fff; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
         .footer-top-line { border-top: 2px solid var(--aadhaar-red); width: 100%; } 
         .footer-bottom-bold-line { border-bottom: 3px solid #000; width: 100%; }
         
         .footer-text-front { font-size: 14px; font-weight: bold; color: #000; margin-top: 1px; }
-        .footer-text-front span.red-text { color: var(--aadhaar-red); } /* Text Red color matched to Patti */
+        .footer-text-front span.red-text { color: var(--aadhaar-red); }
 
         .footer-text-back { font-size: 9px; font-weight: bold; color: #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 5px; margin-bottom: 2px; }
-        
-        /* ICONS FIXED: Back to black outline as per image f298d6fd... */
-        .icon-style { color: #000; font-size: 10px; margin-right: 2px; }
+        .icon-style { color: #000; font-size: 11px; margin-right: 2px; }
 
         .address-box { position: absolute; left: 12px; top: 38px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 42px; width: 105px; height: 105px; }
@@ -55,11 +51,11 @@
         <div class="row">
             <div class="form-group"><label>Aadhar Number</label><input type="text" id="a_num" maxlength="12"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
-            <div class="form-group"><label>Father Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
         </div>
         
         <div class="row">
-            <div class="form-group"><label>House No/Gali/Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
+            <div class="form-group"><label>House No/Gali/Village</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
             <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
             <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
         </div>
@@ -76,14 +72,13 @@
         </div>
 
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Auto)</label><textarea id="addr_en" rows="2" readonly></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Auto English)</label><textarea id="addr_en" rows="2" readonly></textarea></div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local)</label><textarea id="addr_hi" rows="2"></textarea></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address (Local Language)</label><textarea id="addr_hi" rows="2"></textarea></div>
         </div>
         
         <input type="hidden" id="name_hi">
-        <input type="hidden" id="gender_hi" value="पुरुष">
         <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate & Download</button>
     </form>
 </div>
@@ -94,7 +89,7 @@
             <div class="card-header"><div style="font-size:8px; font-weight:bold;">भारत सरकार / Govt. of India</div><div style="font-size:7px; font-weight:bold;">UIDAI</div></div>
             <img id="view_photo" class="photo-frame">
             <div class="details">
-                <span id="c_name_hi" style="display:block; font-weight:600;"></span>
+                <span id="c_name_hi" style="display:block; font-weight:600; font-size:11.5px; color:#111;"></span>
                 <span id="c_name_en"></span><br>
                 जन्म तिथि / DOB: <span id="c_dob"></span><br>
                 <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
@@ -126,19 +121,31 @@
 
 <script>
     function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
-    function syncAddress() {
-        let g = document.getElementById('gender').value;
-        let pEn = (g === "FEMALE") ? "W/O: " : "S/O: ";
-        let parts = [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value];
-        document.getElementById('addr_en').value = pEn + parts.filter(x => x).join(', ');
-        translateFields();
-    }
+    
     async function translateFields() {
         let n = document.getElementById('name_en').value;
-        let a = document.getElementById('addr_en').value;
-        if(n) fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(n)}`).then(res=>res.json()).then(d=>{document.getElementById('name_hi').value=d[0][0][0]});
-        if(a) fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(a)}`).then(res=>res.json()).then(d=>{document.getElementById('addr_hi').value=d[0][0][0].replace(/S\/O:|W\/O:|एस\/ओ:|डब्लੂ\/ओ:/gi, (document.getElementById('gender').value=="FEMALE"?"अर्धांगिनी: ":"आत्मजः: "))});
+        if(n) {
+            let res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(n)}`);
+            let data = await res.json();
+            document.getElementById('name_hi').value = data[0][0][0];
+        }
     }
+
+    async function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let prefix = (g === "FEMALE") ? "W/O: " : "S/O: ";
+        let parts = [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value];
+        let fullEn = prefix + parts.filter(x => x).join(', ');
+        document.getElementById('addr_en').value = fullEn;
+
+        if(fullEn) {
+            let res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(fullEn)}`);
+            let data = await res.json();
+            document.getElementById('addr_hi').value = data[0][0][0].replace(/S\/O:|W\/O:|एस\/ओ:|डब्लू\/ओ:/gi, (g=="FEMALE"?"W/O: ":"S/O: "));
+        }
+        translateFields();
+    }
+
     function generateFinalCard() {
         let n = document.getElementById('a_num').value;
         if(n.length<12) return alert("12 Digit Aadhaar required");
@@ -156,4 +163,10 @@
         document.getElementById('print-area').style.display = 'flex';
         setTimeout(() => {
             html2canvas(document.getElementById('capture-box'), { scale: 3, useCORS: true }).then(c => {
-                let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.
+                let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.click();
+            });
+        }, 1000);
+    }
+</script>
+</body>
+</html>
