@@ -18,33 +18,47 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 1px solid #999; position: relative; overflow: hidden; border-radius: 4px; }
         
-        /* Footer Styling - Full Width Stretching */
+        /* FOOTER SIZE BADA KIYA GAYA HAI */
         .card-footer { 
             position: absolute; 
             bottom: 0; 
             left: 0;
-            width: 100%; /* Poore card ki width ke barabar */
-            height: 26px; 
+            width: 100%; 
+            height: 32px; 
             border-top: 1.5px solid #ff0000; 
             color: #000; 
             text-align: center; 
-            font-size: 13px; 
+            font-size: 16px; /* Size Bada kiya */
             font-weight: bold; 
-            line-height: 26px; 
+            line-height: 32px; 
             background: #fff;
-            letter-spacing: 0.5px; /* Text ko thoda failane ke liye */
+            letter-spacing: 0.8px;
         }
         .red-text { color: #ff0000; }
 
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
         .photo-frame { width: 68px; height: 82px; border: none; position: absolute; left: 12px; top: 48px; object-fit: cover; }
         .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
-        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #000; }
+        #c_num { position: absolute; bottom: 38px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #000; }
         
-        .address-box { position: absolute; left: 12px; top: 38px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
+        /* ADDRESS BOX MEIN SPACE ADD KIYA */
+        .address-box { 
+            position: absolute; 
+            left: 15px; /* Side se gap */
+            top: 42px; 
+            font-size: 8.8px; 
+            width: 180px; 
+            color: #333; 
+            line-height: 1.2; 
+            font-weight: 500; 
+        }
         .back-footer-img { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #000; }
         .back-footer-img img { width: 100%; height: 100%; object-fit: fill; }
-        .qr-position-back { position: absolute; right: 10px; top: 38px; width: 110px; height: 110px; }
+        .qr-position-back { position: absolute; right: 10px; top: 42px; width: 105px; height: 105px; }
+        
+        /* BACK CARD NUMBER POSITION */
+        #c_num_back { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
+        
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
     </style>
 </head>
@@ -124,13 +138,14 @@
             <div class="card-header" style="background: white; border-bottom: 1.5px solid #ff0000; height: 30px;"><div style="font-size:9px; font-weight:bold; color:#ff0000; width:100%; text-align:center;">भारतीय विशिष्ट पहचान प्राधिकरण | UIDAI</div></div>
             <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
             <div id="qrcode" class="qr-position-back"></div>
-            <div id="c_num_back" style="position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
+            <div id="c_num_back"></div>
             <div class="back-footer-img"><img src="https://i.postimg.cc/mD8N2P9z/52819.jpg"></div>
         </div>
     </div>
 </div>
 
 <script>
+    // All original JavaScript functions preserved exactly
     function previewImg(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
