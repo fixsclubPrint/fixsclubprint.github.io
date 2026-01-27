@@ -155,11 +155,11 @@
         }
         
         if(addrBase) {
-            let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः: ";
+            let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः ";
             fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(addrBase)}`)
             .then(res => res.json()).then(data => { 
                 let translated = data[0][0][0];
-                translated = translated.replace(/S\/O:|W\/O:|एस\/ओ:|डब्लू\/ओ:|आत्मज:|अर्धांगिनी:|आत्मजः:/gi, "").trim();
+                translated = translated.replace(/S\/O:|W\/O:|आत्मज:|अर्धांगिनी:|आत्मजः/gi, "").trim();
                 document.getElementById('addr_hi').value = prefixHi + translated;
             });
         }
