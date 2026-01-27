@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Fixed</title>
+    <title>Aadhaar Manual Portal - Professional Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -21,16 +21,16 @@
         #c_name_hi { font-size: 11.5px; font-weight: 600; display: block; color: #111; }
         .address-box { position: absolute; left: 12px; top: 38px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         
-        /* Aadhaar Number - Pure Black */
-        #c_num { position: absolute; bottom: 28px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #000; }
-        #c_num_back { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; color: #000; }
+        /* Aadhaar Number Styling */
+        #c_num { position: absolute; bottom: 28px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+        .num-red { color: #ff0000; }
         
-        /* Footer Styling */
-        .card-footer { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #ff0000; color: #000; text-align: center; font-size: 12px; font-weight: bold; line-height: 24px; background: #fff; }
-        .red-text { color: #ff0000; } /* Specific class for 'Aadhaar' word */
+        #c_num_back { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
+        .card-footer { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #ff0000; color: #ff0000; text-align: center; font-size: 12px; font-weight: bold; line-height: 24px; background: #fff; }
         
-        .back-footer-img { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #000; background: white; overflow: hidden; }
-        .back-footer-img img { width: 100%; height: 100%; object-fit: fill; }
+        /* Footer Image for Back Card */
+        .back-footer-img { position: absolute; bottom: 0; width: 100%; height: 24px; border-top: 1.5px solid #000; background: white; }
+        .back-footer-img img { width: 100%; height: 100%; object-fit: contain; }
 
         .qr-position-back { position: absolute; right: 10px; top: 38px; width: 110px; height: 110px; }
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
@@ -98,7 +98,7 @@
                 <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
             </div>
             <div id="c_num" class="aadhaar-num"></div>
-            <div class="card-footer">मेरा <span class="red-text">आधार</span>, मेरी पहचान</div>
+            <div class="card-footer">मेरा आधार, मेरी पहचान</div>
         </div>
         
         <div class="aadhaar-box" id="back-card">
@@ -150,7 +150,7 @@
         }
         
         if(addrBase) {
-            // Requirement 2: Logic for Male (आत्मजः) and Female (अर्धांगिनी)
+            // Updated logic for Hindi prefix based on gender
             let prefixHi = (gEn === "FEMALE") ? "अर्धांगिनी: " : "आत्मजः: ";
             fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(addrBase)}`)
             .then(res => res.json()).then(data => { 
@@ -167,11 +167,15 @@
         let rawNum = document.getElementById('a_num').value;
         if(rawNum.length < 12) { alert("Please enter 12 digit Aadhaar number"); return; }
         
-        let formatted = rawNum.replace(/(.{4})/g, '$1 ').trim();
-        let dob = document.getElementById('dob').value.split('-').reverse().join('/');
+        // Aadhaar Number Coloring Logic
+        let part1 = rawNum.substring(0, 4);
+        let part2 = rawNum.substring(4, 8);
+        let part3 = rawNum.substring(8, 12);
         
-        document.getElementById('c_num').innerText = formatted;
-        document.getElementById('c_num_back').innerText = formatted;
+        document.getElementById('c_num').innerHTML = `${part1} ${part2} <span class="num-red">${part3}</span>`;
+        document.getElementById('c_num_back').innerText = `${part1} ${part2} ${part3}`;
+
+        let dob = document.getElementById('dob').value.split('-').reverse().join('/');
         document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
         document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
         document.getElementById('c_dob').innerText = dob;
