@@ -23,7 +23,7 @@
 
         /* EXACT BRUSH DESIGN FROM YOUR IMAGE */
         .brush-saffron { 
-            background: #f1a366; /* Image color */
+            background: #f1a366; 
             width: 85%; height: 16px; 
             border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; 
             display: flex; align-items: center; justify-content: center; 
@@ -31,7 +31,7 @@
             position: relative; margin-bottom: 1px;
         }
         .brush-green-long { 
-            background: #97cc9e; /* Image color */
+            background: #97cc9e; 
             width: 95%; height: 14px; 
             border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; 
             display: flex; align-items: center; justify-content: center; 
@@ -125,7 +125,6 @@
 </div>
 
 <script>
-    // Functions remain same for logic
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
@@ -152,19 +151,28 @@
 
     function generatePreview() {
         let r = document.getElementById('a_num').value;
+        let n = document.getElementById('name_en').value;
+        let d = document.getElementById('dob').value;
+        let a = document.getElementById('addr_en').value;
+
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
         document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
-        document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+        document.getElementById('c_name_en').innerText = n;
         document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
-        document.getElementById('c_dob').innerText = document.getElementById('dob').value;
+        document.getElementById('c_dob').innerText = d;
         document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
         document.getElementById('c_gender_hi').innerText = (document.getElementById('gender').value === "MALE") ? "पुरुष" : "महिला";
-        document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
+        document.getElementById('cb_addr_en').innerText = a;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
+        // QR Code updated with Name, Number, DOB, and Address
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: `UID: ${r}\nName: ${document.getElementById('name_en').value}`, width: 95, height: 95 });
+        new QRCode(document.getElementById("qrcode"), { 
+            text: `UID: ${r}\nName: ${n}\nDOB: ${d}\nAddress: ${a}`, 
+            width: 95, 
+            height: 95 
+        });
         
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
