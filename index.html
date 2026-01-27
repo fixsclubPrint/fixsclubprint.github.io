@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Final Front Footer</title>
+    <title>Aadhaar Portal - Preview & Download</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -24,21 +24,20 @@
         .brush-orange { background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11.5px; font-weight: 800; }
         .brush-green { background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9.5px; font-weight: 700; margin-top: 2px; }
 
-        /* FRONT FOOTER: "Mera Aadhaar | Meri Pehchan" Adjustment */
-        .card-footer-red { position: absolute; bottom: 0px; left: 0; width: 100%; height: 26px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 16.5px; font-weight: 900; letter-spacing: 0.1px; padding-bottom: 2px; }
-        .card-footer-red span.pipe-front { color: #ff0000; margin: 0 5px; font-weight: normal; }
-
-        /* BACK FOOTER */
-        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; }
+        /* Front Footer Adjustments */
+        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 32px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; letter-spacing: 0.2px; padding-bottom: 3px; }
+        
+        /* Back Footer Adjustments */
+        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .footer-item { display: flex; align-items: center; font-size: 8px; font-weight: 700; color: #000; }
         .footer-item i { margin-right: 3px; font-size: 9px; color: #000; }
-        .pipe-sep { color: #000; font-weight: 700; font-size: 9px; }
+        .pipe-sep { color: #000; font-weight: bold; font-size: 10px; }
 
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
         .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
         
-        /* Aadhaar Number Positioned as requested */
-        #c_num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+        /* Aadhar Number positioned slightly lower as requested */
+        #c_num { position: absolute; bottom: 35px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         
         .address-box { position: absolute; left: 12px; top: 58px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 58px; width: 95px; height: 95px; }
@@ -94,7 +93,7 @@
             <img id="view_photo" class="photo-frame">
             <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
             <div id="c_num"></div>
-            <div class="card-footer-red">मेरा <span style="color:red; margin-left:3px;">आधार</span> <span class="pipe-front">|</span> मेरी पहचान</div>
+            <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span>, मेरी पहचान</div>
         </div>
         
         <div class="aadhaar-box">
@@ -102,6 +101,7 @@
             <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
             <div id="qrcode" class="qr-position-back"></div>
             <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
+            
             <div class="footer-back-clean">
                 <div class="footer-item"><i class="fa-solid fa-phone"></i> 1947</div>
                 <span class="pipe-sep">|</span>
@@ -115,7 +115,7 @@
 </div>
 
 <script>
-    // JavaScript Logic remains exactly same
+    // Script logic remains the same
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
@@ -146,10 +146,12 @@
         let r = document.getElementById('a_num').value;
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
         let n = r.replace(/(.{4})/g, '$1 ').trim();
+        
         let name = document.getElementById('name_en').value;
         let gender = document.getElementById('gender').value;
         let addr = document.getElementById('addr_en').value;
         let dob = document.getElementById('dob').value; 
+        
         let qrData = `UID: ${r}\nName: ${name}\nDOB: ${dob}\nGender: ${gender}\nAddress: ${addr}`;
 
         document.getElementById('c_num').innerText = n; 
@@ -163,7 +165,13 @@
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: qrData, width: 95, height: 95, correctLevel: QRCode.CorrectLevel.M });
+        new QRCode(document.getElementById("qrcode"), { 
+            text: qrData, 
+            width: 95, 
+            height: 95,
+            correctLevel: QRCode.CorrectLevel.M
+        });
+        
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
     }
@@ -174,7 +182,9 @@
         });
     }
 
-    window.onload = function() { syncAddress(); };
+    window.onload = function() {
+        syncAddress();
+    };
 </script>
 </body>
 </html>
