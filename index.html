@@ -21,8 +21,22 @@
         .header-left { width: 24px; } .header-right { width: 45px; }
         .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 
-        .brush-saffron { background: #f1a366; width: 85%; height: 16px; border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; font-weight: 800; position: relative; margin-bottom: 1px; }
-        .brush-green-long { background: #97cc9e; width: 95%; height: 14px; border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9px; font-weight: 700; margin-top: 1px; }
+        .brush-saffron { 
+            background: #f1a366; 
+            width: 85%; height: 16px; 
+            border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; 
+            display: flex; align-items: center; justify-content: center; 
+            color: #000; font-size: 11px; font-weight: 800; 
+            position: relative; margin-bottom: 1px;
+        }
+        .brush-green-long { 
+            background: #97cc9e; 
+            width: 95%; height: 14px; 
+            border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; 
+            display: flex; align-items: center; justify-content: center; 
+            color: #000; font-size: 9px; font-weight: 700; 
+            margin-top: 1px;
+        }
 
         .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 28px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; letter-spacing: 0.2px; padding-bottom: 1px; }
         .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
@@ -42,7 +56,7 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Live Preview</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Exact Image Design</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -82,12 +96,7 @@
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
             <img id="view_photo" class="photo-frame">
-            <div class="details">
-                <span id="c_name_hi" style="display:block; font-weight:bold;"></span>
-                <span id="c_name_en" style="display:block;"></span>
-                जन्म तिथि / DOB: <span id="c_dob"></span><br>
-                <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
-            </div>
+            <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
             <div id="c_num"></div>
             <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span><span style="font-weight: 400; margin: 0 1px;">,</span> मेरी पहचान</div>
         </div>
@@ -101,10 +110,7 @@
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
-            <div class="address-box">
-                <b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br>
-                <b>Address:</b> <br> <span id="cb_addr_en"></span>
-            </div>
+            <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
             <div id="qrcode" class="qr-position-back"></div>
             <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
             <div class="footer-back-clean">
@@ -124,22 +130,10 @@
     
     async function syncAddress() {
         let g = document.getElementById('gender').value;
-        let rel_hi = (g === "MALE") ? "S/O: " : "W/O: ";
-        let f_name = document.getElementById('fname_en').value;
-        let h_g = document.getElementById('h_g_v_c').value;
-        let p_o = document.getElementById('p_office').value;
-        let dist = document.getElementById('dist').value;
-        let st = document.getElementById('state').value;
-        let pin = document.getElementById('pincode').value;
-
-        let full_en = rel_hi + [f_name, h_g, p_o, dist, st, pin].filter(x => x).join(', ');
-        document.getElementById('addr_en').value = full_en;
-
-        if(f_name) {
-            let rel_hi_trans = (g === "MALE") ? "आत्मज: " : "अर्धांगिनी: ";
-            let trans_addr = await translateText([h_g, p_o, dist, st].filter(x => x).join(', '), 'hi');
-            document.getElementById('addr_hi').value = rel_hi_trans + f_name + ", " + trans_addr + ", " + pin;
-        }
+        let rel_hi = (g === "MALE") ? "आत्मजः " : "अर्धांगिनी: ";
+        let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
+        document.getElementById('addr_en').value = rel_en + [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value].filter(x => x).join(', ');
+        if(document.getElementById('fname_en').value) { let t = await translateText(document.getElementById('addr_en').value.replace(rel_en, ""), 'hi'); document.getElementById('addr_hi').value = rel_hi + t; }
     }
 
     async function translateFields() {
@@ -150,9 +144,8 @@
 
     function generatePreview() {
         let r = document.getElementById('a_num').value;
-        if(r.length < 12) { alert("Aadhar No. 12 अंकों का होना चाहिए"); return; }
+        if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
         
-        // मैपिंग सुधार
         document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
         document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
@@ -160,17 +153,19 @@
         document.getElementById('c_dob').innerText = document.getElementById('dob').value;
         document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
         document.getElementById('c_gender_hi').innerText = (document.getElementById('gender').value === "MALE") ? "पुरुष" : "महिला";
-        
-        // एड्रेस मैपिंग सुधार
         document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
-        // QR Code
+        // QR Code Logic Fixed
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), {
-            text: "UID: " + r + "\nName: " + document.getElementById('name_en').value + "\nDOB: " + document.getElementById('dob').value,
-            width: 95, height: 95
-        });
+        setTimeout(() => {
+            new QRCode(document.getElementById("qrcode"), {
+                text: "UID: " + r + "\nName: " + document.getElementById('name_en').value,
+                width: 95,
+                height: 95,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }, 100);
         
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
