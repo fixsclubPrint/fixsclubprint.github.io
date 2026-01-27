@@ -58,7 +58,7 @@
         <div class="row">
             <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
             <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
-            <div class="form-group"><label>DOB (DD-MM-YYYY)</label><input type="text" id="dob" placeholder="DD-MM-YYYY" maxlength="10"></div>
+            <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
         </div>
         <div class="row">
             <div class="form-group"><label>Gender</label>
@@ -105,11 +105,11 @@
 </div>
 
 <script>
-    // Auto-hyphen for DOB input field
+    // Auto-slash for DOB input (DD/MM/YYYY)
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
-        if (v.length >= 5) v = v.slice(0, 2) + '-' + v.slice(2, 4) + '-' + v.slice(4);
-        else if (v.length >= 3) v = v.slice(0, 2) + '-' + v.slice(2);
+        if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
+        else if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
         e.target.value = v;
     });
 
@@ -140,9 +140,8 @@
         let name = document.getElementById('name_en').value;
         let gender = document.getElementById('gender').value;
         let addr = document.getElementById('addr_en').value;
-        let dob = document.getElementById('dob').value; // Now already in DD-MM-YYYY format
+        let dob = document.getElementById('dob').value; 
         
-        // Full Data for QR
         let qrData = `UID: ${r}\nName: ${name}\nDOB: ${dob}\nGender: ${gender}\nAddress: ${addr}`;
 
         document.getElementById('c_num').innerText = n; 
