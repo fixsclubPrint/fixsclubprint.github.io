@@ -1,76 +1,57 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <title>Government of India - Real Brush Design</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 50px;
-            background: #f4f4f4;
-            font-family: 'Arial', sans-serif;
-        }
+<meta charset="UTF-8">
+<title>Final Aadhaar Header</title>
+<style>
+    body { margin: 0; padding: 50px; background: #eef2f7; font-family: Arial, sans-serif; }
 
-        .gov-header {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            padding: 20px;
-            width: fit-content;
-            border-radius: 8px;
-        }
+    .gov-header {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 15px;
+        width: fit-content;
+        border: 1px solid #ddd;
+    }
 
-        .emblem img {
-            width: 50px;
-            margin-right: 15px;
-        }
+    .emblem img { width: 50px; }
 
-        .text-area {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
+    .text-area {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 
-        /* असली ब्रश इफेक्ट की कोडिंग */
-        .brush {
-            position: relative;
-            padding: 4px 60px 4px 15px; /* दाईं तरफ ज्यादा जगह ताकि ब्रश लंबा दिखे */
-            font-weight: 900;
-            color: #000;
-            white-space: nowrap;
-            /* दाईं तरफ से ब्रश को फीका और कटा हुआ बनाने के लिए */
-            -webkit-mask-image: linear-gradient(to right, 
-                rgba(0,0,0,1) 70%, 
-                rgba(0,0,0,0.8) 85%, 
-                rgba(0,0,0,0) 100%);
-            mask-image: linear-gradient(to right, 
-                rgba(0,0,0,1) 70%, 
-                rgba(0,0,0,0) 100%);
-        }
+    /* ब्रश की असली कोडिंग */
+    .brush {
+        padding: 4px 40px 4px 15px;
+        font-weight: bold;
+        color: #000;
+        /* दाईं तरफ से कटिंग डिजाइन */
+        clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
+        border-radius: 4px 0 0 4px;
+        white-space: nowrap;
+    }
 
-        /* आपकी इमेज वाला हल्का केसरिया */
-        .saffron {
-            background: #f4b483; 
-            font-size: 24px;
-            border-radius: 15px 0 0 5px; /* पीछे से गोल */
-            clip-path: polygon(0% 0%, 95% 2%, 100% 50%, 92% 98%, 0% 100%);
-        }
+    .saffron {
+        background-color: #f4b483; /* आपकी फोटो वाला केसरिया */
+        font-size: 22px;
+    }
 
-        /* आपकी इमेज वाला हल्का हरा */
-        .green {
-            background: #a5d6a7;
-            font-size: 18px;
-            width: 85%; /* हरा वाला हिस्सा थोड़ा छोटा होता है */
-            border-radius: 12px 0 0 5px;
-            clip-path: polygon(0% 0%, 90% 5%, 100% 50%, 88% 95%, 0% 100%);
-        }
-    </style>
+    .green {
+        background-color: #a5d6a7; /* आपकी फोटो वाला हरा */
+        font-size: 18px;
+        width: 90%; /* हरा हिस्सा थोड़ा छोटा */
+    }
+</style>
 </head>
 <body>
 
 <div class="gov-header">
     <div class="emblem">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg">
     </div>
 
     <div class="text-area">
