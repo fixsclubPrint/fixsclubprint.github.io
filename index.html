@@ -1,8 +1,8 @@
-You see<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Final Image Style</title>
+    <title>Aadhaar Portal - Final Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,41 +17,49 @@ You see<!DOCTYPE html>
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; }
         
-        /* HEADER STYLE (Jaisa Photo mein hai) */
+        /* HEADER WITH EXACT BRUSH STYLE */
         .card-header-img {
-            width: 100%; height: 45px; display: flex; align-items: center; 
-            justify-content: space-between; padding: 5px 10px; box-sizing: border-box;
-            background: #fff;
+            width: 100%; height: 52px; display: flex; align-items: center; 
+            justify-content: space-between; padding: 2px 12px; box-sizing: border-box; background: #fff;
         }
-        .header-left { width: 22px; }
-        .header-center { flex-grow: 1; text-align: center; position: relative; margin-top: -5px; }
+        .header-left { width: 24px; }
         .header-right { width: 45px; }
+        
+        .header-center { 
+            flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
 
-        /* Brush Text Effect */
-        .brush-hi { font-size: 12px; font-weight: bold; color: #000; background: linear-gradient(to right, #FF9933 0%, #FF9933 40%, transparent 100%); -webkit-background-clip: text; }
-        .brush-en { font-size: 11px; font-weight: bold; color: #000; background: linear-gradient(to right, #138808 0%, #138808 40%, transparent 100%); -webkit-background-clip: text; }
+        .brush-orange {
+            background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%;
+            display: flex; align-items: center; justify-content: center; color: #000;
+            font-size: 11.5px; font-weight: 800; box-shadow: 8px 0 12px -4px #ff9933;
+        }
+        .brush-green {
+            background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%;
+            display: flex; align-items: center; justify-content: center; color: #000;
+            font-size: 9.5px; font-weight: 700; margin-top: 2px; box-shadow: -8px 0 12px -4px #138808;
+        }
 
         /* FOOTERS */
         .card-footer-red { 
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
-            display: flex; justify-content: center; align-items: center;
+            display: flex; justify-content: center; align-items: center; font-size: 11.5px; font-weight: bold;
         }
         .footer-back-clean {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
-            display: flex; justify-content: space-evenly; align-items: center; padding: 0 5px;
+            display: flex; justify-content: space-evenly; align-items: center;
         }
         .footer-item { display: flex; align-items: center; font-size: 9px; font-weight: 700; color: #000; }
-        .v-line { color: #333; font-size: 11px; margin: 0 2px; }
+        .v-line { color: #333; font-size: 11px; margin: 0 1px; }
 
-        /* CONTENT */
-        .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 52px; object-fit: cover; border: 0.1px solid #ccc; }
-        .details { position: absolute; left: 90px; top: 52px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
+        /* CONTENT POSITIONING */
+        .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
+        .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
         #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
-        .address-box { position: absolute; left: 12px; top: 52px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
-        .qr-position-back { position: absolute; right: 10px; top: 52px; width: 100px; height: 100px; }
-        #c_num_back { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
+        .address-box { position: absolute; left: 12px; top: 58px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
+        .qr-position-back { position: absolute; right: 10px; top: 58px; width: 95px; height: 95px; }
         
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
     </style>
@@ -59,7 +67,7 @@ You see<!DOCTYPE html>
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Image Style Final</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Final Polish</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -98,8 +106,8 @@ You see<!DOCTYPE html>
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
                 <div class="header-center">
-                    <div class="brush-hi">भारत सरकार</div>
-                    <div class="brush-en">Government of India</div>
+                    <div class="brush-orange">भारत सरकार</div>
+                    <div class="brush-green">Government of India</div>
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
@@ -112,22 +120,22 @@ You see<!DOCTYPE html>
                 <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
             </div>
             <div id="c_num"></div>
-            <div class="card-footer-red" style="font-size:11.5px; font-weight:bold;">मेरा <span style="color:red; margin:0 3px;">आधार</span>, मेरी पहचान</div>
+            <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span>, मेरी पहचान</div>
         </div>
         
         <div class="aadhaar-box" id="back-card">
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
                 <div class="header-center">
-                    <div class="brush-hi" style="font-size:10px;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
-                    <div class="brush-en" style="font-size:9px;">Unique Identification Authority of India</div>
+                    <div class="brush-orange" style="font-size:9.5px; width:100%;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
+                    <div class="brush-green" style="font-size:8px; width:95%;">Unique Identification Authority of India</div>
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
             
             <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
             <div id="qrcode" class="qr-position-back"></div>
-            <div id="c_num_back"></div>
+            <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
             
             <div class="footer-back-clean">
                 <div class="footer-item"><i class="fa-solid fa-phone" style="font-size:8px; margin-right:3px;"></i> 1947</div>
@@ -167,7 +175,7 @@ You see<!DOCTYPE html>
         document.getElementById('qrcode').innerHTML = "";
         new QRCode(document.getElementById("qrcode"), { text: `UID: ${r}`, width: 100, height: 100 });
         document.getElementById('print-area').style.display = 'flex';
-        setTimeout(() => { html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(c => { let l = document.createElement('a'); l.download = 'Aadhaar_Perfect.png'; l.href = c.toDataURL(); l.click(); }); }, 800);
+        setTimeout(() => { html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(c => { let l = document.createElement('a'); l.download = 'Aadhaar_Final.png'; l.href = c.toDataURL(); l.click(); }); }, 800);
     }
 </script>
 </body>
