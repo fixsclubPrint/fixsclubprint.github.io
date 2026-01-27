@@ -24,11 +24,14 @@
         .brush-orange { background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11.5px; font-weight: 800; }
         .brush-green { background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9.5px; font-weight: 700; margin-top: 2px; }
 
-        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 36px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 900; letter-spacing: 0.2px; }
+        /* Front Footer: Adjusted to match back-side alignment exactly */
+        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: 900; letter-spacing: 0.2px; padding-top: 2px; }
         
-        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: space-evenly; align-items: center; }
+        /* Back Footer: Email/Globe icons set to thin black style */
+        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: space-evenly; align-items: center; padding: 0 5px; box-sizing: border-box; }
         .footer-item { display: flex; align-items: center; font-size: 8px; font-weight: 700; color: #000; }
-        .footer-item i { margin-right: 3px; font-size: 9px; color: #000; }
+        .footer-item i { margin-right: 3px; font-size: 9px; color: #000; font-weight: 400; }
+        .separator { color: #ccc; font-weight: 100; font-size: 12px; }
 
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
         .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
@@ -96,7 +99,9 @@
             <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
             <div class="footer-back-clean">
                 <div class="footer-item"><i class="fa-solid fa-phone"></i> 1947</div>
-                <div class="footer-item"><i class="fa-solid fa-envelope"></i> help@uidai.gov.in</div>
+                <div class="separator">|</div>
+                <div class="footer-item"><i class="fa-regular fa-envelope"></i> help@uidai.gov.in</div>
+                <div class="separator">|</div>
                 <div class="footer-item"><i class="fa-solid fa-globe"></i> www.uidai.gov.in</div>
             </div>
         </div>
@@ -105,7 +110,6 @@
 </div>
 
 <script>
-    // Auto-slash for DOB input (DD/MM/YYYY)
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
