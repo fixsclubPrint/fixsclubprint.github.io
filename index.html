@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Final Layout</title>
+    <title>Aadhaar Portal - Adjusted Footer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -24,14 +24,23 @@
         .brush-orange { background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11.5px; font-weight: 800; }
         .brush-green { background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9.5px; font-weight: 700; margin-top: 2px; }
 
-        /* FRONT FOOTER PATTI */
-        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; font-size: 16.5px; font-weight: 900; letter-spacing: 0.1px; padding-bottom: 2px; }
-        .pipe-front { color: #ff0000; margin: 0 6px; font-weight: normal; font-size: 18px; }
-
-        /* FRONT NUMBER POSITION */
-        #c_num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1.5px; color: #000; }
-
-        /* BACK FOOTER */
+        /* Modified Front Footer Style */
+        .card-footer-red { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 28px; 
+            border-top: 1.5px solid #ff0000; 
+            background: #fff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 16px; 
+            font-weight: 900; 
+            color: #000; /* Black for 'Mera' and 'Meri Pehchan' */
+        }
+        
         .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .footer-item { display: flex; align-items: center; font-size: 8px; font-weight: 700; color: #000; }
         .footer-item i { margin-right: 3px; font-size: 9px; color: #000; }
@@ -39,6 +48,9 @@
 
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
         .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
+        
+        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+        
         .address-box { position: absolute; left: 12px; top: 58px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 58px; width: 95px; height: 95px; }
 
@@ -49,7 +61,7 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Live Preview</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Preview System</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -89,12 +101,22 @@
 <div id="print-area">
     <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px; border-radius: 10px;">
         <div class="aadhaar-box">
-            <div class="card-header-img"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left"><div class="header-center"><div class="brush-orange">भारत सरकार</div><div class="brush-green">Government of India</div></div><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right"></div>
+            <div class="card-header-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
+                <div class="header-center">
+                    <div class="brush-orange">भारत सरकार</div>
+                    <div class="brush-green">Government of India</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
+            </div>
             <img id="view_photo" class="photo-frame">
             <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
             <div id="c_num"></div>
+            
             <div class="card-footer-red">
-                मेरा आधार <span class="pipe-front">|</span> मेरी पहचान
+                <span>मेरा </span>
+                <span style="color:#ff0000; margin: 0 4px;">आधार</span>
+                <span>, मेरी पहचान</span>
             </div>
         </div>
         
@@ -112,11 +134,11 @@
             </div>
         </div>
     </div>
-    <button type="button" id="dl-btn" class="btn-download" onclick="downloadAadhaar()">2. Download Aadhaar</button>
+    <button type="button" id="dl-btn" class="btn-download" onclick="downloadAadhaar()">2. Everything is OK, Download Now</button>
 </div>
 
 <script>
-    // Keeping your core logic intact
+    // JS logical part stays the same to ensure functionality
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
@@ -147,10 +169,12 @@
         let r = document.getElementById('a_num').value;
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
         let n = r.replace(/(.{4})/g, '$1 ').trim();
+        
         let name = document.getElementById('name_en').value;
         let gender = document.getElementById('gender').value;
         let addr = document.getElementById('addr_en').value;
         let dob = document.getElementById('dob').value; 
+        
         let qrData = `UID: ${r}\nName: ${name}\nDOB: ${dob}\nGender: ${gender}\nAddress: ${addr}`;
 
         document.getElementById('c_num').innerText = n; 
@@ -164,18 +188,26 @@
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: qrData, width: 95, height: 95, correctLevel: QRCode.CorrectLevel.M });
+        new QRCode(document.getElementById("qrcode"), { 
+            text: qrData, 
+            width: 95, 
+            height: 95,
+            correctLevel: QRCode.CorrectLevel.M
+        });
+        
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
     }
 
     function downloadAadhaar() {
         html2canvas(document.getElementById('capture-box'), { scale: 3, useCORS: true }).then(c => { 
-            let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toToDataURL(); l.click(); 
+            let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.click(); 
         });
     }
 
-    window.onload = function() { syncAddress(); };
+    window.onload = function() {
+        syncAddress();
+    };
 </script>
 </body>
 </html>
