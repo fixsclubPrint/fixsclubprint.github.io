@@ -56,10 +56,10 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Image Style Match</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Exact Image Design</h2>
     <form id="masterForm">
         <div class="row">
-            <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+            <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
             <div class="form-group"><label>Father Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
         </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="row">
             <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
-            <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, ''); syncAddress()"></div>
+            <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
             <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
         </div>
         <div class="row">
@@ -124,14 +124,8 @@
 </div>
 
 <script>
-    document.getElementById('dob').addEventListener('input', function (e) {
-        var v = e.target.value.replace(/\D/g, '').slice(0, 8);
-        if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
-        else if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
-        e.target.value = v;
-    });
-
     function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
+    
     async function translateText(t, l) { if(!t) return ""; try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
     
     async function syncAddress() {
@@ -151,6 +145,7 @@
     function generatePreview() {
         let r = document.getElementById('a_num').value;
         if(r.length < 12) { alert("Aadhar No. must be 12 digits"); return; }
+        
         document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
         document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
         document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
@@ -161,8 +156,16 @@
         document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
         document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
         
+        // QR Code Logic Fixed
         document.getElementById('qrcode').innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), { text: `UID: ${r}\nName: ${document.getElementById('name_en').value}`, width: 95, height: 95 });
+        setTimeout(() => {
+            new QRCode(document.getElementById("qrcode"), {
+                text: "UID: " + r + "\nName: " + document.getElementById('name_en').value,
+                width: 95,
+                height: 95,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }, 100);
         
         document.getElementById('print-area').style.display = 'flex';
         document.getElementById('dl-btn').style.display = 'block';
