@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Relationship Fix</title>
+    <title>Aadhaar Portal - Full Auto Update</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,6 +17,7 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; }
         
+        /* ORIGINAL BRUSH HEADER */
         .card-header-img {
             width: 100%; height: 55px; display: flex; align-items: center; 
             justify-content: space-between; padding: 0 10px; box-sizing: border-box; background: #fff;
@@ -54,7 +55,7 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Relationship Fixed</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Auto Logic Fixed</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -140,51 +141,8 @@
 
 <script>
     function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
-    async function translateText(t, l) { try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
-
-    async function syncAddress() {
-        let g = document.getElementById('gender').value;
-        let lang = document.getElementById('lang_select').value;
-        
-        // MALE/FEMALE AUTO LABELS
-        let rel_hi = "";
-        let rel_en = "";
-        
-        if(g === "MALE") {
-            document.getElementById('gender_hi').value = "पुरुष";
-            rel_hi = "आत्मजः ";
-            rel_en = "S/O: ";
-        } else {
-            document.getElementById('gender_hi').value = "महिला";
-            rel_hi = "अर्धांगिनी: ";
-            rel_en = "W/O: ";
-        }
-
-        let fields = [
-            document.getElementById('fname_en').value,
-            document.getElementById('h_g_v_c').value,
-            document.getElementById('p_office').value,
-            document.getElementById('dist').value,
-            document.getElementById('state').value,
-            document.getElementById('pincode').value
-        ].filter(x => x).join(', ');
-
-        document.getElementById('addr_en').value = rel_en + fields;
-        
-        if(fields) {
-            let translatedBody = await translateText(fields, lang);
-            document.getElementById('addr_hi').value = rel_hi + translatedBody;
-        }
-    }
-
-    async function translateFields() {
-        let n = document.getElementById('name_en').value;
-        if(n) document.getElementById('name_hi').value = await translateText(n, document.getElementById('lang_select').value);
-        syncAddress();
-    }
-
-    function generateFinalCard() {
-        let r = document.getElementById('a_num').value, n = r.replace(/(.{4})/g, '$1 ').trim();
-        document.getElementById('c_num').innerText = n; 
-        document.getElementById('c_num_back').innerText = n;
-        document.getElementById('c_name_en').innerText = document.
+    
+    async function translateText(t, l) { 
+        if(!t) return "";
+        try { 
+            const res = await fetch(`
