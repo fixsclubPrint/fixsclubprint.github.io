@@ -1,64 +1,262 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Final Aadhaar Header</title>
-<style>
-    body { margin: 0; padding: 50px; background: #eef2f7; font-family: Arial, sans-serif; }
-
-    .gov-header {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        padding: 15px;
-        width: fit-content;
-        border: 1px solid #ddd;
-    }
-
-    .emblem img { width: 50px; }
-
-    .text-area {
-        margin-left: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    /* ब्रश की असली कोडिंग */
-    .brush {
-        padding: 4px 40px 4px 15px;
-        font-weight: bold;
-        color: #000;
-        /* दाईं तरफ से कटिंग डिजाइन */
-        clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
-        border-radius: 4px 0 0 4px;
-        white-space: nowrap;
-    }
-
-    .saffron {
-        background-color: #f4b483; /* आपकी फोटो वाला केसरिया */
-        font-size: 22px;
-    }
-
-    .green {
-        background-color: #a5d6a7; /* आपकी फोटो वाला हरा */
-        font-size: 18px;
-        width: 90%; /* हरा हिस्सा थोड़ा छोटा */
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Color Picker - Government of India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .header {
+            width: 100%;
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .color-picker-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .color-picker-box h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .color-display {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            border: 8px solid white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        input[type="color"] {
+            width: 80px;
+            height: 80px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .color-code {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: #f1f1f1;
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 15px;
+            color: #333;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .color-sliders {
+            margin-top: 25px;
+            text-align: left;
+        }
+        .slider-container {
+            margin: 15px 0;
+        }
+        .slider-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+        .info-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .info-box h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .info-box p {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .govt-logo {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            padding: 20px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1.1rem; }
+            .content { flex-direction: column; align-items: center; }
+        }
+    </style>
 </head>
 <body>
-
-<div class="gov-header">
-    <div class="emblem">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg">
+    <div class="header">
+        <h1>Total Color Picker</h1>
+        <p>Government of India | मारत सरकार</p>
+    </div>
+    
+    <div class="content">
+        <div class="color-picker-box">
+            <h2>Interactive Color Picker</h2>
+            <div class="color-display" id="colorDisplay"></div>
+            <input type="color" id="colorPicker" value="#1e3c72">
+            <div class="color-code" id="colorCode">#1e3c72</div>
+            
+            <div class="color-sliders">
+                <div class="slider-container">
+                    <label for="redSlider">Red: <span id="redValue">30</span></label>
+                    <input type="range" id="redSlider" min="0" max="255" value="30">
+                </div>
+                <div class="slider-container">
+                    <label for="greenSlider">Green: <span id="greenValue">60</span></label>
+                    <input type="range" id="greenSlider" min="0" max="255" value="60">
+                </div>
+                <div class="slider-container">
+                    <label for="blueSlider">Blue: <span id="blueValue">114</span></label>
+                    <input type="range" id="blueSlider" min="0" max="255" value="114">
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h2>About This Tool</h2>
+            <p>This color picker tool is inspired by "Total Color" design principles and developed under the emblem of the Government of India.</p>
+            <p>Features:</p>
+            <ul style="padding-left: 20px; color: #555; line-height: 1.6;">
+                <li>Live color preview</li>
+                <li>Color picker (click the circle)</li>
+                <li>RGB sliders for fine-tuning</li>
+                <li>Hex color code display</li>
+                <li>Fully responsive design</li>
+            </ul>
+            <div class="govt-logo">
+                भारत सरकार | Government of India
+            </div>
+            <p>This interface combines modern web design with official government representation.</p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Total Color Picker | Official Government of India Inspired Design</p>
+        <p>मारत सरकार | Ministry of Electronics & Information Technology</p>
     </div>
 
-    <div class="text-area">
-        <div class="brush saffron">भारत सरकार</div>
-        <div class="brush green">Government of India</div>
-    </div>
-</div>
+    <script>
+        const colorPicker = document.getElementById('colorPicker');
+        const colorDisplay = document.getElementById('colorDisplay');
+        const colorCode = document.getElementById('colorCode');
+        const redSlider = document.getElementById('redSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const redValue = document.getElementById('redValue');
+        const greenValue = document.getElementById('greenValue');
+        const blueValue = document.getElementById('blueValue');
 
+        function updateColor() {
+            const r = redSlider.value;
+            const g = greenSlider.value;
+            const b = blueSlider.value;
+            
+            const hexColor = rgbToHex(r, g, b);
+            
+            colorDisplay.style.backgroundColor = hexColor;
+            colorCode.textContent = hexColor;
+            colorPicker.value = hexColor;
+            
+            redValue.textContent = r;
+            greenValue.textContent = g;
+            blueValue.textContent = b;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (parseInt(r) << 16) + (parseInt(g) << 8) + parseInt(b)).toString(16).slice(1);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        colorPicker.addEventListener('input', (e) => {
+            const rgb = hexToRgb(e.target.value);
+            if (rgb) {
+                redSlider.value = rgb.r;
+                greenSlider.value = rgb.g;
+                blueSlider.value = rgb.b;
+                updateColor();
+            }
+        });
+
+        redSlider.addEventListener('input', updateColor);
+        greenSlider.addEventListener('input', updateColor);
+        blueSlider.addEventListener('input', updateColor);
+
+        updateColor();
+    </script>
 </body>
 </html>
