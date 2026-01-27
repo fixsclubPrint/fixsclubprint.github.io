@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Manual Portal - Final Fixed</title>
+    <title>Aadhaar Manual Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -20,14 +20,13 @@
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
         .card-header-back { width: 100%; height: 38px; border-bottom: 1px solid #ddd; display: flex; justify-content: center; align-items: center; background: #fff; }
 
-        /* FOOTER SYSTEM */
+        /* FOOTER - ONLY BACK SIDE ICONS MODIFIED */
         .card-footer { 
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
             display: flex; justify-content: center; align-items: center; gap: 8px;
         }
 
-        /* BACK SIDE ICONS STYLE */
         .footer-item { display: flex; align-items: center; font-size: 9px; font-weight: 700; color: #000; }
         .icon-style { margin-right: 3px; color: #333; font-weight: 400; }
         .separator { color: #333; font-size: 11px; margin: 0 2px; }
@@ -46,7 +45,7 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Manual Portal</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Card Manual Portal</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -74,7 +73,7 @@
         </div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (Local)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
-        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar</button>
+        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar Card</button>
     </form>
 </div>
 
