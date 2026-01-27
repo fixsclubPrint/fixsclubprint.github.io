@@ -2,120 +2,119 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Card Test Preview</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>Aadhaar Brush Design Check</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; padding: 20px; }
-        .aadhaar-box { 
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: #eef2f7; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 50px; 
+        }
+
+        /* मुख्य कार्ड बॉक्स */
+        .aadhaar-box {
             width: 325px; 
             height: 205px; 
             background: white; 
-            border: 0.5px solid #999; 
+            border: 0.5px solid #999;
             position: relative; 
             overflow: hidden; 
-            border-radius: 6px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-            margin: 20px auto;
+            border-radius: 8px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        
-        /* --- HEADER BRUSH DESIGN (As per your Image) --- */
-        .card-header-img { 
+
+        /* हेडर सेक्शन */
+        .header-container {
             width: 100%; 
-            height: 55px; 
+            height: 60px; 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            padding: 2px 10px; 
-            box-sizing: border-box; 
+            padding: 5px 10px; 
+            box-sizing: border-box;
         }
-        .header-left { width: 24px; } 
-        .header-right { width: 45px; }
+
         .header-center { 
             flex-grow: 1; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; 
+            margin: 0 5px;
         }
 
-        .brush-orange { 
-            background: #FF9933; 
-            width: 98%; 
-            height: 19px; 
-            border-radius: 45% 10% 60% 8% / 80% 15% 90% 10%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #000; 
-            font-size: 12.5px; 
-            font-weight: 800; 
-        }
-        .brush-green { 
-            background: #138808; 
-            width: 92%; 
-            height: 17px; 
-            border-radius: 8% 70% 15% 45% / 15% 90% 10% 80%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #000; 
-            font-size: 10.5px; 
+        /* इमेज वाला केसरिया ब्रश इफेक्ट */
+        .brush-orange {
+            background: #f4b483; /* आपकी इमेज वाला कलर */
+            width: 100%; 
+            height: 22px; 
+            color: #000;
+            font-size: 13px; 
             font-weight: 700; 
-            margin-top: 2px;
-            margin-right: 10px;
-        }
-
-        /* --- FOOTER DESIGN (Bada aur Neeche) --- */
-        .card-footer-red { 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 36px; 
-            border-top: 1.5px solid #ff0000; 
-            background: #fff; 
             display: flex; 
-            justify-content: center; 
             align-items: center; 
-            font-size: 18px; 
-            font-weight: 900; 
-            letter-spacing: 0.2px; 
+            justify-content: center;
+            /* ब्रश जैसा रफ किनारा */
+            clip-path: polygon(2% 15%, 15% 5%, 35% 12%, 55% 5%, 75% 10%, 98% 4%, 100% 50%, 97% 90%, 80% 80%, 55% 95%, 30% 85%, 0% 95%);
         }
 
-        /* --- AADHAAR NUMBER (Chhota aur Adjusted) --- */
-        #c_num { 
-            position: absolute; 
-            bottom: 38px; 
-            width: 100%; 
-            text-align: center; 
-            font-size: 15.5px; 
-            font-weight: bold; 
-            letter-spacing: 1.5px; 
+        /* इमेज वाला हरा ब्रश इफेक्ट */
+        .brush-green {
+            background: #a5d6a7; /* आपकी इमेज वाला कलर */
+            width: 95%; 
+            height: 20px; 
+            color: #000;
+            font-size: 11px; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin-top: 3px;
+            /* ब्रश जैसा रफ किनारा */
+            clip-path: polygon(0% 15%, 20% 8%, 45% 15%, 70% 5%, 95% 12%, 100% 55%, 90% 92%, 65% 85%, 40% 98%, 15% 88%, 0% 85%);
         }
+
+        /* लोगो और एम्बलेम की सेटिंग */
+        .emblem { width: 22px; }
+        .aadhaar-logo { width: 42px; }
+
+        /* बाकी डिटेल्स (डमी) */
+        .photo-frame { width: 65px; height: 80px; position: absolute; left: 12px; top: 65px; border: 0.5px solid #ccc; background: #f0f0f0; }
+        .details { position: absolute; left: 85px; top: 68px; font-size: 10px; line-height: 1.3; font-weight: 600; }
+        .aadhaar-num { position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 2px; }
+        .footer-line { position: absolute; bottom: 0; width: 100%; height: 32px; border-top: 1.5px solid #ff0000; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: bold; }
+
     </style>
 </head>
 <body>
 
-<h2 style="text-align:center;">Final Design Check</h2>
+    <h3 style="color: #333;">Aadhaar Background Color & Design Check</h3>
 
-<div class="aadhaar-box">
-    <div class="card-header-img">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
-        <div class="header-center">
-            <div class="brush-orange">भारत सरकार</div>
-            <div class="brush-green">Government of India</div>
+    <div class="aadhaar-box">
+        <div class="header-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="emblem">
+            <div class="header-center">
+                <div class="brush-orange">भारत सरकार</div>
+                <div class="brush-green">Government of India</div>
+            </div>
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="aadhaar-logo">
         </div>
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
+
+        <div class="photo-frame"></div>
+        <div class="details">
+            <b>नाम / Name</b><br>
+            जन्म तिथि / DOB: 01/01/1990<br>
+            पुरुष / MALE
+        </div>
+
+        <div class="aadhaar-num">0000 0000 0000</div>
+        <div class="footer-line">मेरा <span style="color:red; margin:0 4px;">आधार</span>, मेरी पहचान</div>
     </div>
 
-    <div id="c_num">1234 5678 9012</div>
-
-    <div class="card-footer-red">
-        मेरा <span style="color:red; margin:0 5px;">आधार</span>, मेरी पहचान
-    </div>
-</div>
+    <p style="margin-top: 20px; font-size: 14px; color: #666;">
+        (नोट: ऊपर दिए गए ब्रश कलर्स <b>#f4b483</b> और <b>#a5d6a7</b> आपकी इमेज से मैच किए गए हैं।)
+    </p>
 
 </body>
 </html>
