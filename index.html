@@ -21,9 +21,8 @@
         .header-left { width: 24px; } .header-right { width: 45px; }
         .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 
-        /* EXACT BRUSH DESIGN FROM YOUR IMAGE */
         .brush-saffron { 
-            background: #f1a366; /* Image color */
+            background: #f1a366; 
             width: 85%; height: 16px; 
             border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; 
             display: flex; align-items: center; justify-content: center; 
@@ -31,7 +30,7 @@
             position: relative; margin-bottom: 1px;
         }
         .brush-green-long { 
-            background: #97cc9e; /* Image color */
+            background: #97cc9e; 
             width: 95%; height: 14px; 
             border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; 
             display: flex; align-items: center; justify-content: center; 
@@ -99,7 +98,7 @@
             <img id="view_photo" class="photo-frame">
             <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
             <div id="c_num"></div>
-            <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span>, मेरी पहचान</div>
+            <div class="card-footer-red">मेरा <span style="color:red; margin:0 3px;">आधार</span><span style="font-weight: 400; margin: 0 1px;">,</span> मेरी पहचान</div>
         </div>
         
         <div class="aadhaar-box">
@@ -125,7 +124,6 @@
 </div>
 
 <script>
-    // Functions remain same for logic
     document.getElementById('dob').addEventListener('input', function (e) {
         var v = e.target.value.replace(/\D/g, '').slice(0, 8);
         if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
