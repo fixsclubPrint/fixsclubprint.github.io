@@ -132,7 +132,13 @@
         document.getElementById('c_num_back').innerText = n;
         document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
         document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
-        document.getElementById('c_dob').innerText = document.getElementById('dob').value.split('-').reverse().join('/');
+        
+        // DOB Format DD/MM/YYYY
+        let dobVal = document.getElementById('dob').value;
+        if(dobVal) {
+            document.getElementById('c_dob').innerText = dobVal.split('-').reverse().join('/');
+        }
+        
         document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
         document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
         document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
@@ -152,7 +158,12 @@
         });
     }
 
-    window.onload = syncAddress;
+    // Set Today's Date as Max Limit on Load
+    window.onload = function() {
+        let today = new Date().toISOString().split('T')[0];
+        document.getElementById('dob').setAttribute('max', today);
+        syncAddress();
+    };
 </script>
 </body>
 </html>
