@@ -141,6 +141,7 @@
         if(document.getElementById('fname_en').value) { 
             let t = await translateText(document.getElementById('addr_en').value.replace(rel_en, ""), 'hi'); 
             let rel_hi = (g === "MALE") ? "आत्मज: " : "अर्धांगिनी: ";
+            let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
             document.getElementById('addr_hi').value = rel_hi + t; 
         }
     }
