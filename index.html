@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Card Portal - Final Fixed</title>
+    <title>Aadhaar Manual Portal - Final Fixed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,11 +17,10 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 4px; }
         
-        /* HEADERS */
         .card-header { width: 100%; height: 38px; border-bottom: 1px solid #ddd; padding: 2px 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; background: linear-gradient(to bottom, #FF9933 12%, #FFFFFF 12%, #FFFFFF 88%, #138808 88%); }
         .card-header-back { width: 100%; height: 38px; border-bottom: 1px solid #ddd; display: flex; justify-content: center; align-items: center; background: #fff; }
 
-        /* FOOTER DESIGN (FRONT & BACK MATCHED) */
+        /* FOOTER SYSTEM */
         .card-footer { 
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
@@ -33,12 +32,10 @@
         .icon-style { margin-right: 3px; color: #333; font-weight: 400; }
         .separator { color: #333; font-size: 11px; margin: 0 2px; }
 
-        /* FRONT CONTENT */
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 48px; object-fit: cover; }
         .details { position: absolute; left: 90px; top: 48px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
         #c_num { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
         
-        /* BACK CONTENT */
         .address-box { position: absolute; left: 12px; top: 45px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
         .qr-position-back { position: absolute; right: 10px; top: 45px; width: 100px; height: 100px; }
         #c_num_back { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 15px; font-weight: bold; }
