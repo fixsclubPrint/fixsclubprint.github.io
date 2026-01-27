@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Professional Design</title>
+    <title>Aadhaar Portal - Final Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,46 +17,35 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; }
         
-        /* UPDATED HEADER DESIGN */
+        /* HEADER WITH EXACT BRUSH STYLE */
         .card-header-img {
-            width: 100%; height: 55px; display: flex; align-items: center; 
-            justify-content: space-between; padding: 0 10px; box-sizing: border-box; background: #fff;
+            width: 100%; height: 52px; display: flex; align-items: center; 
+            justify-content: space-between; padding: 2px 12px; box-sizing: border-box; background: #fff;
         }
-        .header-left { width: 22px; margin-top: 5px; }
-        .header-right { width: 42px; margin-top: 5px; }
+        .header-left { width: 24px; }
+        .header-right { width: 45px; }
         
         .header-center { 
             flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
         }
 
-        /* ACTUAL BRUSH STYLES (MATCHED TO IMAGE) */
         .brush-orange {
-            background: linear-gradient(90deg, transparent 0%, #f4a460 20%, #f4a460 80%, transparent 100%);
-            width: 100%; height: 20px; border-radius: 60% 20% 50% 10%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: #000; letter-spacing: 0.5px;
+            background: #ff9933; width: 95%; height: 18px; border-radius: 45% 15% 55% 10%;
+            display: flex; align-items: center; justify-content: center; color: #000;
+            font-size: 11.5px; font-weight: 800; box-shadow: 8px 0 12px -4px #ff9933;
         }
         .brush-green {
-            background: linear-gradient(90deg, transparent 0%, #8fbc8f 15%, #8fbc8f 85%, transparent 100%);
-            width: 95%; height: 16px; border-radius: 10% 50% 15% 45%;
-            display: flex; align-items: center; justify-content: center; margin-top: 1px;
-            font-size: 9px; font-weight: 700; color: #000;
+            background: #138808; width: 90%; height: 16px; border-radius: 10% 45% 15% 55%;
+            display: flex; align-items: center; justify-content: center; color: #000;
+            font-size: 9.5px; font-weight: 700; margin-top: 2px; box-shadow: -8px 0 12px -4px #138808;
         }
 
-        /* CONTENT POSITIONING */
-        .photo-frame { width: 68px; height: 82px; position: absolute; left: 14px; top: 62px; object-fit: cover; border: 0.1px solid #ccc; }
-        .details { position: absolute; left: 92px; top: 62px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
-        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
-        
+        /* FOOTERS */
         .card-footer-red { 
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
             display: flex; justify-content: center; align-items: center; font-size: 11.5px; font-weight: bold;
         }
-
-        .address-box { position: absolute; left: 14px; top: 60px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
-        .qr-position-back { position: absolute; right: 12px; top: 60px; width: 95px; height: 95px; }
-        
         .footer-back-clean {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; 
             border-top: 1.2px solid #ff0000; background: #fff;
@@ -65,13 +54,20 @@
         .footer-item { display: flex; align-items: center; font-size: 9px; font-weight: 700; color: #000; }
         .v-line { color: #333; font-size: 11px; margin: 0 1px; }
 
+        /* CONTENT POSITIONING */
+        .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
+        .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
+        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+        .address-box { position: absolute; left: 12px; top: 58px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; }
+        .qr-position-back { position: absolute; right: 10px; top: 58px; width: 95px; height: 95px; }
+        
         .btn-gen { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Pro Design</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Final Polish</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -131,8 +127,8 @@
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
                 <div class="header-center">
-                    <div class="brush-orange" style="font-size:9px; width:100%;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
-                    <div class="brush-green" style="font-size:7.5px; width:95%;">Unique Identification Authority of India</div>
+                    <div class="brush-orange" style="font-size:9.5px; width:100%;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
+                    <div class="brush-green" style="font-size:8px; width:95%;">Unique Identification Authority of India</div>
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
@@ -153,7 +149,6 @@
 </div>
 
 <script>
-    // Script remains the same as per your logic
     function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
     async function translateText(t, l) { try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
     async function syncAddress() {
@@ -180,7 +175,7 @@
         document.getElementById('qrcode').innerHTML = "";
         new QRCode(document.getElementById("qrcode"), { text: `UID: ${r}`, width: 100, height: 100 });
         document.getElementById('print-area').style.display = 'flex';
-        setTimeout(() => { html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(c => { let l = document.createElement('a'); l.download = 'Aadhaar_Brush_Back_Side.png'; l.href = c.toDataURL(); l.click(); }); }, 800);
+        setTimeout(() => { html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(c => { let l = document.createElement('a'); l.download = 'Aadhaar_Final.png'; l.href = c.toDataURL(); l.click(); }); }, 800);
     }
 </script>
 </body>
