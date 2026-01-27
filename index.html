@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Aadhaar Portal - Full Auto Update</title>
+    <title>Aadhaar Portal - Original Fixed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,7 +17,6 @@
         #print-area { display: none; margin-top: 40px; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 20px; background: #fff; }
         .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; }
         
-        /* ORIGINAL BRUSH HEADER */
         .card-header-img {
             width: 100%; height: 55px; display: flex; align-items: center; 
             justify-content: space-between; padding: 0 10px; box-sizing: border-box; background: #fff;
@@ -55,7 +54,7 @@
 <body>
 
 <div class="form-container">
-    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Auto Logic Fixed</h2>
+    <h2 style="text-align: center; color: #1a237e;">Aadhaar Portal - Original Fixed</h2>
     <form id="masterForm">
         <div class="row">
             <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
@@ -83,7 +82,6 @@
             <div class="form-group"><label>Language</label>
                 <select id="lang_select" onchange="translateFields()">
                     <option value="hi">HINDI</option>
-                    <option value="gu">GUJARATI</option>
                 </select>
             </div>
         </div>
@@ -93,12 +91,12 @@
         </div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (Hindi)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
         <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
-        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate Aadhaar Card</button>
+        <button type="button" class="btn-gen" onclick="generateFinalCard()">Generate & Download Aadhaar</button>
     </form>
 </div>
 
 <div id="print-area">
-    <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px;">
+    <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px; width: fit-content;">
         <div class="aadhaar-box" id="front-card">
             <div class="card-header-img">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
@@ -108,7 +106,7 @@
                 </div>
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
             </div>
-            <img id="view_photo" class="photo-frame">
+            <img id="view_photo" class="photo-frame" src="">
             <div class="details">
                 <span id="c_name_hi" style="display:block; font-weight:bold;"></span>
                 <span id="c_name_en" style="display:block;"></span>
@@ -140,9 +138,3 @@
 </div>
 
 <script>
-    function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
-    
-    async function translateText(t, l) { 
-        if(!t) return "";
-        try { 
-            const res = await fetch(`
