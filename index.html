@@ -77,10 +77,6 @@
             <div class="menu-item" style="color:#a29bfe" onclick="window.open('https://serviceonline.bihar.gov.in/')">📄 RTPS Bihar ↗️</div>
             <div class="menu-item" style="color:#fab1a0" onclick="window.open('https://beneficiary.nha.gov.in/')">🏥 Ayushman ↗️</div>
             <div class="menu-item" style="color:#1abc9c" onclick="window.open('https://udyamregistration.gov.in/')">🏢 MSME Udyam ↗️</div>
-
-            <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">QUICK ACCESS</div>
-            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/')">🔗 CSC CONNECT</div>
-            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">🆔 myAADHAAR</div>
             
             <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">PRINT SERVICES</div>
             <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR PRINT</div>
@@ -102,6 +98,11 @@
                 <div id="dash-view" class="view">
                     <div class="box">
                         <h3>Dashboard 👋</h3>
+
+                        <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">QUICK ACCESS</div>
+            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/')">🔗 CSC CONNECT</div>
+            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">🆔 myAADHAAR</div>
+                        
                         <div class="card-grid">
                             <div class="s-card" style="background: var(--msme-teal);" onclick="window.open('https://udyamregistration.gov.in/')"><b>MSME Udyam</b></div>
                             <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://swcs.bihar.gov.in/')"><b>RTPS Bihar</b></div>
@@ -112,7 +113,7 @@
 
                 <div id="aadhaar-view" class="view hidden">
                     <div class="box">
-                        <h3>Aadhaar Manual Print (Yadav)</h3>
+                        <h3>Aadhaar Manual Print </h3>
                         <input type="text" id="aadhaar_num" placeholder="Aadhaar Number">
                         <textarea id="yadav_code" placeholder="Yadav: Paste Code Here..."></textarea>
                         <button class="btn" style="background: var(--success)" onclick="processAadhaar()">Print & Save</button>
