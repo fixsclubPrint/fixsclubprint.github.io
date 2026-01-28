@@ -125,54 +125,87 @@
                 <div id="aadhaar-view" class="view hidden">
                     <div class="box">
                         <h3>Aadhaar Manual PVC Portal</h3>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                            <input type="text" id="a_num" placeholder="Aadhar Number" maxlength="12">
-                            <input type="text" id="name_en" placeholder="Full Name" oninput="translateFields()">
-                            <input type="text" id="fname_en" placeholder="Father Name" oninput="syncAddress()">
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                          <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
-                           <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
-                            <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                            <select id="gender" onchange="syncAddress()"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select>
-                            <input type="text" id="name_hi" placeholder="Name in Hindi">
-                            <input type="file" onchange="previewImg(this)">
-                        </div>
-                        <textarea id="addr_en" placeholder="Address (English)" rows="2"></textarea>
-                        <textarea id="addr_hi" placeholder="Address (Hindi)" rows="2"></textarea>
-                        
-                        <button class="btn" style="background: var(--uidai-blue);" onclick="generateAadhaar()">Print & Save</button>
+                      <form id="masterForm">
+        <div class="row">
+            <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
+            <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
+            <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
+            <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
+             <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Gender</label>
+                <select id="gender" onchange="syncAddress()">
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Name (Hindi)</label><input type="text" id="name_hi"></div>
+            <div class="form-group"><label>Language</label><select id="lang_select"><option value="hi">HINDI</option></select></div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Gender (Hindi)</label><input type="text" id="gender_hi"></div>
+            <div class="form-group" style="grid-column: span 2;"><label>Photo</label><input type="file" id="photo_input" onchange="previewImg(this)"></div>
+        </div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
+        <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Full Address (Hindi)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
+        <button type="button" class="btn-gen" onclick="generatePreview()">1. Preview Aadhaar</button>
+    </form>
+</div>
 
-                        <div id="print-area" style="display:none; margin-top:20px; text-align:center;">
-                            <div id="capture-box" style="display:inline-flex; gap:15px; background:white; padding:10px; border-radius:10px;">
-                                <div class="aadhaar-box">
-                                    <div style="display:flex; justify-content:space-between; padding:5px 10px;">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" width="20">
-                                        <div style="flex-grow:1; text-align:center;">
-                                            <div class="brush-saffron" style="margin:0 auto;">भारत सरकार</div>
-                                            <div class="brush-green-long" style="margin:0 auto;">Government of India</div>
-                                        </div>
-                                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" width="40">
-                                    </div>
-                                    <img id="view_photo" class="photo-frame">
-                                    <div class="details">
-                                        <b id="c_name_hi"></b><br><span id="c_name_en"></span><br>
-                                        जन्म तिथि / DOB: <span id="c_dob"></span><br>
-                                        <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
-                                    </div>
-                                    <div id="c_num"></div>
-                                    <div class="card-footer-red">मेरा आधार, मेरी पहचान</div>
-                                </div>
-                                <div class="aadhaar-box">
-                                    <div style="padding:5px 10px; text-align:left; font-size:8px;">
-                                        <b>Address:</b> <br> <span id="cb_addr_hi"></span><br><span id="cb_addr_en"></span>
-                                    </div>
-                                    <div id="qrcode" class="qr-position-back"></div>
-                                </div>
-                            </div>
-                            <br><button class="btn" style="background:var(--success); width:auto; margin-top:10px;" onclick="downloadAadhaar()">Download PNG</button>
+<div id="print-area">
+    <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px; border-radius: 10px;">
+        <div class="aadhaar-box">
+            <div class="card-header-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
+                <div class="header-center">
+                    <div class="brush-saffron">भारत सरकार</div>
+                    <div class="brush-green-long">Government of India</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
+            </div>
+            <img id="view_photo" class="photo-frame">
+            <div class="details">
+                <span id="c_name_hi" style="display:block; font-weight:bold;"></span>
+                <span id="c_name_en" style="display:block;"></span>
+                जन्म तिथि / DOB: <span id="c_dob"></span><br>
+                <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
+            </div>
+            <div id="c_num"></div>
+            <div class="card-footer-red">मेरा <span style="color:red; margin:0 2px;">आधार</span><span class="balanced-pai">,</span> मेरी पहचान</div>
+        </div>
+        
+        <div class="aadhaar-box">
+            <div class="card-header-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
+                <div class="header-center">
+                    <div class="brush-saffron" style="font-size: 9.5px;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
+                    <div class="brush-green-long" style="font-size: 8px;">Unique Identification Authority of India</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
+            </div>
+            <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
+            <div id="qrcode" class="qr-position-back"></div>
+            <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
+            
+            <div class="footer-back-clean">
+                <div class="footer-item"><i class="fa-solid fa-phone"></i> 1947</div>
+                <span class="footer-sep">|</span>
+                <div class="footer-item"><i class="fa-regular fa-envelope"></i> help@uidai.gov.in</div>
+                <span class="footer-sep">|</span>
+                <div class="footer-item"><i class="fa-solid fa-globe"></i> www.uidai.gov.in</div>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="dl-btn" class="btn-download" onclick="downloadAadhaar()">2. Download Now</button>
                         </div>
                     </div>
                 </div>
