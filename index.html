@@ -23,7 +23,6 @@
 
         .app-container { display: flex; flex-grow: 1; overflow: hidden; }
         
-        /* Sidebar */
         .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
         .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
@@ -37,42 +36,37 @@
         .container { padding: 25px; }
         .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         
-        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 13px; }
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
-        .btn:hover { opacity: 0.9; }
         .hidden { display: none !important; }
 
-        /* Aadhaar Card Styles Merged */
-        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 5px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 11px; font-weight: bold; margin-bottom: 3px; color: #555; text-align: left; }
-        
-        #print-area { display: none; margin-top: 20px; flex-direction: column; align-items: center; gap: 20px; padding: 20px; background: #fff; border: 1px solid #ddd; border-radius: 10px; }
-        .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .card-header-img { width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 2px 12px; box-sizing: border-box; background: #fff; }
+        /* Payment Overlay Style */
+        #paymentOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+
+        /* Aadhaar Card Styling */
+        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .form-group { display: flex; flex-direction: column; text-align: left; }
+        .form-group label { font-size: 11px; font-weight: bold; margin-bottom: 3px; }
+        #print-area { display: none; margin-top: 20px; flex-direction: column; align-items: center; gap: 20px; }
+        .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; }
+        .card-header-img { width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 2px 12px; box-sizing: border-box; }
         .header-left { width: 24px; } .header-right { width: 45px; }
-        .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .brush-saffron { background: #f1a366; width: 85%; height: 16px; border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; font-weight: 800; position: relative; margin-bottom: 1px; }
-        .brush-green-long { background: #97cc9e; width: 95%; height: 14px; border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9px; font-weight: 700; margin-top: 1px; }
-        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 28px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; letter-spacing: 0.2px; padding-bottom: 1px; }
-        .balanced-pai { font-weight: 600; color: #000; margin: 0 1px; font-size: 17px; position: relative; bottom: 0.5px; }
+        .header-center { flex-grow: 1; display: flex; flex-direction: column; align-items: center; }
+        .brush-saffron { background: #f1a366; width: 85%; height: 16px; border-radius: 100% 15% 100% 10% / 50% 10% 90% 15%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; font-weight: 800; }
+        .brush-green-long { background: #97cc9e; width: 95%; height: 14px; border-radius: 15% 100% 15% 100% / 10% 50% 15% 90%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 9px; font-weight: 700; }
         .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; object-fit: cover; border: 0.1px solid #ccc; }
-        .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; text-align: left; }
-        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
-        .address-box { position: absolute; left: 12px; top: 65px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; font-weight: 500; text-align: left; }
+        .details { position: absolute; left: 90px; top: 60px; font-size: 10.5px; line-height: 1.3; color: #222; font-weight: 500; }
+        #c_num { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 18px; font-weight: bold; }
+        .card-footer-red { position: absolute; bottom: 0; left: 0; width: 100%; height: 28px; border-top: 1.5px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: flex-end; font-size: 17px; font-weight: 900; }
         .qr-position-back { position: absolute; right: 10px; top: 50px; width: 105px; height: 105px; }
-        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; background: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .footer-item { display: flex; align-items: center; font-size: 7.5px; font-weight: 700; color: #000; }
-        .footer-sep { font-weight: bold; font-size: 9px; color: #000; }
-        
-        .btn-gen { background: var(--uidai-blue); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        .btn-download { background: var(--success); color: white; border: none; padding: 12px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 20px; }
+        .address-box { position: absolute; left: 12px; top: 65px; font-size: 8.5px; width: 185px; color: #333; line-height: 1.1; }
+        .footer-back-clean { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; border-top: 1.2px solid #ff0000; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 7.5px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="top-notice">
-        <marquee>🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा। | सहायता के लिए HELP & SUPPORT पर संपर्क करें।</marquee>
+        <marquee>🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा।</marquee>
     </div>
 
     <div class="app-container">
@@ -82,7 +76,7 @@
                 <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
                 <input type="password" id="l_pass" placeholder="पासवर्ड">
                 <button class="btn" style="background: var(--active-blue);" onclick="doLogin()">लॉगिन करें</button>
-                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">नया अकाउंट बनाएँ</p>
+                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px;">नया अकाउंट बनाएँ</p>
             </div>
             <div id="regBox" class="box hidden" style="width: 350px; text-align: center;">
                 <h2 style="color: var(--success);">रजिस्ट्रेशन</h2>
@@ -90,22 +84,17 @@
                 <input type="text" id="r_mob" placeholder="मोबाइल नंबर">
                 <input type="password" id="r_pass" placeholder="पासवर्ड सेट करें">
                 <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
-                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">लॉगिन पर वापस जाएँ</p>
+                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px;">लॉगिन पर वापस जाएँ</p>
             </div>
         </div>
 
         <div id="sidebar" class="sidebar hidden">
             <div class="sidebar-header">FixsdigitalSeva</div>
             <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
-            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/')">🔗 CSC CONNECT</div>
-            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">🆔 myAADHAAR</div>
-            <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6; background: #1a252f; letter-spacing: 1px;">PRINT SERVICES</div>
             <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR PRINT</div>
             <div class="menu-item" onclick="nav('pan')">💳 PAN CARD PRINT</div>
             <div class="menu-item" onclick="nav('voter')">🗳️ VOTER ID PRINT</div>
-            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
-            <div class="menu-item" onclick="nav('support')" style="margin-top: auto;">🎧 HELP & SUPPORT</div>
-            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;">🔒 LOGOUT</div>
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675; margin-top: auto;">🔒 LOGOUT</div>
         </div>
 
         <div id="mainArea" class="main-content hidden">
@@ -116,104 +105,53 @@
 
             <div class="container">
                 <div id="dash-view" class="view">
-                    <div class="box">
-                        <h3>Dashboard 👋</h3>
-                        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                            <div class="s-card" style="background: var(--msme-teal); padding:20px; border-radius:10px; color:white; cursor:pointer;" onclick="window.open('https://udyamregistration.gov.in/')"><b>MSME Udyam</b></div>
-                            <div class="s-card" style="background: var(--rtps-color); padding:20px; border-radius:10px; color:white; cursor:pointer;" onclick="window.open('https://serviceonline.bihar.gov.in/')"><b>RTPS Bihar</b></div>
-                            <div class="s-card" style="background: var(--eshram-color); padding:20px; border-radius:10px; color:white; cursor:pointer;" onclick="window.open('https://register.eshram.gov.in/')"><b>e-Shram</b></div>
-                        </div>
-                    </div>
+                    <div class="box"><h3>Welcome to FixsClub Portal</h3><p>Select a service from the sidebar.</p></div>
                 </div>
 
                 <div id="aadhaar-view" class="view hidden">
                     <div class="box">
-                        <h2 style="color: var(--uidai-blue); margin-bottom: 20px;">Aadhaar Manual PVC Portal</h2>
-                        
-                        <form id="masterForm">
-                            <div class="row">
-                                <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
-                                <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
-                                <div class="form-group"><label>Father/Husband Name</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group"><label>Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
-                                <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
-                                <div class="form-group"><label>District</label><input type="text" id="dist" oninput="syncAddress()"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group"><label>State</label><input type="text" id="state" oninput="syncAddress()"></div>
-                                <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
-                                <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group"><label>Gender</label>
-                                    <select id="gender" onchange="syncAddress()">
-                                        <option value="MALE">MALE</option>
-                                        <option value="FEMALE">FEMALE</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Name (Hindi)</label><input type="text" id="name_hi"></div>
-                                <div class="form-group"><label>Gender (Hindi)</label><input type="text" id="gender_hi"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group" style="grid-column: span 3;"><label>User Photo</label><input type="file" id="photo_input" onchange="previewImg(this)"></div>
-                            </div>
-                            <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (English)</label><textarea id="addr_en" rows="2"></textarea></div></div>
-                            <div class="row"><div class="form-group" style="grid-column: span 3;"><label>Address (Hindi)</label><textarea id="addr_hi" rows="2"></textarea></div></div>
-                            
-                            <button type="button" class="btn-gen" onclick="generatePreview()">1. Generate Aadhaar Preview</button>
-                        </form>
+                        <h3>Aadhaar Manual PVC Portal</h3>
+                        <div class="row">
+                            <div class="form-group"><label>Aadhar No.</label><input type="text" id="a_num" maxlength="12"></div>
+                            <div class="form-group"><label>Full Name</label><input type="text" id="name_en" oninput="translateFields()"></div>
+                            <div class="form-group"><label>Father/Husband</label><input type="text" id="fname_en" oninput="syncAddress()"></div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group"><label>Village/City</label><input type="text" id="h_g_v_c" oninput="syncAddress()"></div>
+                            <div class="form-group"><label>Post Office</label><input type="text" id="p_office" oninput="syncAddress()"></div>
+                            <div class="form-group"><label>Pincode</label><input type="text" id="pincode" maxlength="6" oninput="syncAddress()"></div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group"><label>DOB</label><input type="text" id="dob" placeholder="DD/MM/YYYY"></div>
+                            <div class="form-group"><label>Gender</label><select id="gender" onchange="syncAddress()"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></div>
+                            <div class="form-group"><label>Photo</label><input type="file" onchange="previewImg(this)"></div>
+                        </div>
+                        <textarea id="addr_en" placeholder="Full Address English" rows="2"></textarea>
+                        <textarea id="addr_hi" placeholder="Full Address Hindi" rows="2"></textarea>
+                        <button class="btn" style="background: var(--uidai-blue);" onclick="generatePreview()">1. Preview Aadhaar</button>
 
                         <div id="print-area">
-                            <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 15px; border-radius: 10px;">
+                            <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 10px;">
                                 <div class="aadhaar-box">
-                                    <div class="card-header-img">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
-                                        <div class="header-center">
-                                            <div class="brush-saffron">भारत सरकार</div>
-                                            <div class="brush-green-long">Government of India</div>
-                                        </div>
-                                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
-                                    </div>
+                                    <div class="card-header-img"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left"><div class="header-center"><div class="brush-saffron">भारत सरकार</div><div class="brush-green-long">Government of India</div></div><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right"></div>
                                     <img id="view_photo" class="photo-frame">
-                                    <div class="details">
-                                        <span id="c_name_hi" style="display:block; font-weight:bold;"></span>
-                                        <span id="c_name_en" style="display:block;"></span>
-                                        जन्म तिथि / DOB: <span id="c_dob"></span><br>
-                                        <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
-                                    </div>
-                                    <div id="c_num"></div>
-                                    <div class="card-footer-red">मेरा <span style="color:red; margin:0 2px;">आधार</span><span class="balanced-pai">,</span> मेरी पहचान</div>
+                                    <div class="details"><span id="c_name_hi" style="display:block; font-weight:bold;"></span><span id="c_name_en" style="display:block;"></span>जन्म तिथि / DOB: <span id="c_dob"></span><br><span id="c_gender_hi"></span> / <span id="c_gender_en"></span></div>
+                                    <div id="c_num"></div><div class="card-footer-red">मेरा आधार, मेरी पहचान</div>
                                 </div>
-                                
                                 <div class="aadhaar-box">
-                                    <div class="card-header-img">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
-                                        <div class="header-center">
-                                            <div class="brush-saffron" style="font-size: 9.5px;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
-                                            <div class="brush-green-long" style="font-size: 8px;">Unique Identification Authority of India</div>
-                                        </div>
-                                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
-                                    </div>
-                                    <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
+                                    <div class="card-header-img"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left"><div class="header-center"><div class="brush-saffron" style="font-size:9px;">भारतीय विशिष्ट पहचान प्राधिकरण</div><div class="brush-green-long" style="font-size:8px;">Unique Identification Authority of India</div></div><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right"></div>
+                                    <div class="address-box"><b>Address:</b> <br> <span id="cb_addr_hi"></span><br><span id="cb_addr_en"></span></div>
                                     <div id="qrcode" class="qr-position-back"></div>
-                                    <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
-                                    <div class="footer-back-clean">
-                                        <div class="footer-item"><i class="fa-solid fa-phone"></i> 1947</div><span class="footer-sep">|</span>
-                                        <div class="footer-item"><i class="fa-regular fa-envelope"></i> help@uidai.gov.in</div><span class="footer-sep">|</span>
-                                        <div class="footer-item"><i class="fa-solid fa-globe"></i> www.uidai.gov.in</div>
-                                    </div>
+                                    <div class="footer-back-clean"><span>1947</span>|<span>help@uidai.gov.in</span>|<span>www.uidai.gov.in</span></div>
                                 </div>
                             </div>
-                            <button type="button" class="btn-download" onclick="downloadAadhaar()">2. Download Aadhaar PNG</button>
+                            <button class="btn" style="background: var(--success); width: auto;" onclick="downloadAadhaar()">2. Download PNG</button>
                         </div>
                     </div>
                 </div>
 
-                <div id="pan-view" class="view hidden"><div class="box"><h3>PAN Card PVC Manual</h3><input type="text" id="pan_num" placeholder="PAN Number"><button class="btn" style="background:#003366">Process PAN</button></div></div>
-                <div id="voter-view" class="view hidden"><div class="box"><h3>Voter Manual Print</h3><input type="text" placeholder="EPIC Number"><button class="btn" style="background: #d32f2f">Print Now</button></div></div>
-                <div id="support-view" class="view hidden"><div class="box"><h3>Support</h3><textarea placeholder="Message"></textarea><button class="btn" style="background:var(--active-blue)">Send</button></div></div>
+                <div id="pan-view" class="view hidden"><div class="box"><h3>PAN Card Section</h3></div></div>
+                <div id="voter-view" class="view hidden"><div class="box"><h3>Voter Card Section</h3></div></div>
             </div>
         </div>
     </div>
@@ -223,16 +161,97 @@
         const MASTER_PASS = "Yadav@957272";
         const UPI_ID = "Q973860146@ybl";
 
-        // Auth Functions
         function toggleAuth(t) {
             document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
             document.getElementById('regBox').classList.toggle('hidden', t === 'login');
         }
+
         function doRegister() {
             const mob = document.getElementById('r_mob').value;
             const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime(), lastPaymentDate: null };
             localStorage.setItem('user_' + mob, JSON.stringify(userData));
             alert("पंजीकरण सफल!"); toggleAuth('login');
         }
+
         function doLogin() {
-            const mo
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                document.getElementById('welcomeMsg').innerText = "Master Admin";
+                showPortal(); return;
+            }
+            
+            const data = localStorage.getItem('user_' + mob);
+            if (data) {
+                const user = JSON.parse(data);
+                if (user.password === pass) {
+                    checkSubscription(user);
+                } else { alert("गलत पासवर्ड!"); }
+            } else { alert("अकाउंट नहीं मिला!"); }
+        }
+
+        function checkSubscription(user) {
+            const now = new Date().getTime();
+            if (now - user.regDate > (7 * 24 * 60 * 60 * 1000) && !user.lastPaymentDate) {
+                showPaymentModal(); return;
+            }
+            document.getElementById('welcomeMsg').innerText = "नमस्ते, " + user.name;
+            showPortal();
+        }
+
+        function showPaymentModal() {
+            const upiLink = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
+            document.body.insertAdjacentHTML('beforeend', `<div id="paymentOverlay"><div style="background:white; padding:30px; border-radius:15px; text-align:center;"><h2>Trial Over!</h2><p>Pay ₹100 to continue</p><a href="${upiLink}" class="btn" style="background:#673ab7; color:white; text-decoration:none; display:block; padding:10px;">Pay Now</a></div></div>`);
+        }
+
+        function showPortal() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mainArea').classList.remove('hidden');
+        }
+
+        function nav(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id + '-view').classList.remove('hidden');
+        }
+
+        // Aadhaar Functions
+        async function translateText(t, l) { if(!t) return ""; try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
+        
+        async function syncAddress() {
+            let g = document.getElementById('gender').value;
+            let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
+            let rel_hi = (g === "MALE") ? "आत्मज: " : "अर्धांगिनी: ";
+            document.getElementById('addr_en').value = rel_en + [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('pincode').value].join(', ');
+            document.getElementById('addr_hi').value = rel_hi + await translateText(document.getElementById('addr_en').value, 'hi');
+        }
+
+        async function translateFields() {
+            document.getElementById('c_name_hi').innerText = await translateText(document.getElementById('name_en').value, 'hi');
+        }
+
+        function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
+
+        function generatePreview() {
+            const r = document.getElementById('a_num').value;
+            document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
+            document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
+            document.getElementById('c_dob').innerText = document.getElementById('dob').value;
+            document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+            document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
+            document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
+            
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), { text: "UID:"+r, width: 105, height: 105 });
+            document.getElementById('print-area').style.display = 'flex';
+        }
+
+        function downloadAadhaar() {
+            html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(c => { 
+                let l = document.createElement('a'); l.download = 'Aadhaar.png'; l.href = c.toDataURL(); l.click(); 
+            });
+        }
+    </script>
+</body>
+</html>
