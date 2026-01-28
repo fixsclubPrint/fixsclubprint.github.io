@@ -1,91 +1,236 @@
-<div id="aadhaar-view" class="view hidden">
-    <div class="box">
-        <h3>Aadhaar Manual Print</h3>
-        <input type="text" id="manual_aadhaar_no" placeholder="Aadhaar Number (12 Digits)">
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixsClub Print | Official Master Portal</title>
+    
+    <style>
+        :root { 
+            --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
+            --success: #27ae60; --warning-yellow: #fff9c4;
+            --rtps-color: #8e44ad; --nha-color: #d35400; --uidai-blue: #003366;
+            --csc-gold: #f39c12; --eshram-color: #2980b9; --msme-teal: #16a085;
+            --pan-color: #d35400;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
-        <textarea id="yadav_code_area" placeholder="Yadav: Yahan apna Aadhaar code daalein..." 
-            style="width: 100%; height: 80px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 15px;"></textarea>
+        .top-notice { background: var(--warning-yellow); border-bottom: 2px solid #fbc02d; padding: 8px 0; z-index: 1001; }
+        .top-notice marquee { color: #455a64; font-weight: bold; font-size: 15px; }
+
+        .app-container { display: flex; flex-grow: 1; overflow: hidden; }
         
-        <div style="display: flex; gap: 10px;">
-            <button class="btn" style="background: var(--success); flex: 1;" onclick="saveAndPrint('Auto')">Print Now</button>
-            <button class="btn" style="background: #2c3e50; flex: 1;" onclick="saveAndPrint('Manual')">Manual (Yadav)</button>
-        </div>
+        /* Sidebar */
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; transition: 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
+        .menu-item:hover { background: #34495e; }
+        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
+
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { padding: 20px; }
+        .box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; margin-top: 5px; }
+        .btn:hover { opacity: 0.9; transform: scale(0.98); }
+        .hidden { display: none !important; }
+
+        /* History Style */
+        .hist-item { background: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 4px solid var(--active-blue); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .s-card { padding: 20px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; }
+    </style>
+</head>
+<body>
+
+    <div class="top-notice">
+        <marquee>🚀 बिना CSC ID के सभी सेवाएं चालू | ⚠️ ध्यान दें: 7 दिन बाद ₹100 शुल्क अनिवार्य है। | Master Admin: 9693101077</marquee>
     </div>
 
-    <div class="box">
-        <h4>Recent History (Yadav Edit)</h4>
-        <div id="history_list" style="max-height: 300px; overflow-y: auto;">
-            <p style="color: #999; text-align: center;">Abhi koi history nahi hai.</p>
-        </div>
-        <button class="btn" style="background: #e74c3c; margin-top: 10px; font-size: 12px; padding: 5px;" onclick="clearAllHistory()">Clear All History</button>
-    </div>
-</div>
-
-<script>
-    // Page load hote hi history load karein
-    window.onload = function() {
-        displayHistory();
-    };
-
-    function saveAndPrint(type) {
-        const aadhaarNo = document.getElementById('manual_aadhaar_no').value;
-        const codeData = document.getElementById('yadav_code_area').value;
-        
-        if (!aadhaarNo || !codeData) {
-            alert("Kripya dono fields bharein!");
-            return;
-        }
-
-        const newEntry = {
-            id: Date.now(),
-            number: aadhaarNo,
-            code: codeData,
-            type: type,
-            date: new Date().toLocaleString()
-        };
-
-        // LocalStorage mein save karein
-        let history = JSON.parse(localStorage.getItem('aadhaar_history') || '[]');
-        history.unshift(newEntry); // Naya wala sabse upar
-        localStorage.setItem('aadhaar_history', JSON.stringify(history));
-
-        displayHistory();
-        alert("Data Save ho gaya aur " + type + " print start!");
-    }
-
-    function displayHistory() {
-        const historyList = document.getElementById('history_list');
-        const history = JSON.parse(localStorage.getItem('aadhaar_history') || '[]');
-
-        if (history.length === 0) {
-            historyList.innerHTML = '<p style="color: #999; text-align: center;">Abhi koi history nahi hai.</p>';
-            return;
-        }
-
-        historyList.innerHTML = history.map(item => `
-            <div style="border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong style="color: #2c3e50;">${item.number}</strong> <small>(${item.type})</small><br>
-                    <small style="color: #666;">Data: ${item.code.substring(0, 20)}... | ${item.date}</small>
-                </div>
-                <button onclick="deleteEntry(${item.id})" style="background: #ff7675; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+    <div class="app-container">
+        <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+            <div id="loginBox" class="box" style="width: 350px; text-align: center;">
+                <h2 style="color: var(--active-blue);">FixsClub Login</h2>
+                <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
+                <input type="password" id="l_pass" placeholder="पासवर्ड">
+                <button class="btn" style="background: var(--active-blue);" onclick="doLogin()">लॉगिन करें</button>
+                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px;">नया अकाउंट बनाएँ</p>
             </div>
-        `).join('');
-    }
+            <div id="regBox" class="box hidden" style="width: 350px; text-align: center;">
+                <h2 style="color: var(--success);">रजिस्ट्रेशन</h2>
+                <input type="text" id="r_name" placeholder="पूरा नाम">
+                <input type="text" id="r_mob" placeholder="मोबाइल नंबर">
+                <input type="password" id="r_pass" placeholder="पासवर्ड सेट करें">
+                <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
+                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px;">वापस लॉगिन करें</p>
+            </div>
+        </div>
 
-    function deleteEntry(id) {
-        if(confirm("Kya aap ise remove karna chahte hain?")) {
-            let history = JSON.parse(localStorage.getItem('aadhaar_history') || '[]');
-            history = history.filter(item => item.id !== id);
-            localStorage.setItem('aadhaar_history', JSON.stringify(history));
-            displayHistory();
-        }
-    }
+        <div id="sidebar" class="sidebar hidden">
+            <div class="sidebar-header">FixsClub Master</div>
+            <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
+            <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
+            <div class="menu-item" onclick="nav('pan')">💳 PAN CARD MANUAL</div>
+            <div class="menu-item" onclick="nav('voter')">🗳️ VOTER ID PRINT</div>
+            <div style="padding: 10px 20px; font-size: 11px; color: #95a5a6;">ADMIN OPTIONS</div>
+            <div class="menu-item" onclick="nav('support')">🎧 HELP & SUPPORT</div>
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;">🔒 LOGOUT</div>
+        </div>
 
-    function clearAllHistory() {
-        if(confirm("Sari history delete ho jayegi. Kya aap sure hain?")) {
-            localStorage.removeItem('aadhaar_history');
-            displayHistory();
+        <div id="mainArea" class="main-content hidden">
+            <div class="top-nav">
+                <span id="welcomeMsg">नमस्ते</span>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">Server Online</div>
+            </div>
+
+            <div class="container">
+                <div id="dash-view" class="view">
+                    <div class="box">
+                        <h3>Quick Services</h3>
+                        <div class="card-grid">
+                            <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://serviceonline.bihar.gov.in/')">RTPS Bihar</div>
+                            <div class="s-card" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">UIDAI Portal</div>
+                            <div class="s-card" style="background: var(--nha-color);" onclick="window.open('https://beneficiary.nha.gov.in/')">Ayushman NHA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="aadhaar-view" class="view hidden">
+                    <div class="box">
+                        <h3>Aadhaar Manual Print (Yadav Edit)</h3>
+                        <input type="text" id="a_num" placeholder="Aadhaar Number">
+                        <textarea id="a_code" placeholder="Yadav Code Yahan Daalein..."></textarea>
+                        <button class="btn" style="background: var(--success);" onclick="saveAadhaar()">Print & Save History</button>
+                    </div>
+                    <div class="box">
+                        <h4>Aadhaar History</h4>
+                        <div id="a_history"></div>
+                    </div>
+                </div>
+
+                <div id="pan-view" class="view hidden">
+                    <div class="box">
+                        <h3>PAN Card PVC Color Print</h3>
+                        <input type="text" id="p_num" placeholder="PAN Number">
+                        <input type="text" id="p_name" placeholder="Customer Name">
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn" style="background: #003366;" onclick="savePan('UTI')">UTI Print</button>
+                            <button class="btn" style="background: #e67e22;" onclick="savePan('NSDL')">NSDL Print</button>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <h4>PAN History</h4>
+                        <div id="p_history"></div>
+                    </div>
+                </div>
+
+                <div id="voter-view" class="view hidden">
+                    <div class="box"><h3>Voter Manual Print</h3><input type="text" placeholder="EPIC Number"><button class="btn" style="background: #d32f2f">Print Now</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MASTER_MOB = "9693101077";
+        const MASTER_PASS = "Yadav@957272";
+
+        function toggleAuth(t) {
+            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
+            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
         }
-    }
-</script>
+
+        function doRegister() {
+            const mob = document.getElementById('r_mob').value;
+            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime() };
+            localStorage.setItem('user_' + mob, JSON.stringify(userData));
+            alert("Registration Successful!"); toggleAuth('login');
+        }
+
+        function doLogin() {
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            const data = localStorage.getItem('user_' + mob);
+
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                showPortal("Master Admin");
+            } else if (data && JSON.parse(data).password === pass) {
+                showPortal(JSON.parse(data).name);
+            } else {
+                alert("Invalid Login!");
+            }
+        }
+
+        function showPortal(name) {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mainArea').classList.remove('hidden');
+            document.getElementById('welcomeMsg').innerText = "Welcome, " + name;
+            renderHistories();
+        }
+
+        function nav(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
+            document.getElementById(id + '-view').classList.remove('hidden');
+            event.currentTarget.classList.add('active-nav');
+        }
+
+        // --- Aadhaar Logic ---
+        function saveAadhaar() {
+            const num = document.getElementById('a_num').value;
+            const code = document.getElementById('a_code').value;
+            if(!num || !code) return alert("Fill all fields");
+            
+            let hist = JSON.parse(localStorage.getItem('a_hist') || '[]');
+            hist.unshift({ id: Date.now(), num, code, date: new Date().toLocaleString() });
+            localStorage.setItem('a_hist', JSON.stringify(hist));
+            renderHistories();
+            alert("Aadhaar Data Saved!");
+        }
+
+        // --- PAN Logic ---
+        function savePan(type) {
+            const num = document.getElementById('p_num').value;
+            const name = document.getElementById('p_name').value;
+            if(!num || !name) return alert("Fill all fields");
+
+            let hist = JSON.parse(localStorage.getItem('p_hist') || '[]');
+            hist.unshift({ id: Date.now(), num, name, type, date: new Date().toLocaleString() });
+            localStorage.setItem('p_hist', JSON.stringify(hist));
+            renderHistories();
+            alert(type + " Color Print Command Sent!");
+        }
+
+        function renderHistories() {
+            // Render Aadhaar
+            const ah = JSON.parse(localStorage.getItem('a_hist') || '[]');
+            document.getElementById('a_history').innerHTML = ah.map(i => `
+                <div class="hist-item">
+                    <div><b>${i.num}</b><br><small>${i.date}</small></div>
+                    <button onclick="delHist('a_hist', ${i.id})" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
+                </div>
+            `).join('') || "No History";
+
+            // Render PAN
+            const ph = JSON.parse(localStorage.getItem('p_hist') || '[]');
+            document.getElementById('p_history').innerHTML = ph.map(i => `
+                <div class="hist-item">
+                    <div><b>${i.num} (${i.type})</b><br><small>${i.name} | ${i.date}</small></div>
+                    <button onclick="delHist('p_hist', ${i.id})" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
+                </div>
+            `).join('') || "No History";
+        }
+
+        function delHist(key, id) {
+            let hist = JSON.parse(localStorage.getItem(key));
+            hist = hist.filter(i => i.id !== id);
+            localStorage.setItem(key, JSON.stringify(hist));
+            renderHistories();
+        }
+    </script>
+</body>
+</html>
