@@ -317,8 +317,11 @@
 
     function downloadAadhaar() {
         html2canvas(document.getElementById('capture-box'), { scale: 3, useCORS: true }).then(c => { 
-            let l = document.createElement('a'); l.download = 'Aadhaar_Card.png'; l.href = c.toDataURL(); l.click(); 
-                        <div id="aadhaar_history_list"></div>
+            let l = document.createElement('a'); l.download = 'Aadhaar_Card.png'; l.href = c.toDataURL(); l.click();
+            
+              });
+    }
+                  <div id="aadhaar_history_list"></div>
                     </div>
                 </div>
 
