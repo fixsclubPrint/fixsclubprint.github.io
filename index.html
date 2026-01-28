@@ -2,187 +2,179 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Official Master Portal</title>
+    <title>Voter ID Card Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { 
-            --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
-            --success: #5cb85c; --warning-yellow: #fff9c4;
-            --uidai-blue: #003366;
-        }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
-        
-        /* Auth Screen */
-        #authScreen { position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        
-        .top-notice { background: var(--warning-yellow); border-bottom: 2px solid #fbc02d; padding: 8px 0; z-index: 1001; }
-        .app-container { display: flex; flex-grow: 1; overflow: hidden; }
-        
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; }
-        .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; font-size: 14px; }
-        .menu-item:hover, .active-nav { background: var(--active-blue); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+        .form-container { background: #fff; max-width: 900px; margin: 0 auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 12px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #333; }
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
 
-        /* Aadhaar Design Styling */
-        .aadhaar-box { width: 325px; height: 205px; background: white; border: 0.5px solid #999; position: relative; overflow: hidden; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .card-header-img { width: 100%; height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 2px 12px; box-sizing: border-box; }
-        .header-left { width: 24px; } .header-right { width: 45px; }
-        .brush-saffron { background: #f1a366; width: 85%; height: 16px; border-radius: 5px; text-align: center; font-size: 11px; font-weight: 800; }
-        .brush-green-long { background: #97cc9e; width: 95%; height: 14px; border-radius: 5px; text-align: center; font-size: 9px; font-weight: 700; }
-        .photo-frame { width: 68px; height: 82px; position: absolute; left: 12px; top: 60px; border: 0.1px solid #ccc; }
-        .details { position: absolute; left: 90px; top: 60px; font-size: 10px; line-height: 1.2; }
-        #c_num, #c_num_back { position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 1px; }
-        .card-footer-red { position: absolute; bottom: 0; width: 100%; height: 25px; border-top: 1.5px solid red; text-align: center; font-weight: bold; font-size: 14px; }
+        /* Voter Card Styling */
+        #print-area { display: none; margin-top: 30px; justify-content: center; gap: 30px; }
+        .voter-card { width: 220px; height: 350px; background: #fff; border: 1px solid #000; position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         
-        .main-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
-        .hidden { display: none !important; }
-        input, select, textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-gen { background: var(--active-blue); color: white; border: none; padding: 12px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; }
+        /* Header Section */
+        .v_header { background: linear-gradient(to bottom, #7fb3d5, #fff); height: 75px; text-align: center; border-bottom: 1px solid #ccc; padding-top: 5px; }
+        .v_header img { width: 25px; margin-bottom: 2px; }
+        .v_header div { font-size: 10px; font-weight: bold; color: #000; line-height: 1.1; }
+
+        .epic-no { font-size: 12px; font-weight: 900; text-align: center; margin: 5px 0; border-bottom: 1px dashed #aaa; padding-bottom: 2px; }
+        
+        .photo-area { width: 85px; height: 100px; border: 1px solid #000; margin: 0 auto; margin-top: 5px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+
+        .v_details { padding: 8px 12px; font-size: 10px; line-height: 1.4; color: #000; }
+        .v_label { font-weight: 800; display: block; font-size: 9px; margin-top: 3px; }
+        
+        /* Back Side */
+        .v_back_header { border-bottom: 1px solid #000; padding: 5px; font-size: 9px; font-weight: bold; text-align: center; }
+        .v_qr_box { text-align: center; margin: 15px 0; }
+        .v_back_details { padding: 10px; font-size: 9.5px; line-height: 1.3; }
+        .sign-area { position: absolute; bottom: 35px; right: 15px; text-align: center; }
+        .sign-area div { font-size: 7px; border-top: 0.5px solid #000; margin-top: 15px; }
+
+        .v_footer { position: absolute; bottom: 0; width: 100%; height: 25px; background: #eee; border-top: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; }
+
+        .btn-gen { background: #004a99; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
+        .btn-download { background: #e67e22; color: white; border: none; padding: 10px 30px; border-radius: 5px; cursor: pointer; margin-top: 20px; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
 
-    <div id="authScreen">
-        <div id="loginBox" class="box">
-            <h2 style="color: var(--active-blue);">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
-            <input type="password" id="l_pass" placeholder="पासवर्ड">
-            <button class="btn-gen" onclick="doLogin()">लॉगिन करें</button>
+<div class="form-container">
+    <h3 style="text-align:center; color:#004a99;">भारत निर्वाचन आयोग - Voter Card Portal</h3>
+    <form id="voterForm">
+        <div class="row">
+            <div class="form-group"><label>EPIC Number</label><input type="text" id="epic_num" placeholder="ABC1234567"></div>
+            <div class="form-group"><label>English Name</label><input type="text" id="v_name_en" oninput="translateVoter()"></div>
+            <div class="form-group"><label>Father's Name (En)</label><input type="text" id="v_fname_en" oninput="translateVoter()"></div>
         </div>
-    </div>
-
-    <div id="mainApp" class="hidden" style="display: flex; flex-direction: column; height: 100vh;">
-        <div class="top-notice"><marquee>🚀 Aadhaar Print Service Active | Help: 1947</marquee></div>
-        
-        <div class="app-container">
-            <div class="sidebar">
-                <div class="sidebar-header">FixsdigitalSeva</div>
-                <div class="menu-item" onclick="showTab('dash-view')">🏠 DASHBOARD</div>
-                <div class="menu-item active-nav" onclick="showTab('aadhaar-view')">🆔 AADHAAR PRINT</div>
-                <div class="menu-item" onclick="location.reload()" style="color: #ff7675;">🔒 LOGOUT</div>
-            </div>
-
-            <div class="main-content">
-                <div id="dash-view" class="hidden">
-                    <h2>Welcome to Dashboard</h2>
-                    <p>Yahan se aap apni services manage kar sakte hain.</p>
-                </div>
-
-                <div id="aadhaar-view">
-                    <div class="box" style="width: 100%; max-width: 800px; text-align: left;">
-                        <h3>Aadhaar Data Entry</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <input type="text" id="a_num" placeholder="Aadhar Number" maxlength="12">
-                            <input type="text" id="name_en" placeholder="Full Name (English)">
-                            <input type="text" id="name_hi" placeholder="Full Name (Hindi)">
-                            <input type="text" id="dob" placeholder="DOB (DD/MM/YYYY)">
-                            <select id="gender"><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select>
-                            <input type="file" id="photo_input" onchange="previewImg(this)">
-                        </div>
-                        <textarea id="addr_en" placeholder="Address (English)"></textarea>
-                        <textarea id="addr_hi" placeholder="Address (Hindi)"></textarea>
-                        <button class="btn-gen" onclick="generatePreview()">Preview Aadhaar Card</button>
-                    </div>
-
-                    <div id="print-area" class="hidden" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
-                        <div id="capture-box" style="display: flex; gap: 20px; padding: 10px; background: #fff;">
-                            <div class="aadhaar-box">
-                                <div class="card-header-img">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
-                                    <div style="text-align:center;">
-                                        <div class="brush-saffron">भारत सरकार</div>
-                                        <div class="brush-green-long">Government of India</div>
-                                    </div>
-                                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
-                                </div>
-                                <img id="view_photo" class="photo-frame">
-                                <div class="details">
-                                    <b id="c_name_hi"></b><br><span id="c_name_en"></span><br>
-                                    जन्म तिथि / DOB: <span id="c_dob"></span><br>
-                                    <span id="c_gender_hi"></span> / <span id="c_gender_en"></span>
-                                </div>
-                                <div id="c_num"></div>
-                                <div class="card-footer-red">मेरा <span style="color:red">आधार</span>, मेरी पहचान</div>
-                            </div>
-                            <div class="aadhaar-box">
-                                <div class="card-header-img">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
-                                    <div style="text-align:center;"><div class="brush-saffron" style="font-size:9px;">भारतीय विशिष्ट पहचान प्राधिकरण</div></div>
-                                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
-                                </div>
-                                <div style="padding:10px; font-size:8px; width:180px;">
-                                    <b>पता:</b> <span id="cb_addr_hi"></span><br><br>
-                                    <b>Address:</b> <span id="cb_addr_en"></span>
-                                </div>
-                                <div id="qrcode" style="position:absolute; right:10px; top:55px;"></div>
-                                <div id="c_num_back"></div>
-                            </div>
-                        </div>
-                        <button class="btn-gen" style="background:green; width:200px;" onclick="downloadAadhaar()">Download PNG</button>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="form-group"><label>Hindi Name</label><input type="text" id="v_name_hi"></div>
+            <div class="form-group"><label>Hindi Father Name</label><input type="text" id="v_fname_hi"></div>
+            <div class="form-group"><label>Gender</label>
+                <select id="v_gender">
+                    <option value="MALE">MALE / पुरुष</option>
+                    <option value="FEMALE">FEMALE / महिला</option>
+                </select>
             </div>
         </div>
+        <div class="row">
+            <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="v_dob" placeholder="01/01/1990"></div>
+            <div class="form-group"><label>AC Number & Name</label><input type="text" id="v_ac" placeholder="123 - Lucknow"></div>
+            <div class="form-group"><label>Part No. & Name</label><input type="text" id="v_part" placeholder="45 - Govt School"></div>
+        </div>
+        <div class="row">
+            <div class="form-group" style="grid-column: span 3;"><label>Full Address</label><input type="text" id="v_addr" placeholder="H.No, Street, City, State, Pincode"></div>
+        </div>
+        <div class="row">
+            <div class="form-group" style="grid-column: span 3;"><label>Upload Photo</label><input type="file" onchange="voterPhoto(this)"></div>
+        </div>
+        <button type="button" class="btn-gen" onclick="generateVoter()">Generate Voter Card</button>
+    </form>
+</div>
+
+<div id="print-area">
+    <div id="capture-box" style="display: flex; gap: 20px; background: #f0f2f5; padding: 15px;">
+        <div class="voter-card" id="front">
+            <div class="v_header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg">
+                <div>भारत निर्वाचन आयोग<br>ELECTION COMMISSION OF INDIA</div>
+            </div>
+            <div class="epic-no" id="disp_epic">ABC0000000</div>
+            <div class="photo-area"><img id="disp_photo" src=""></div>
+            <div class="v_details">
+                <span class="v_label">नाम / Name</span>
+                <b id="disp_name_hi"></b><br><span id="disp_name_en"></span>
+                <span class="v_label">पिता का नाम / Father's Name</span>
+                <span id="disp_fname_hi"></span><br><span id="disp_fname_en"></span>
+                <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                    <div><span class="v_label">लिंग / Gender</span><span id="disp_gen"></span></div>
+                    <div><span class="v_label">जन्म तिथि / DOB</span><span id="disp_dob"></span></div>
+                </div>
+            </div>
+            <div class="v_footer">पहचान पत्र / IDENTITY CARD</div>
+        </div>
+
+        <div class="voter-card" id="back">
+            <div class="v_back_header">Address / पता</div>
+            <div class="v_back_details">
+                <span id="disp_addr"></span>
+                <br><br>
+                <b>AC No. & Name:</b> <span id="disp_ac"></span><br>
+                <b>Part No. & Name:</b> <span id="disp_part"></span>
+            </div>
+            <div class="v_qr_box"><div id="v_qrcode" style="display:inline-block;"></div></div>
+            <div class="sign-area">
+                <br>
+                <div>Electoral Registration Officer</div>
+            </div>
+            <div class="v_footer">निर्वाचक रजिस्ट्रीकरण अधिकारी</div>
+        </div>
     </div>
+</div>
 
-    <script>
-        function doLogin() {
-            if(document.getElementById('l_mob').value !== "") {
-                document.getElementById('authScreen').classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-            } else { alert("Please enter mobile number"); }
+<div style="text-align:center;"><button id="dl-voter" class="btn-download" onclick="downloadVoter()">Download Voter Card</button></div>
+
+<script>
+    async function translateVoter() {
+        let n = document.getElementById('v_name_en').value;
+        let fn = document.getElementById('v_fname_en').value;
+        if(n) document.getElementById('v_name_hi').value = await fetchTrans(n);
+        if(fn) document.getElementById('v_fname_hi').value = await fetchTrans(fn);
+    }
+
+    async function fetchTrans(t) {
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(t)}`);
+            const d = await res.json(); return d[0][0][0];
+        } catch { return t; }
+    }
+
+    function voterPhoto(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) { document.getElementById('disp_photo').src = e.target.result; }
+            reader.readAsDataURL(input.files[0]);
         }
+    }
 
-        function showTab(id) {
-            document.getElementById('dash-view').classList.add('hidden');
-            document.getElementById('aadhaar-view').classList.add('hidden');
-            document.getElementById(id).classList.remove('hidden');
-        }
+    function generateVoter() {
+        document.getElementById('disp_epic').innerText = document.getElementById('epic_num').value;
+        document.getElementById('disp_name_en').innerText = document.getElementById('v_name_en').value;
+        document.getElementById('disp_name_hi').innerText = document.getElementById('v_name_hi').value;
+        document.getElementById('disp_fname_en').innerText = document.getElementById('v_fname_en').value;
+        document.getElementById('disp_fname_hi').innerText = document.getElementById('v_fname_hi').value;
+        document.getElementById('disp_gen').innerText = document.getElementById('v_gender').value === "MALE" ? "M / पुरुष" : "F / महिला";
+        document.getElementById('disp_dob').innerText = document.getElementById('v_dob').value;
+        document.getElementById('disp_addr').innerText = document.getElementById('v_addr').value;
+        document.getElementById('disp_ac').innerText = document.getElementById('v_ac').value;
+        document.getElementById('disp_part').innerText = document.getElementById('v_part').value;
 
-        function previewImg(i) {
-            if (i.files && i.files[0]) {
-                var r = new FileReader();
-                r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; };
-                r.readAsDataURL(i.files[0]);
-            }
-        }
+        // QR Code
+        document.getElementById('v_qrcode').innerHTML = "";
+        new QRCode(document.getElementById("v_qrcode"), {
+            text: `EPIC: ${document.getElementById('epic_num').value}\nName: ${document.getElementById('v_name_en').value}\nAC: ${document.getElementById('v_ac').value}`,
+            width: 70, height: 70
+        });
 
-        function generatePreview() {
-            document.getElementById('c_name_en').innerText = document.getElementById('name_en').value;
-            document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
-            document.getElementById('c_dob').innerText = document.getElementById('dob').value;
-            let g = document.getElementById('gender').value;
-            document.getElementById('c_gender_en').innerText = g;
-            document.getElementById('c_gender_hi').innerText = (g === "MALE" ? "पुरुष" : "महिला");
-            
-            let num = document.getElementById('a_num').value;
-            let formattedNum = num.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
-            document.getElementById('c_num').innerText = formattedNum;
-            document.getElementById('c_num_back').innerText = formattedNum;
+        document.getElementById('print-area').style.display = 'flex';
+        document.getElementById('dl-voter').style.display = 'inline-block';
+    }
 
-            document.getElementById('cb_addr_en').innerText = document.getElementById('addr_en').value;
-            document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
-
-            // QR Code
-            document.getElementById('qrcode').innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), { text: num, width: 85, height: 85 });
-
-            document.getElementById('print-area').classList.remove('hidden');
-        }
-
-        async function downloadAadhaar() {
-            const box = document.getElementById('capture-box');
-            const canvas = await html2canvas(box, { scale: 3 });
-            const link = document.createElement('a');
-            link.download = 'Aadhaar_Card.png';
+    function downloadVoter() {
+        html2canvas(document.getElementById('capture-box'), { scale: 3 }).then(canvas => {
+            let link = document.createElement('a');
+            link.download = 'Voter_Card.png';
             link.href = canvas.toDataURL();
             link.click();
-        }
-    </script>
+        });
+    }
+</script>
 </body>
 </html>
