@@ -2,169 +2,186 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Voter ID Card Generator</title>
+    <title>e-EPIC Voter Card Generator - Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-        .form-container { background: #fff; max-width: 900px; margin: 0 auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 12px; }
+        :root { --voter-bg: #fdfcf0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; padding: 20px; }
+        .form-container { background: #fff; max-width: 950px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
-        label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #333; }
-        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+        label { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; }
 
-        /* Voter Card Styling */
-        #print-area { display: none; margin-top: 30px; justify-content: center; gap: 30px; }
-        .voter-card { width: 220px; height: 350px; background: #fff; border: 1px solid #000; position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        #print-area { display: none; margin-top: 40px; flex-direction: column; align-items: center; gap: 20px; }
         
-        /* Header Section */
-        .v_header { background: linear-gradient(to bottom, #7fb3d5, #fff); height: 75px; text-align: center; border-bottom: 1px solid #ccc; padding-top: 5px; }
-        .v_header img { width: 25px; margin-bottom: 2px; }
-        .v_header div { font-size: 10px; font-weight: bold; color: #000; line-height: 1.1; }
-
-        .epic-no { font-size: 12px; font-weight: 900; text-align: center; margin: 5px 0; border-bottom: 1px dashed #aaa; padding-bottom: 2px; }
+        .voter-box { width: 325px; height: 205px; background: var(--voter-bg); border: 0.8px solid #999; position: relative; overflow: hidden; border-radius: 4px; background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); }
         
-        .photo-area { width: 85px; height: 100px; border: 1px solid #000; margin: 0 auto; margin-top: 5px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+        .v-header { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; border-bottom: 1.5px solid #000; background: white; }
+        .v-header img.emblem { height: 30px; }
+        .v-header img.logo { height: 30px; }
+        .v-header-text { text-align: center; flex-grow: 1; }
+        .v-header-text div:first-child { font-size: 11px; font-weight: bold; }
+        .v-header-text div:last-child { font-size: 9px; font-weight: bold; }
 
-        .v_details { padding: 8px 12px; font-size: 10px; line-height: 1.4; color: #000; }
-        .v_label { font-weight: 800; display: block; font-size: 9px; margin-top: 3px; }
+        .epic-front { position: absolute; top: 60px; left: 10px; font-size: 11px; font-weight: bold; z-index: 5; }
+        .main-photo { position: absolute; left: 10px; top: 80px; width: 75px; height: 95px; border: 0.5px solid #000; object-fit: cover; }
+        .small-photo { position: absolute; right: 15px; top: 65px; width: 35px; height: 45px; opacity: 0.7; filter: grayscale(50%); }
+        .small-epic { position: absolute; right: 8px; top: 65px; font-size: 6px; writing-mode: vertical-rl; color: #555; }
+
+        .v-details { position: absolute; left: 95px; top: 75px; font-size: 9px; line-height: 1.4; }
+        .v-details b { font-size: 9.5px; }
+
+        .v-footer-front { position: absolute; bottom: 0; width: 100%; height: 22px; border-top: 1px solid #000; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
+
+        .v-back-addr { padding: 8px 10px; font-size: 8.5px; line-height: 1.2; text-align: left; }
+        .qr-area { position: absolute; left: 10px; top: 75px; width: 85px; height: 85px; background: white; padding: 2px; }
+        .back-epic-center { position: absolute; left: 15px; top: 165px; font-size: 11px; font-weight: bold; }
         
-        /* Back Side */
-        .v_back_header { border-bottom: 1px solid #000; padding: 5px; font-size: 9px; font-weight: bold; text-align: center; }
-        .v_qr_box { text-align: center; margin: 15px 0; }
-        .v_back_details { padding: 10px; font-size: 9.5px; line-height: 1.3; }
-        .sign-area { position: absolute; bottom: 35px; right: 15px; text-align: center; }
-        .sign-area div { font-size: 7px; border-top: 0.5px solid #000; margin-top: 15px; }
+        .officer-area { position: absolute; right: 15px; top: 135px; text-align: center; width: 150px; }
+        .officer-area b { font-size: 9px; display: block; }
+        .officer-area span { font-size: 8.5px; }
+        .download-date-label { font-size: 8px; margin-top: 1px; display: block; }
 
-        .v_footer { position: absolute; bottom: 0; width: 100%; height: 25px; background: #eee; border-top: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; }
+        .v-footer-back { position: absolute; bottom: 0; width: 100%; height: 22px; border-top: 1px solid #b22222; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-sizing: border-box; font-size: 9px; }
 
-        .btn-gen { background: #004a99; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
-        .btn-download { background: #e67e22; color: white; border: none; padding: 10px 30px; border-radius: 5px; cursor: pointer; margin-top: 20px; font-weight: bold; display: none; }
+        .btn-gen { background: #1a237e; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-download { background: #27ae60; color: white; border: none; padding: 12px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; display: none; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h3 style="text-align:center; color:#004a99;">भारत निर्वाचन आयोग - Voter Card Portal</h3>
+    <h2 style="text-align: center; color: #1a237e;">Voter Card Generator (Custom Date Version)</h2>
     <form id="voterForm">
         <div class="row">
-            <div class="form-group"><label>EPIC Number</label><input type="text" id="epic_num" placeholder="ABC1234567"></div>
-            <div class="form-group"><label>English Name</label><input type="text" id="v_name_en" oninput="translateVoter()"></div>
-            <div class="form-group"><label>Father's Name (En)</label><input type="text" id="v_fname_en" oninput="translateVoter()"></div>
+            <div class="form-group"><label>EPIC Number</label><input type="text" id="epic_no" placeholder="IWG2327435"></div>
+            <div class="form-group"><label>Hindi Name</label><input type="text" id="name_hi"></div>
+            <div class="form-group"><label>English Name</label><input type="text" id="name_en"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>Hindi Name</label><input type="text" id="v_name_hi"></div>
-            <div class="form-group"><label>Hindi Father Name</label><input type="text" id="v_fname_hi"></div>
-            <div class="form-group"><label>Gender</label>
-                <select id="v_gender">
-                    <option value="MALE">MALE / पुरुष</option>
-                    <option value="FEMALE">FEMALE / महिला</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Hindi Father Name</label><input type="text" id="fname_hi"></div>
+            <div class="form-group"><label>English Father Name</label><input type="text" id="fname_en"></div>
+            <div class="form-group"><label>Date of Birth (dd/mm/yyyy)</label><input type="text" id="dob" maxlength="10" placeholder="DD/MM/YYYY"></div>
         </div>
         <div class="row">
-            <div class="form-group"><label>DOB (DD/MM/YYYY)</label><input type="text" id="v_dob" placeholder="01/01/1990"></div>
-            <div class="form-group"><label>AC Number & Name</label><input type="text" id="v_ac" placeholder="123 - Lucknow"></div>
-            <div class="form-group"><label>Part No. & Name</label><input type="text" id="v_part" placeholder="45 - Govt School"></div>
+            <div class="form-group"><label>Gender</label><select id="gender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+            <div class="form-group"><label>Manual Download Date</label><input type="text" id="manual_date" maxlength="10" placeholder="DD-MM-YYYY (Blank for Today)"></div>
+            <div class="form-group"><label>Photo</label><input type="file" onchange="loadPhoto(this)"></div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Full Address</label><input type="text" id="v_addr" placeholder="H.No, Street, City, State, Pincode"></div>
+            <div class="form-group" style="grid-column: span 3;"><label>Hindi Address</label><input type="text" id="addr_hi"></div>
         </div>
         <div class="row">
-            <div class="form-group" style="grid-column: span 3;"><label>Upload Photo</label><input type="file" onchange="voterPhoto(this)"></div>
+            <div class="form-group" style="grid-column: span 3;"><label>English Address</label><input type="text" id="addr_en"></div>
         </div>
-        <button type="button" class="btn-gen" onclick="generateVoter()">Generate Voter Card</button>
+        <div class="row">
+            <div class="form-group" style="grid-column: span 3;"><label>Assembly Constituency</label><input type="text" id="ero_office" placeholder="192-Sandesh"></div>
+        </div>
+        <button type="button" class="btn-gen" onclick="generateVoter()">Generate Card</button>
     </form>
 </div>
 
 <div id="print-area">
-    <div id="capture-box" style="display: flex; gap: 20px; background: #f0f2f5; padding: 15px;">
-        <div class="voter-card" id="front">
-            <div class="v_header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg">
-                <div>भारत निर्वाचन आयोग<br>ELECTION COMMISSION OF INDIA</div>
+    <div id="capture-box" style="display: flex; gap: 20px; background: white; padding: 15px;">
+        <div class="voter-box">
+            <div class="v-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="emblem">
+                <div class="v-header-text"><div>भारत निर्वाचन आयोग</div><div>ELECTION COMMISSION OF INDIA</div></div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Election_Commission_of_India_logo.png" class="logo">
             </div>
-            <div class="epic-no" id="disp_epic">ABC0000000</div>
-            <div class="photo-area"><img id="disp_photo" src=""></div>
-            <div class="v_details">
-                <span class="v_label">नाम / Name</span>
-                <b id="disp_name_hi"></b><br><span id="disp_name_en"></span>
-                <span class="v_label">पिता का नाम / Father's Name</span>
-                <span id="disp_fname_hi"></span><br><span id="disp_fname_en"></span>
-                <div style="display:flex; justify-content:space-between; margin-top:5px;">
-                    <div><span class="v_label">लिंग / Gender</span><span id="disp_gen"></span></div>
-                    <div><span class="v_label">जन्म तिथि / DOB</span><span id="disp_dob"></span></div>
-                </div>
+            <div class="epic-front" id="f_epic"></div>
+            <img id="v_photo" class="main-photo">
+            <img id="v_photo_small" class="small-photo">
+            <div class="small-epic" id="f_epic_small"></div>
+            <div class="v-details">
+                नाम : <b id="f_name_hi"></b><br>Name: <b id="f_name_en"></b><br>
+                पिता का नाम : <span id="f_fname_hi"></span><br>Father Name: <span id="f_fname_en"></span><br>
+                सेक्स / Gender: / <span id="f_gen"></span><br>
+                जन्मतिथि/आयु : <br>Date of Birth / Age: <span id="f_dob"></span>
             </div>
-            <div class="v_footer">पहचान पत्र / IDENTITY CARD</div>
+            <div class="v-footer-front">ई - मतदाता पहचान पत्र</div>
         </div>
 
-        <div class="voter-card" id="back">
-            <div class="v_back_header">Address / पता</div>
-            <div class="v_back_details">
-                <span id="disp_addr"></span>
-                <br><br>
-                <b>AC No. & Name:</b> <span id="disp_ac"></span><br>
-                <b>Part No. & Name:</b> <span id="disp_part"></span>
+        <div class="voter-box">
+            <div class="v-back-addr">
+                <b>पता :</b> <span id="b_addr_hi"></span><br><b>Address:</b> <br><span id="b_addr_en"></span>
             </div>
-            <div class="v_qr_box"><div id="v_qrcode" style="display:inline-block;"></div></div>
-            <div class="sign-area">
-                <br>
-                <div>Electoral Registration Officer</div>
+            <div id="qrcode" class="qr-area"></div>
+            <div class="back-epic-center" id="b_epic"></div>
+            <div class="officer-area">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Signature_of_H._V._Kamath.svg" style="height:20px;">
+                <b id="b_ero_hi"></b><span id="b_ero_en"></span>
+                <span class="download-date-label">Download Date -: <span id="disp_date"></span></span>
             </div>
-            <div class="v_footer">निर्वाचक रजिस्ट्रीकरण अधिकारी</div>
+            <div class="v-footer-back"><span>1950</span><span>https://ceobihar.nic.in/</span></div>
         </div>
     </div>
+    <button type="button" id="dl-btn" class="btn-download" onclick="downloadVoter()">Download PNG</button>
 </div>
 
-<div style="text-align:center;"><button id="dl-voter" class="btn-download" onclick="downloadVoter()">Download Voter Card</button></div>
-
 <script>
-    async function translateVoter() {
-        let n = document.getElementById('v_name_en').value;
-        let fn = document.getElementById('v_fname_en').value;
-        if(n) document.getElementById('v_name_hi').value = await fetchTrans(n);
-        if(fn) document.getElementById('v_fname_hi').value = await fetchTrans(fn);
-    }
+    // DOB Auto-slash and limit to 10 chars
+    document.getElementById('dob').addEventListener('input', function (e) {
+        let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+        if (v.length >= 5) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
+        else if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+        e.target.value = v;
+    });
 
-    async function fetchTrans(t) {
-        try {
-            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(t)}`);
-            const d = await res.json(); return d[0][0][0];
-        } catch { return t; }
-    }
+    // Manual Date Auto-dash
+    document.getElementById('manual_date').addEventListener('input', function (e) {
+        let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+        if (v.length >= 5) v = v.slice(0, 2) + '-' + v.slice(2, 4) + '-' + v.slice(4);
+        else if (v.length >= 3) v = v.slice(0, 2) + '-' + v.slice(2);
+        e.target.value = v;
+    });
 
-    function voterPhoto(input) {
+    function loadPhoto(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) { document.getElementById('disp_photo').src = e.target.result; }
-            reader.readAsDataURL(input.files[0]);
+            var r = new FileReader();
+            r.onload = function(e) { 
+                document.getElementById('v_photo').src = e.target.result; 
+                document.getElementById('v_photo_small').src = e.target.result; 
+            };
+            r.readAsDataURL(input.files[0]);
         }
     }
 
     function generateVoter() {
-        document.getElementById('disp_epic').innerText = document.getElementById('epic_num').value;
-        document.getElementById('disp_name_en').innerText = document.getElementById('v_name_en').value;
-        document.getElementById('disp_name_hi').innerText = document.getElementById('v_name_hi').value;
-        document.getElementById('disp_fname_en').innerText = document.getElementById('v_fname_en').value;
-        document.getElementById('disp_fname_hi').innerText = document.getElementById('v_fname_hi').value;
-        document.getElementById('disp_gen').innerText = document.getElementById('v_gender').value === "MALE" ? "M / पुरुष" : "F / महिला";
-        document.getElementById('disp_dob').innerText = document.getElementById('v_dob').value;
-        document.getElementById('disp_addr').innerText = document.getElementById('v_addr').value;
-        document.getElementById('disp_ac').innerText = document.getElementById('v_ac').value;
-        document.getElementById('disp_part').innerText = document.getElementById('v_part').value;
+        let epic = document.getElementById('epic_no').value.toUpperCase();
+        let mDate = document.getElementById('manual_date').value;
+        
+        // Date Logic
+        if(!mDate) {
+            let t = new Date();
+            mDate = t.getDate().toString().padStart(2, '0') + '-' + (t.getMonth()+1).toString().padStart(2, '0') + '-' + t.getFullYear();
+        }
 
-        // QR Code
-        document.getElementById('v_qrcode').innerHTML = "";
-        new QRCode(document.getElementById("v_qrcode"), {
-            text: `EPIC: ${document.getElementById('epic_num').value}\nName: ${document.getElementById('v_name_en').value}\nAC: ${document.getElementById('v_ac').value}`,
-            width: 70, height: 70
-        });
+        document.getElementById('f_epic').innerText = epic;
+        document.getElementById('b_epic').innerText = epic;
+        document.getElementById('f_epic_small').innerText = epic;
+        document.getElementById('f_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('f_name_en').innerText = document.getElementById('name_en').value.toUpperCase();
+        document.getElementById('f_fname_hi').innerText = document.getElementById('fname_hi').value;
+        document.getElementById('f_fname_en').innerText = document.getElementById('fname_en').value.toUpperCase();
+        document.getElementById('f_gen').innerText = document.getElementById('gender').value;
+        document.getElementById('f_dob').innerText = document.getElementById('dob').value;
+        document.getElementById('b_addr_hi').innerText = document.getElementById('addr_hi').value;
+        document.getElementById('b_addr_en').innerText = document.getElementById('addr_en').value;
+        document.getElementById('disp_date').innerText = mDate;
+
+        let ero = document.getElementById('ero_office').value;
+        document.getElementById('b_ero_hi').innerText = "निर्वाचक निबंधन पदाधिकारी, " + ero;
+        document.getElementById('b_ero_en').innerText = "Electoral Registration Officer, " + ero;
+
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { text: epic, width: 85, height: 85 });
 
         document.getElementById('print-area').style.display = 'flex';
-        document.getElementById('dl-voter').style.display = 'inline-block';
+        document.getElementById('dl-btn').style.display = 'block';
     }
 
     function downloadVoter() {
@@ -177,4 +194,5 @@
     }
 </script>
 </body>
-</html>
+                                                                                                 </html>
+                                                                                                 
