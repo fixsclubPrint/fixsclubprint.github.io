@@ -3,214 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub | INDI PRINT PORTAL Style</title>
+    <title>FixsClub Print | Premium Portal</title>
     <style>
-        :root { --blue-dark: #1e2746; --blue-light: #34495e; --blue-active: #3f51b5; --bg-gray: #f4f7f9; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg-gray); overflow: hidden; }
-
-        /* Auth Screen */
-        #authScreen { position: fixed; inset: 0; background: #eef2f7; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .auth-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        .auth-card input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .auth-btn { width: 100%; padding: 12px; border: none; background: var(--blue-active); color: white; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        /* Sidebar Layout (Image ki tarah) */
-        .sidebar { width: 240px; background: var(--blue-dark); color: white; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
-        .sidebar-header { padding: 20px; font-weight: bold; text-align: center; background: #141a33; border-bottom: 1px solid #2c3e50; color: #fff; font-size: 16px; }
-        .sidebar-menu { padding: 10px 0; }
-        .menu-item { padding: 12px 20px; font-size: 13px; color: #b8c7ce; cursor: pointer; display: flex; align-items: center; border-left: 3px solid transparent; transition: 0.2s; }
-        .menu-item:hover { background: #2c3b41; color: white; }
-        .active-nav { background: #3c8dbc; color: white !important; border-left: 3px solid #3c8dbc; }
+        :root { --sidebar-bg: #1a252f; --active-blue: #2980b9; --text-white: #ecf0f1; --success: #27ae60; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; transition: 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; background: #141a21; font-size: 20px; font-weight: bold; border-bottom: 1px solid #34495e; color: #3498db; }
+        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #2c3e50; display: flex; align-items: center; font-size: 14px; transition: 0.2s; }
+        .menu-item:hover { background: #34495e; padding-left: 30px; }
+        .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
         /* Main Content */
-        .main-container { flex-grow: 1; display: flex; flex-direction: column; }
-        .top-bar { height: 55px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .content-area { padding: 20px; overflow-y: auto; }
-
-        /* Form Grid (Like Image) */
-        .form-box { background: white; border-radius: 4px; border-top: 3px solid #3c8dbc; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
-        .full-row { grid-column: span 3; }
-        .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
-        .input-group input, .input-group select, .input-group textarea { padding: 10px; border: 1px solid #d2d6de; border-radius: 4px; font-size: 14px; }
-        
-        .submit-btn { background: #00a65a; color: white; border: none; padding: 12px 40px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .top-nav { background: #fff; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { padding: 25px; }
+        .box { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid var(--active-blue); }
         .hidden { display: none !important; }
+
+        /* Forms */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #34495e; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* PVC Card Preview (Screen) */
+        .pvc-preview { width: 325px; height: 204px; border: 1px solid #ccc; border-radius: 10px; position: relative; background: #fff; overflow: hidden; margin: 10px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-    <div id="authScreen">
-        <div id="loginBox" class="auth-card">
-            <h2 style="color:var(--blue-active)">FixsClub Login</h2>
-            <input type="text" id="l_mob" placeholder="Mobile Number">
-            <input type="password" id="l_pass" placeholder="Password">
-            <button class="auth-btn" onclick="doLogin()">Login</button>
-            <p style="font-size:12px; margin-top:15px; cursor:pointer; color:blue;" onclick="toggleAuth('reg')">Naya Account Banayein</p>
-        </div>
-        <div id="regBox" class="auth-card hidden">
-            <h2 style="color:#00a65a">Naya User Register</h2>
-            <input type="text" id="r_name" placeholder="Pura Naam">
-            <input type="text" id="r_mob" placeholder="Mobile Number">
-            <input type="email" id="r_email" placeholder="Email ID">
-            <input type="password" id="r_pass" placeholder="Password Chunein">
-            <button class="auth-btn" style="background:#00a65a" onclick="doRegister()">Powerful Register</button>
-            <p style="font-size:12px; margin-top:15px; cursor:pointer; color:blue;" onclick="toggleAuth('login')">Wapas Login Par Jayein</p>
-        </div>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">FixsClub Pro</div>
+        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
+        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
+        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER SMART</div>
+        <div class="menu-item" onclick="nav('pan_nsdl')">💳 PAN (NSDL) PVC</div>
+        <div class="menu-item" onclick="nav('pan_uti')">💳 PAN (UTI) PVC</div>
+        <div class="menu-item" onclick="nav('history')">📂 HISTORY</div>
     </div>
 
-    <div id="sidebar" class="sidebar hidden">
-        <div class="sidebar-header">FIXSCLUB PRINT PORTAL</div>
-        <div class="sidebar-menu">
-            <div class="menu-item active-nav" onclick="nav('dash')">🏠 Dashboard</div>
-            <div class="menu-item" onclick="nav('aadhaar')">🆔 Aadhar Manual</div>
-            <div class="menu-item" onclick="nav('voter')">🗳️ Voter Manual</div>
-            <div class="menu-item" onclick="nav('history')">📂 History</div>
-            <div class="menu-item" style="color:#e74c3c" onclick="location.reload()">🔒 Logout</div>
-        </div>
-    </div>
-
-    <div id="mainArea" class="main-container hidden">
-        <div class="top-bar">
-            <div style="font-weight:bold; color:#555">Welcome, <span id="userName">User</span></div>
-            <div style="background:#f39c12; color:white; padding:5px 15px; border-radius:20px; font-size:12px;">Prepaid Wallet: ₹500</div>
+    <div id="mainArea" class="main-content">
+        <div class="top-nav">
+            <marquee style="width: 60%; color: red; font-weight: bold;">New Updates: NSDL & UTI PAN PVC Service Live! | Voter ID Smart Print Added.</marquee>
+            <div id="user_info">Welcome, User</div>
         </div>
 
-        <div class="content-area">
+        <div class="container">
             <div id="aadhaar-view" class="view hidden">
-                <div class="form-box">
-                    <h3 style="margin-top:0; font-size:16px; border-bottom:1px solid #eee; padding-bottom:10px;">Aadhar Manual Entry</h3>
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label>Aadhar Card No.</label>
-                            <input type="text" placeholder="Aadharcard No.." id="a_no">
-                        </div>
-                        <div class="input-group">
-                            <label>Name</label>
-                            <input type="text" placeholder="Example: Raju Kumar" id="a_name">
-                        </div>
-                        <div class="input-group">
-                            <label>Father Name</label>
-                            <input type="text" placeholder="Example: Shyam Singh" id="a_father">
-                        </div>
-                        <div class="input-group">
-                            <label>House No</label>
-                            <input type="text" id="a_house">
-                        </div>
-                        <div class="input-group">
-                            <label>Gali/Locality</label>
-                            <input type="text" id="a_gali">
-                        </div>
-                        <div class="input-group">
-                            <label>Post Office</label>
-                            <input type="text" id="a_post">
-                        </div>
-                        <div class="input-group">
-                            <label>City</label>
-                            <input type="text" id="a_city">
-                        </div>
-                        <div class="input-group">
-                            <label>Pin code</label>
-                            <input type="text" id="a_pin">
-                        </div>
-                        <div class="input-group">
-                            <label>Date Of Birth</label>
-                            <input type="text" placeholder="26/07/1992" id="a_dob">
-                        </div>
-                        <div class="input-group">
-                            <label>Select Gender</label>
-                            <select id="a_gender"><option>MALE</option><option>FEMALE</option></select>
-                        </div>
-                        <div class="input-group">
-                            <label>Select Image</label>
-                            <input type="file" id="a_pic">
-                        </div>
-                        <div class="input-group full-row">
-                            <label>Address</label>
-                            <textarea id="a_addr_full" rows="2" placeholder="S/O : Mo Rahim, khurdaha..."></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label>Select Local Language</label>
-                            <select id="a_lang"><option>HINDI</option><option>BENGALI</option></select>
-                        </div>
-                        <div class="input-group">
-                            <label>Name (Local Language)</label>
-                            <input type="text" id="a_name_local">
-                        </div>
-                        <div class="input-group">
-                            <label>Address (Local Language)</label>
-                            <input type="text" id="a_addr_local">
-                        </div>
+                <div class="box">
+                    <h3>🆔 Aadhaar Card PVC Form</h3>
+                    <div class="grid-3">
+                        <input type="text" id="a_no" placeholder="Aadhar No.">
+                        <input type="text" id="a_name" placeholder="Full Name">
+                        <input type="text" id="a_dob" placeholder="DD/MM/YYYY">
+                        <input type="file" onchange="previewImg(event, 'a_img_pre')">
                     </div>
-                    <button class="submit-btn" onclick="saveData()">Submit</button>
+                    <textarea id="a_addr" placeholder="Full Address"></textarea>
+                    <button class="btn" style="background:var(--success)" onclick="printService('Aadhaar')">Print Aadhaar</button>
+                </div>
+            </div>
+
+            <div id="pan_nsdl-view" class="view hidden">
+                <div class="box">
+                    <h3>💳 NSDL PAN Card (PVC Style)</h3>
+                    <div class="grid-3">
+                        <input type="text" id="pn_no" placeholder="PAN Number">
+                        <input type="text" id="pn_name" placeholder="Full Name">
+                        <input type="text" id="pn_fname" placeholder="Father's Name">
+                        <input type="text" id="pn_dob" placeholder="DOB">
+                        <div><label>Photo</label><input type="file" onchange="previewImg(event, 'pn_img_pre')"></div>
+                        <div><label>Signature</label><input type="file" onchange="previewImg(event, 'pn_sig_pre')"></div>
+                    </div>
+                    <button class="btn" style="background:var(--active-blue)" onclick="printService('PAN_NSDL')">Download NSDL PVC</button>
                 </div>
             </div>
 
             <div id="dash-view" class="view">
-                <div class="form-box">
+                <div class="box">
                     <h2>Namaste! 🙏</h2>
-                    <p>Hamare portal par aapka swagat hai. Side menu se service chunein.</p>
+                    <p>Sabhi PVC Services ab live hain. Photo और Signature के साथ कार्ड प्रिंट करें।</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="print-templates" class="hidden">
+        <div id="temp-aadhaar" style="width:325px; height:204px; border:1px solid #000; position:relative;">
+            <div style="background:orange; height:10px;"></div>
+            <img id="a_img_pre" src="" style="width:60px; height:70px; margin:10px;">
+            <div style="position:absolute; top:40px; left:80px; font-size:10px;" id="disp_a_data"></div>
+            <div style="position:absolute; bottom:10px; width:100%; text-align:center; font-weight:bold;" id="disp_a_no"></div>
+        </div>
+
+        <div id="temp-pan" style="width:325px; height:204px; border:1px solid #aaa; background: linear-gradient(135deg, #fff 60%, #e3f2fd 100%); position:relative; font-family:Arial;">
+            <div style="background:#003366; color:#fff; font-size:9px; padding:4px;">INCOME TAX DEPARTMENT | GOVT. OF INDIA</div>
+            <img id="pn_img_pre" src="" style="width:55px; height:65px; position:absolute; top:40px; left:15px; border:1px solid #000;">
+            <div style="margin-left:80px; margin-top:10px; font-size:10px;">
+                <p>Name: <b id="disp_pn_name"></b></p>
+                <p>Father: <b id="disp_pn_fname"></b></p>
+                <p>PAN: <b id="disp_pn_no" style="font-size:14px;"></b></p>
+            </div>
+            <img id="pn_sig_pre" src="" style="width:70px; height:20px; position:absolute; bottom:20px; right:15px;">
+        </div>
+    </div>
+
     <script>
-        // Auth Logic
-        function toggleAuth(type) {
-            document.getElementById('loginBox').classList.toggle('hidden', type === 'reg');
-            document.getElementById('regBox').classList.toggle('hidden', type === 'login');
-        }
-
-        function doLogin() {
-            const m = document.getElementById('l_mob').value;
-            const p = document.getElementById('l_pass').value;
-
-            // Bypass Admin Login
-            if (m === "9693101077" && p === "yadav@101077") {
-                unlockPortal("Admin"); return;
-            }
-
-            const stored = JSON.parse(localStorage.getItem("user_" + m));
-            if (stored && stored.pass === p) {
-                unlockPortal(stored.name);
-            } else {
-                alert("Mobile ya Password galat hai!");
-            }
-        }
-
-        function doRegister() {
-            const m = document.getElementById('r_mob').value;
-            const n = document.getElementById('r_name').value;
-            const e = document.getElementById('r_email').value;
-            const p = document.getElementById('r_pass').value;
-
-            if(m && n && p) {
-                localStorage.setItem("user_"+m, JSON.stringify({name: n, email: e, pass: p}));
-                alert("Account Ban Gaya! Ab Login Karein.");
-                toggleAuth('login');
-            }
-        }
-
-        function unlockPortal(name) {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('sidebar').classList.remove('hidden');
-            document.getElementById('mainArea').classList.remove('hidden');
-            document.getElementById('userName').innerText = name;
-        }
-
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id + '-view').classList.remove('hidden');
+            const target = document.getElementById(id + '-view');
+            if(target) target.classList.remove('hidden');
+            
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
             event.currentTarget.classList.add('active-nav');
         }
 
-        function saveData() {
-            alert("Data Saved Successfully! Generating PDF...");
-            window.print();
+        function previewImg(event, targetId) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById(targetId).src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function printService(type) {
+            if(type === 'PAN_NSDL') {
+                document.getElementById('disp_pn_name').innerText = document.getElementById('pn_name').value;
+                document.getElementById('disp_pn_fname').innerText = document.getElementById('pn_fname').value;
+                document.getElementById('disp_pn_no').innerText = document.getElementById('pn_no').value;
+                var content = document.getElementById('temp-pan').innerHTML;
+            }
+            
+            const win = window.open('', '', 'width=500,height=400');
+            win.document.write('<html><head><style>body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;}</style></head><body>');
+            win.document.write('<div style="width:325px;height:204px;border:1px solid #000;position:relative;border-radius:10px;overflow:hidden;">' + content + '</div>');
+            win.document.write('</body></html>');
+            win.document.close();
+            setTimeout(() => { win.print(); }, 500);
         }
     </script>
 </body>
 </html>
+
+
+
+
+Ismein check karo kya dikkat hai ismein Aadhaar card print Nahin ho raha hai aur Aadhaar Card ka print sab bharne ke bad is par Nahin dikha raha hai Aadhaar Card jaisa
