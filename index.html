@@ -8,10 +8,9 @@
     <style>
         :root { 
             --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
-            --success: #27ae60; --warning-yellow: #fff9c4;
+            --success: #5cb85c; --warning-yellow: #fff9c4;
             --rtps-color: #8e44ad; --nha-color: #d35400; --uidai-blue: #003366;
             --csc-gold: #f39c12; --eshram-color: #2980b9; --msme-teal: #16a085;
-            --pan-color: #d35400;
         }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
         
@@ -20,44 +19,45 @@
 
         .app-container { display: flex; flex-grow: 1; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; transition: 0.3s; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
         .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
         .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
+        .special-btn { color: white; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; cursor: pointer; margin: 5px 15px; font-size: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); }
+
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .container { padding: 20px; }
-        .box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .container { padding: 25px; }
+        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; margin-top: 5px; }
-        .btn:hover { opacity: 0.9; transform: scale(0.98); }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn:hover { opacity: 0.9; }
         .hidden { display: none !important; }
 
-        /* History Style */
-        .hist-item { background: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 4px solid var(--active-blue); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .s-card { padding: 20px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; }
+        /* History Items Style */
+        .hist-card { border-left: 5px solid var(--active-blue); background: #f9f9f9; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; font-size: 13px; }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .s-card { padding: 20px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <div class="top-notice">
-        <marquee>🚀 बिना CSC ID के सभी सेवाएं चालू | ⚠️ ध्यान दें: 7 दिन बाद ₹100 शुल्क अनिवार्य है। | Master Admin: 9693101077</marquee>
+        <marquee>🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा। | सहायता के लिए HELP & SUPPORT पर संपर्क करें।</marquee>
     </div>
 
     <div class="app-container">
-        <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9998; display: flex; align-items: center; justify-content: center;">
             <div id="loginBox" class="box" style="width: 350px; text-align: center;">
                 <h2 style="color: var(--active-blue);">FixsClub Login</h2>
                 <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
                 <input type="password" id="l_pass" placeholder="पासवर्ड">
                 <button class="btn" style="background: var(--active-blue);" onclick="doLogin()">लॉगिन करें</button>
-                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px;">नया अकाउंट बनाएँ</p>
+                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">नया अकाउंट बनाएँ</p>
             </div>
             <div id="regBox" class="box hidden" style="width: 350px; text-align: center;">
                 <h2 style="color: var(--success);">रजिस्ट्रेशन</h2>
@@ -65,71 +65,80 @@
                 <input type="text" id="r_mob" placeholder="मोबाइल नंबर">
                 <input type="password" id="r_pass" placeholder="पासवर्ड सेट करें">
                 <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
-                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px;">वापस लॉगिन करें</p>
+                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">लॉगिन पर वापस जाएँ</p>
             </div>
         </div>
 
         <div id="sidebar" class="sidebar hidden">
             <div class="sidebar-header">FixsClub Master</div>
+            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/')">🔗 CSC CONNECT</div>
+            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">🆔 myAADHAAR</div>
+
             <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
-            <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
-            <div class="menu-item" onclick="nav('pan')">💳 PAN CARD MANUAL</div>
+            <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR PRINT</div>
+            <div class="menu-item" onclick="nav('pan')">💳 PAN CARD PRINT</div>
             <div class="menu-item" onclick="nav('voter')">🗳️ VOTER ID PRINT</div>
-            <div style="padding: 10px 20px; font-size: 11px; color: #95a5a6;">ADMIN OPTIONS</div>
-            <div class="menu-item" onclick="nav('support')">🎧 HELP & SUPPORT</div>
+            
+            <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
+            <div class="menu-item" style="color:#a29bfe" onclick="window.open('https://serviceonline.bihar.gov.in/')">RTPS Bihar ↗️</div>
+            <div class="menu-item" style="color:#fab1a0" onclick="window.open('https://beneficiary.nha.gov.in/')">Ayushman Portal ↗️</div>
+
+            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
+            <div class="menu-item" onclick="nav('support')" style="margin-top: auto;">🎧 HELP & SUPPORT</div>
             <div class="menu-item" onclick="location.reload()" style="color: #ff7675;">🔒 LOGOUT</div>
         </div>
 
         <div id="mainArea" class="main-content hidden">
             <div class="top-nav">
                 <span id="welcomeMsg">नमस्ते</span>
-                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">Server Online</div>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
             </div>
 
             <div class="container">
                 <div id="dash-view" class="view">
                     <div class="box">
-                        <h3>Quick Services</h3>
+                        <h3>सेवाएं और लिंक्स 👋</h3>
                         <div class="card-grid">
-                            <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://serviceonline.bihar.gov.in/')">RTPS Bihar</div>
-                            <div class="s-card" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/')">UIDAI Portal</div>
-                            <div class="s-card" style="background: var(--nha-color);" onclick="window.open('https://beneficiary.nha.gov.in/')">Ayushman NHA</div>
+                            <div class="s-card" style="background: var(--msme-teal);" onclick="window.open('https://udyamregistration.gov.in/')"><b>MSME Udyam</b></div>
+                            <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://swcs.bihar.gov.in/')"><b>RTPS Bihar</b></div>
+                            <div class="s-card" style="background: var(--eshram-color);" onclick="window.open('https://register.eshram.gov.in/')"><b>e-Shram Card</b></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="aadhaar-view" class="view hidden">
                     <div class="box">
-                        <h3>Aadhaar Manual Print (Yadav Edit)</h3>
-                        <input type="text" id="a_num" placeholder="Aadhaar Number">
-                        <textarea id="a_code" placeholder="Yadav Code Yahan Daalein..."></textarea>
-                        <button class="btn" style="background: var(--success);" onclick="saveAadhaar()">Print & Save History</button>
-                    </div>
-                    <div class="box">
-                        <h4>Aadhaar History</h4>
-                        <div id="a_history"></div>
+                        <h3>Aadhaar Manual Print (Yadav)</h3>
+                        <input type="text" id="aadhaar_num" placeholder="Aadhaar Number">
+                        <textarea id="yadav_code" placeholder="Yadav: Type or Paste Aadhaar Code here..."></textarea>
+                        <button class="btn" style="background: var(--success)" onclick="processAadhaar()">Print & Save</button>
+                        <hr>
+                        <h4>History</h4>
+                        <div id="aadhaar_history_list"></div>
                     </div>
                 </div>
 
                 <div id="pan-view" class="view hidden">
                     <div class="box">
-                        <h3>PAN Card PVC Color Print</h3>
-                        <input type="text" id="p_num" placeholder="PAN Number">
-                        <input type="text" id="p_name" placeholder="Customer Name">
+                        <h3>PAN Card Manual Print (PVC Color)</h3>
+                        <input type="text" id="pan_num" placeholder="PAN Number">
+                        <input type="text" id="pan_name" placeholder="Full Name">
                         <div style="display: flex; gap: 10px;">
-                            <button class="btn" style="background: #003366;" onclick="savePan('UTI')">UTI Print</button>
-                            <button class="btn" style="background: #e67e22;" onclick="savePan('NSDL')">NSDL Print</button>
+                            <button class="btn" style="background: #003366;" onclick="processPan('UTI')">UTI Print</button>
+                            <button class="btn" style="background: #e67e22;" onclick="processPan('NSDL')">NSDL Print</button>
                         </div>
-                    </div>
-                    <div class="box">
-                        <h4>PAN History</h4>
-                        <div id="p_history"></div>
+                        <hr>
+                        <h4>History</h4>
+                        <div id="pan_history_list"></div>
                     </div>
                 </div>
 
                 <div id="voter-view" class="view hidden">
                     <div class="box"><h3>Voter Manual Print</h3><input type="text" placeholder="EPIC Number"><button class="btn" style="background: #d32f2f">Print Now</button></div>
                 </div>
+
+                <div id="admin-view" class="view hidden"><div class="box"><h3>Admin Control</h3><input type="text" id="act_mob" placeholder="User Mobile"><button class="btn" onclick="activateUserManual()">Activate</button></div></div>
+                <div id="support-view" class="view hidden"><div class="box"><h3>Help & Support</h3><textarea placeholder="Message..."></textarea><button class="btn" onclick="sendMessage()">Send</button></div></div>
             </div>
         </div>
     </div>
@@ -137,7 +146,9 @@
     <script>
         const MASTER_MOB = "9693101077";
         const MASTER_PASS = "Yadav@957272";
+        const UPI_ID = "Q973860146@ybl";
 
+        // Auth Functions (Purana Logic)
         function toggleAuth(t) {
             document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
             document.getElementById('regBox').classList.toggle('hidden', t === 'login');
@@ -145,91 +156,101 @@
 
         function doRegister() {
             const mob = document.getElementById('r_mob').value;
-            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime() };
+            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime(), lastPaymentDate: null };
             localStorage.setItem('user_' + mob, JSON.stringify(userData));
-            alert("Registration Successful!"); toggleAuth('login');
+            alert("पंजीकरण सफल!"); toggleAuth('login');
         }
 
         function doLogin() {
             const mob = document.getElementById('l_mob').value;
             const pass = document.getElementById('l_pass').value;
-            const data = localStorage.getItem('user_' + mob);
-
             if (mob === MASTER_MOB && pass === MASTER_PASS) {
-                showPortal("Master Admin");
-            } else if (data && JSON.parse(data).password === pass) {
-                showPortal(JSON.parse(data).name);
-            } else {
-                alert("Invalid Login!");
+                document.getElementById('adminLink').classList.remove('hidden');
+                document.getElementById('welcomeMsg').innerText = "नमस्ते मास्टर एडमिन";
+                showPortal(); return;
             }
+            const data = localStorage.getItem('user_' + mob);
+            if (data && JSON.parse(data).password === pass) { 
+                checkSubscription(JSON.parse(data)); 
+            } else { alert("गलत आईडी या पासवर्ड!"); }
         }
 
-        function showPortal(name) {
+        function checkSubscription(user) {
+            const now = new Date().getTime();
+            if (now - user.regDate > (7 * 24 * 60 * 60 * 1000) && !user.lastPaymentDate) {
+                showPaymentModal(); return;
+            }
+            document.getElementById('welcomeMsg').innerText = "स्वागत है, " + user.name;
+            showPortal();
+        }
+
+        function showPortal() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('sidebar').classList.remove('hidden');
             document.getElementById('mainArea').classList.remove('hidden');
-            document.getElementById('welcomeMsg').innerText = "Welcome, " + name;
-            renderHistories();
+            loadHistories();
         }
 
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
             document.getElementById(id + '-view').classList.remove('hidden');
-            event.currentTarget.classList.add('active-nav');
         }
 
-        // --- Aadhaar Logic ---
-        function saveAadhaar() {
-            const num = document.getElementById('a_num').value;
-            const code = document.getElementById('a_code').value;
-            if(!num || !code) return alert("Fill all fields");
+        // --- NAYA SMART LOGIC (Aadhaar & PAN History) ---
+
+        function processAadhaar() {
+            const num = document.getElementById('aadhaar_num').value;
+            const code = document.getElementById('yadav_code').value;
+            if(!num || !code) return alert("Details bharein!");
             
-            let hist = JSON.parse(localStorage.getItem('a_hist') || '[]');
-            hist.unshift({ id: Date.now(), num, code, date: new Date().toLocaleString() });
-            localStorage.setItem('a_hist', JSON.stringify(hist));
-            renderHistories();
-            alert("Aadhaar Data Saved!");
+            let history = JSON.parse(localStorage.getItem('aadhaar_hist') || '[]');
+            history.unshift({id: Date.now(), num, code, date: new Date().toLocaleString()});
+            localStorage.setItem('aadhaar_hist', JSON.stringify(history));
+            loadHistories();
+            alert("Aadhaar Print Command Sent!");
         }
 
-        // --- PAN Logic ---
-        function savePan(type) {
-            const num = document.getElementById('p_num').value;
-            const name = document.getElementById('p_name').value;
-            if(!num || !name) return alert("Fill all fields");
+        function processPan(type) {
+            const num = document.getElementById('pan_num').value;
+            const name = document.getElementById('pan_name').value;
+            if(!num || !name) return alert("Details bharein!");
 
-            let hist = JSON.parse(localStorage.getItem('p_hist') || '[]');
-            hist.unshift({ id: Date.now(), num, name, type, date: new Date().toLocaleString() });
-            localStorage.setItem('p_hist', JSON.stringify(hist));
-            renderHistories();
-            alert(type + " Color Print Command Sent!");
+            let history = JSON.parse(localStorage.getItem('pan_hist') || '[]');
+            history.unshift({id: Date.now(), num, name, type, date: new Date().toLocaleString()});
+            localStorage.setItem('pan_hist', JSON.stringify(history));
+            loadHistories();
+            alert(type + " PVC Color Print Command Sent!");
         }
 
-        function renderHistories() {
-            // Render Aadhaar
-            const ah = JSON.parse(localStorage.getItem('a_hist') || '[]');
-            document.getElementById('a_history').innerHTML = ah.map(i => `
-                <div class="hist-item">
+        function loadHistories() {
+            // Aadhaar History
+            const aHist = JSON.parse(localStorage.getItem('aadhaar_hist') || '[]');
+            document.getElementById('aadhaar_history_list').innerHTML = aHist.map(i => `
+                <div class="hist-card">
                     <div><b>${i.num}</b><br><small>${i.date}</small></div>
-                    <button onclick="delHist('a_hist', ${i.id})" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
-                </div>
-            `).join('') || "No History";
+                    <button onclick="delHist('aadhaar_hist', ${i.id})" style="background:red; color:white; border:none; padding:5px; border-radius:3px;">Delete</button>
+                </div>`).join('');
 
-            // Render PAN
-            const ph = JSON.parse(localStorage.getItem('p_hist') || '[]');
-            document.getElementById('p_history').innerHTML = ph.map(i => `
-                <div class="hist-item">
+            // PAN History
+            const pHist = JSON.parse(localStorage.getItem('pan_hist') || '[]');
+            document.getElementById('pan_history_list').innerHTML = pHist.map(i => `
+                <div class="hist-card">
                     <div><b>${i.num} (${i.type})</b><br><small>${i.name} | ${i.date}</small></div>
-                    <button onclick="delHist('p_hist', ${i.id})" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
-                </div>
-            `).join('') || "No History";
+                    <button onclick="delHist('pan_hist', ${i.id})" style="background:red; color:white; border:none; padding:5px; border-radius:3px;">Delete</button>
+                </div>`).join('');
         }
 
         function delHist(key, id) {
             let hist = JSON.parse(localStorage.getItem(key));
-            hist = hist.filter(i => i.id !== id);
+            hist = hist.filter(item => item.id !== id);
             localStorage.setItem(key, JSON.stringify(hist));
-            renderHistories();
+            loadHistories();
+        }
+
+        function sendMessage() { alert("मैसेज भेज दिया गया!"); }
+        function showPaymentModal() {
+            const upiLink = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
+            document.body.insertAdjacentHTML('beforeend', `<div id="paymentOverlay"><div style="background:white; padding:30px; border-radius:15px; text-align:center;"><h2>ट्रायल समाप्त!</h2><p>₹100 का भुगतान करें</p><a href="${upiLink}" class="btn" style="background:#673ab7; display:block; color:white; text-decoration:none;">अभी पे करें</a></div></div>`);
         }
     </script>
 </body>
