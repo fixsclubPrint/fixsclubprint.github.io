@@ -60,8 +60,7 @@
     <div class="top-notice">
         <marquee>🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा। 1 माह का | सहायता के लिए HELP & SUPPORT पर संपर्क करें।</marquee>
     </div>
-
-    <div class="app-container">
+ <div class="app-container">
         <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9998; display: flex; align-items: center; justify-content: center;">
             <div id="loginBox" class="box" style="width: 350px; text-align: center;">
                 <h2 style="color: var(--active-blue);">FixsClub Login</h2>
@@ -77,10 +76,7 @@
                 <input type="password" id="r_pass" placeholder="पासवर्ड सेट करें">
                 <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
                 <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">लॉगिन पर वापस जाएँ</p>
-            </div>
-        </div>
-
-        <div id="sidebar" class="sidebar hidden">
+             <div id="sidebar" class="sidebar hidden">
             <div class="sidebar-header">FixsdigitalSeva</div>
 
        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
@@ -99,7 +95,157 @@
             <div class="menu-item" onclick="nav('pan')">💳 PAN CARD PRINT</div>
             <div class="menu-item" onclick="nav('voter')">🗳️ VOTER ID PRINT</div>
             
+            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
+            <div class="menu-item" onclick="nav('support')" style="margin-top: auto;">🎧 HELP & SUPPORT</div>
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;">🔒 LOGOUT</div>
+        </div>
 
+        <div id="mainArea" class="main-content hidden">
+            <div class="top-nav">
+                <span id="welcomeMsg">नमस्ते</span>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
+            </div>
+
+            <div class="container">
+                <div id="dash-view" class="view">
+                    <div class="box">
+                        <h3>Dashboard 👋</h3>
+                        <div class="card-grid">
+                             <div class="s-card" style="background: var(--msme-teal);" onclick="window.open('https://udyamregistration.gov.in/Government-India/Ministry-MSME-registration.htm', '_blank')"><b>MSME Udyam</b><br><small>नया रजिस्ट्रेशन</small></div>
+                            <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://swcs.bihar.gov.in/RtpsReportView/certificateDownload.do', '_blank')"><b>RTPS Bihar</b><br><small>जाति/आय/निवास</small></div>
+                            <div class="s-card" style="background: var(--eshram-color);" onclick="window.open('https://register.eshram.gov.in/#/user/self', '_blank')"><b>e-Shram Card</b><br><small>Self Registration</small></div>
+                            <div class="s-card" style="background: var(--nha-color);" onclick="window.open('https://beneficiary.nha.gov.in/', '_blank')"><b>Ayushman</b><br><small>Health Portal</small></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="aadhaar-view" class="view hidden">
+                    <div class="box">
+                        <h3>Aadhaar Manual Print </h3>
+                        <input type="text" id="aadhaar_num" placeholder="Aadhaar Number">
+                        <textarea id="yadav_code" placeholder="Yadav: Paste Code Here..."></textarea>
+                        <button class="btn" style="background: var(--success)" onclick="processAadhaar()">Print & Save</button>
+                        <div id="aadhaar_history_list"></div>
+                    </div>
+                </div>
+
+                <div id="pan-view" class="view hidden">
+                    <div class="box">
+                        <h3>PAN Card PVC Manual (UTI/NSDL)</h3>
+                        <input type="text" id="pan_num" placeholder="PAN Number">
+                        <input type="text" id="pan_name" placeholder="Full Name">
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn" style="background: #003366;" onclick="processPan('UTI')">UTI Format</button>
+                            <button class="btn" style="background: #e67e22;" onclick="processPan('NSDL')">NSDL Format</button>
+                        </div>
+                        <div id="pan_history_list"></div>
+                    </div>
+                </div>
+
+                <div id="voter-view" class="view hidden">
+                    <div class="box"><h3>Voter Manual Print</h3><input type="text" placeholder="EPIC Number"><button class="btn" style="background: #d32f2f">Print Now</button></div>
+                </div>
+                
+                <div id="support-view" class="view hidden"><div class="box"><h3>Support</h3><textarea placeholder="Message"></textarea><button class="btn" style="background:var(--active-blue)">Send</button></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MASTER_MOB = "9693101077";
+        const MASTER_PASS = "Yadav@957272";
+        const UPI_ID = "Q973860146@ybl";
+
+        function toggleAuth(t) {
+            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
+            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
+        }
+
+        function doRegister() {
+            const mob = document.getElementById('r_mob').value;
+            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime(), lastPaymentDate: null };
+            localStorage.setItem('user_' + mob, JSON.stringify(userData));
+            alert("पंजीकरण सफल!"); toggleAuth('login');
+        }
+
+        function doLogin() {
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                document.getElementById('adminLink').classList.remove('hidden');
+                document.getElementById('welcomeMsg').innerText = "Master Admin";
+                showPortal(); return;
+            }
+            const data = localStorage.getItem('user_' + mob);
+            if (data && JSON.parse(data).password === pass) { 
+                checkSubscription(JSON.parse(data)); 
+            } else { alert("Error: Wrong Mobile or Password"); }
+        }
+
+        function checkSubscription(user) {
+            const now = new Date().getTime();
+            if (now - user.regDate > (7 * 24 * 60 * 60 * 1000) && !user.lastPaymentDate) {
+                showPaymentModal(); return;
+            }
+            document.getElementById('welcomeMsg').innerText = "Welcome, " + user.name;
+            showPortal();
+        }
+
+        function showPortal() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mainArea').classList.remove('hidden');
+            loadHistories();
+        }
+
+        function nav(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id + '-view').classList.remove('hidden');
+        }
+
+        function processAadhaar() {
+            const num = document.getElementById('aadhaar_num').value;
+            const code = document.getElementById('yadav_code').value;
+            if(!num || !code) return alert("Please fill all details!");
+            let hist = JSON.parse(localStorage.getItem('aadhaar_hist') || '[]');
+            hist.unshift({id: Date.now(), num, code, date: new Date().toLocaleString()});
+            localStorage.setItem('aadhaar_hist', JSON.stringify(hist));
+            loadHistories();
+            alert("Aadhaar Data Saved!");
+        }
+
+        function processPan(type) {
+            const num = document.getElementById('pan_num').value;
+            const name = document.getElementById('pan_name').value;
+            if(!num || !name) return alert("Please fill all details!");
+            let hist = JSON.parse(localStorage.getItem('pan_hist') || '[]');
+            hist.unshift({id: Date.now(), num, name, type, date: new Date().toLocaleString()});
+            localStorage.setItem('pan_hist', JSON.stringify(hist));
+            loadHistories();
+            alert(type + " PVC Color Print Command Sent!");
+        }
+
+        function loadHistories() {
+            const aHist = JSON.parse(localStorage.getItem('aadhaar_hist') || '[]');
+            document.getElementById('aadhaar_history_list').innerHTML = aHist.map(i => `<div class="hist-card"><div><b>${i.num}</b><br><small>${i.date}</small></div><button onclick="delHist('aadhaar_hist', ${i.id})" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px;">Del</button></div>`).join('');
+            const pHist = JSON.parse(localStorage.getItem('pan_hist') || '[]');
+            document.getElementById('pan_history_list').innerHTML = pHist.map(i => `<div class="hist-card"><div><b>${i.num} (${i.type})</b><br><small>${i.name}</small></div><button onclick="delHist('pan_hist', ${i.id})" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px;">Del</button></div>`).join('');
+        }
+
+        function delHist(key, id) {
+            let hist = JSON.parse(localStorage.getItem(key));
+            hist = hist.filter(item => item.id !== id);
+            localStorage.setItem(key, JSON.stringify(hist));
+            loadHistories();
+        }
+
+        function showPaymentModal() {
+            const upiLink = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
+            document.body.insertAdjacentHTML('beforeend', `<div id="paymentOverlay"><div style="background:white; padding:30px; border-radius:15px; text-align:center;"><h2>Trial Over!</h2><p>Pay ₹100 to continue</p><a href="${upiLink}" class="btn" style="background:#673ab7; color:white; text-decoration:none; display:block;">Pay Now</a></div></div>`);
+        }
+    </script>
+
+                 
             <div id="aadhaar-view" class="view hidden">
                 <div class="form-container">
                     <form id="masterForm">
