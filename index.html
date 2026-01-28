@@ -3,151 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixsClub Print | Premium Portal</title>
+    <title>FixsClub Print | Official Master Portal</title>
+    
     <style>
-        :root { --sidebar-bg: #1a252f; --active-blue: #2980b9; --text-white: #ecf0f1; --success: #27ae60; --danger: #e74c3c; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        :root { 
+            --sidebar-bg: #2c3e50; --active-blue: #1a237e; --text-white: #ecf0f1; 
+            --success: #5cb85c; --warning-yellow: #fff9c4;
+            --rtps-color: #8e44ad; --nha-color: #d35400; --uidai-blue: #003366;
+            --csc-gold: #f39c12; --eshram-color: #2980b9; --msme-teal: #16a085;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; background: #f4f7f6; overflow: hidden; }
+        
+        .top-notice { background: var(--warning-yellow); border-bottom: 2px solid #fbc02d; padding: 8px 0; z-index: 1001; }
+        .top-notice marquee { color: #455a64; font-weight: bold; font-size: 15px; }
+
+        .app-container { display: flex; flex-grow: 1; overflow: hidden; }
         
         /* Sidebar */
-        .sidebar { width: 260px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; transition: 0.3s; }
-        .sidebar-header { padding: 20px; text-align: center; background: #141a21; font-size: 20px; font-weight: bold; border-bottom: 1px solid #34495e; color: #3498db; }
-        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #2c3e50; display: flex; align-items: center; font-size: 14px; transition: 0.2s; }
-        .menu-item:hover { background: #34495e; padding-left: 30px; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--text-white); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar-header { padding: 20px; text-align: center; background: #1a252f; font-size: 18px; font-weight: bold; border-bottom: 1px solid #34495e; }
+        .menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; align-items: center; justify-content: space-between; font-size: 14px; transition: 0.3s; }
+        .menu-item:hover { background: #34495e; }
         .active-nav { background: var(--active-blue) !important; border-left: 5px solid #fff; }
 
-        /* Main Content */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .top-nav { background: #fff; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Quick Access Buttons */
+        .special-btn { color: white; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; cursor: pointer; margin: 5px 15px; font-size: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); }
+
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+        .top-nav { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { padding: 25px; }
-        .box { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid var(--active-blue); }
+        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn:hover { opacity: 0.9; }
         .hidden { display: none !important; }
 
-        /* Forms */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #34495e; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        /* Dashboard Card Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .s-card { padding: 20px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .s-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
 
-        /* PVC Card Preview (Screen) */
-        .pvc-preview { width: 325px; height: 204px; border: 1px solid #ccc; border-radius: 10px; position: relative; background: #fff; overflow: hidden; margin: 10px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #paymentOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; display:flex; align-items:center; justify-content:center; }
     </style>
 </head>
 <body>
 
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">FixsClub Pro</div>
-        <div class="menu-item active-nav" onclick="nav('dash')">🏠 DASHBOARD</div>
-        <div class="menu-item" onclick="nav('aadhaar')">🆔 AADHAAR MANUAL</div>
-        <div class="menu-item" onclick="nav('voter')">🗳️ VOTER SMART</div>
-        <div class="menu-item" onclick="nav('pan_nsdl')">💳 PAN (NSDL) PVC</div>
-        <div class="menu-item" onclick="nav('pan_uti')">💳 PAN (UTI) PVC</div>
-        <div class="menu-item" onclick="nav('history')">📂 HISTORY</div>
+    <div class="top-notice">
+        <marquee behavior="scroll" direction="left">
+            🚀 बिना CSC ID के भी आप सभी सेवाओं का लाभ ले सकते हैं। | ⚠️ ध्यान दें: 7 दिन के बाद ₹100 Fee देना पड़ेगा। | सहायता के लिए HELP & SUPPORT पर संपर्क करें।
+        </marquee>
     </div>
 
-    <div id="mainArea" class="main-content">
-        <div class="top-nav">
-            <marquee style="width: 60%; color: red; font-weight: bold;">New Updates: NSDL & UTI PAN PVC Service Live! | Voter ID Smart Print Added.</marquee>
-            <div id="user_info">Welcome, User</div>
+    <div class="app-container">
+        <div id="authScreen" style="position: fixed; inset: 0; background: #f0f2f5; z-index: 9998; display: flex; align-items: center; justify-content: center;">
+            <div id="loginBox" class="box" style="width: 350px; text-align: center;">
+                <h2 style="color: var(--active-blue);">FixsClub Login</h2>
+                <input type="text" id="l_mob" placeholder="मोबाइल नंबर">
+                <input type="password" id="l_pass" placeholder="पासवर्ड">
+                <button class="btn" style="background: var(--active-blue);" onclick="doLogin()">लॉगिन करें</button>
+                <p onclick="toggleAuth('reg')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">नया अकाउंट बनाएँ</p>
+            </div>
+            <div id="regBox" class="box hidden" style="width: 350px; text-align: center;">
+                <h2 style="color: var(--success);">रजिस्ट्रेशन</h2>
+                <input type="text" id="r_name" placeholder="पूरा नाम">
+                <input type="text" id="r_mob" placeholder="मोबाइल नंबर">
+                <input type="password" id="r_pass" placeholder="पासवर्ड सेट करें">
+                <button class="btn" style="background: var(--success);" onclick="doRegister()">अकाउंट बनाएँ</button>
+                <p onclick="toggleAuth('login')" style="color: blue; cursor: pointer; margin-top: 15px; font-size: 13px;">लॉगिन पर वापस जाएँ</p>
+            </div>
         </div>
 
-        <div class="container">
-            <div id="aadhaar-view" class="view hidden">
-                <div class="box">
-                    <h3>🆔 Aadhaar Card PVC Form</h3>
-                    <div class="grid-3">
-                        <input type="text" id="a_no" placeholder="Aadhar No.">
-                        <input type="text" id="a_name" placeholder="Full Name">
-                        <input type="text" id="a_dob" placeholder="DD/MM/YYYY">
-                        <input type="file" onchange="previewImg(event, 'a_img_pre')">
+        <div id="sidebar" class="sidebar hidden">
+            <div class="sidebar-header">FixsClub Master</div>
+            
+            <div class="special-btn" style="background: var(--csc-gold);" onclick="window.open('https://digitalseva.csc.gov.in/', '_blank')">🔗 CSC CONNECT</div>
+            <div class="special-btn" style="background: var(--uidai-blue);" onclick="window.open('https://myaadhaar.uidai.gov.in/', '_blank')">🆔 myAADHAAR</div>
+
+            <div class="menu-item active-nav" onclick="nav('dash')"><span>🏠 DASHBOARD</span></div>
+            <div class="menu-item" onclick="nav('aadhaar')"><span>🆔 AADHAAR PRINT</span></div>
+            <div class="menu-item" onclick="nav('voter')"><span>🗳️ VOTER ID PRINT</span></div>
+            
+            <div style="padding: 10px 20px 5px; font-size: 11px; color: #95a5a6;">GOVERNMENT PORTALS</div>
+            <div class="menu-item" style="color:#a29bfe" onclick="window.open('https://serviceonline.bihar.gov.in/', '_blank')"><span>📄 RTPS Bihar</span><span>↗️</span></div>
+            <div class="menu-item" style="color:#fab1a0" onclick="window.open('https://beneficiary.nha.gov.in/', '_blank')"><span>🏥 Ayushman Portal</span><span>↗️</span></div>
+            <div class="menu-item" style="color:#1abc9c" onclick="window.open('https://udyamregistration.gov.in/Government-India/Ministry-MSME-registration.htm', '_blank')"><span>🏢 MSME Udyam</span><span>↗️</span></div>
+
+            <div id="adminLink" class="menu-item hidden" onclick="nav('admin')"><span style="color:#f1c40f;">👑 ADMIN PANEL</span></div>
+            <div class="menu-item" onclick="nav('support')" style="margin-top: auto; border-top: 1px solid #444;"><span>🎧 HELP & SUPPORT</span></div>
+            <div class="menu-item" onclick="location.reload()" style="color: #ff7675;"><span>🔒 LOGOUT</span></div>
+        </div>
+
+        <div id="mainArea" class="main-content hidden">
+            <div class="top-nav">
+                <span id="welcomeMsg">नमस्ते</span>
+                <div style="background:#27ae60; color:white; padding:5px 12px; border-radius:20px; font-size:12px;">System Live</div>
+            </div>
+
+            <div class="container">
+                <div id="dash-view" class="view">
+                    <div class="box">
+                        <h3 style="margin-top:0;">सेवाएं और लिंक्स 👋</h3>
+                        <div class="card-grid">
+                            <div class="s-card" style="background: var(--msme-teal);" onclick="window.open('https://udyamregistration.gov.in/Government-India/Ministry-MSME-registration.htm', '_blank')"><b>MSME Udyam</b><br><small>नया रजिस्ट्रेशन</small></div>
+                            <div class="s-card" style="background: var(--rtps-color);" onclick="window.open('https://swcs.bihar.gov.in/RtpsReportView/certificateDownload.do', '_blank')"><b>RTPS Bihar</b><br><small>जाति/आय/निवास</small></div>
+                            <div class="s-card" style="background: var(--eshram-color);" onclick="window.open('https://register.eshram.gov.in/#/user/self', '_blank')"><b>e-Shram Card</b><br><small>Self Registration</small></div>
+                            <div class="s-card" style="background: var(--nha-color);" onclick="window.open('https://beneficiary.nha.gov.in/', '_blank')"><b>Ayushman</b><br><small>Health Portal</small></div>
+                        </div>
                     </div>
-                    <textarea id="a_addr" placeholder="Full Address"></textarea>
-                    <button class="btn" style="background:var(--success)" onclick="printService('Aadhaar')">Print Aadhaar</button>
                 </div>
-            </div>
 
-            <div id="pan_nsdl-view" class="view hidden">
-                <div class="box">
-                    <h3>💳 NSDL PAN Card (PVC Style)</h3>
-                    <div class="grid-3">
-                        <input type="text" id="pn_no" placeholder="PAN Number">
-                        <input type="text" id="pn_name" placeholder="Full Name">
-                        <input type="text" id="pn_fname" placeholder="Father's Name">
-                        <input type="text" id="pn_dob" placeholder="DOB">
-                        <div><label>Photo</label><input type="file" onchange="previewImg(event, 'pn_img_pre')"></div>
-                        <div><label>Signature</label><input type="file" onchange="previewImg(event, 'pn_sig_pre')"></div>
-                    </div>
-                    <button class="btn" style="background:var(--active-blue)" onclick="printService('PAN_NSDL')">Download NSDL PVC</button>
+                <div id="aadhaar-view" class="view hidden">
+                    <div class="box"><h3>Aadhaar Manual Print</h3><input type="text" placeholder="Aadhaar Number"><button class="btn" style="background: var(--success)">Print Now</button></div>
                 </div>
-            </div>
 
-            <div id="dash-view" class="view">
-                <div class="box">
-                    <h2>Namaste! 🙏</h2>
-                    <p>Sabhi PVC Services ab live hain. Photo और Signature के साथ कार्ड प्रिंट करें।</p>
+                <div id="voter-view" class="view hidden">
+                    <div class="box"><h3>Voter Manual Print</h3><input type="text" placeholder="EPIC Number"><button class="btn" style="background: #d32f2f">Print Now</button></div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="print-templates" class="hidden">
-        <div id="temp-aadhaar" style="width:325px; height:204px; border:1px solid #000; position:relative;">
-            <div style="background:orange; height:10px;"></div>
-            <img id="a_img_pre" src="" style="width:60px; height:70px; margin:10px;">
-            <div style="position:absolute; top:40px; left:80px; font-size:10px;" id="disp_a_data"></div>
-            <div style="position:absolute; bottom:10px; width:100%; text-align:center; font-weight:bold;" id="disp_a_no"></div>
-        </div>
-
-        <div id="temp-pan" style="width:325px; height:204px; border:1px solid #aaa; background: linear-gradient(135deg, #fff 60%, #e3f2fd 100%); position:relative; font-family:Arial;">
-            <div style="background:#003366; color:#fff; font-size:9px; padding:4px;">INCOME TAX DEPARTMENT | GOVT. OF INDIA</div>
-            <img id="pn_img_pre" src="" style="width:55px; height:65px; position:absolute; top:40px; left:15px; border:1px solid #000;">
-            <div style="margin-left:80px; margin-top:10px; font-size:10px;">
-                <p>Name: <b id="disp_pn_name"></b></p>
-                <p>Father: <b id="disp_pn_fname"></b></p>
-                <p>PAN: <b id="disp_pn_no" style="font-size:14px;"></b></p>
+                <div id="admin-view" class="view hidden"><div class="box"><h3>Admin Control</h3><input type="text" id="act_mob" placeholder="User Mobile"><button class="btn" style="background:var(--active-blue);" onclick="activateUserManual()">Activate</button></div></div>
+                <div id="support-view" class="view hidden"><div class="box"><h3>Help & Support</h3><textarea id="supportMsg" placeholder="Message..." style="height:100px;"></textarea><button class="btn" style="background:var(--active-blue);" onclick="sendMessage()">Send</button></div></div>
             </div>
-            <img id="pn_sig_pre" src="" style="width:70px; height:20px; position:absolute; bottom:20px; right:15px;">
         </div>
     </div>
 
     <script>
+        const MASTER_MOB = "9693101077";
+        const MASTER_PASS = "Yadav@957272";
+        const UPI_ID = "Q973860146@ybl";
+
+        function toggleAuth(t) {
+            document.getElementById('loginBox').classList.toggle('hidden', t === 'reg');
+            document.getElementById('regBox').classList.toggle('hidden', t === 'login');
+        }
+
+        function doRegister() {
+            const mob = document.getElementById('r_mob').value;
+            const userData = { name: document.getElementById('r_name').value, mobile: mob, password: document.getElementById('r_pass').value, regDate: new Date().getTime(), lastPaymentDate: null };
+            localStorage.setItem('user_' + mob, JSON.stringify(userData));
+            alert("पंजीकरण सफल! लॉगिन करें।"); toggleAuth('login');
+        }
+
+        function doLogin() {
+            const mob = document.getElementById('l_mob').value;
+            const pass = document.getElementById('l_pass').value;
+            if (mob === MASTER_MOB && pass === MASTER_PASS) {
+                document.getElementById('adminLink').classList.remove('hidden');
+                document.getElementById('welcomeMsg').innerText = "नमस्ते मास्टर एडमिन";
+                showPortal(); return;
+            }
+            const data = localStorage.getItem('user_' + mob);
+            if (data && JSON.parse(data).password === pass) { 
+                checkSubscription(JSON.parse(data)); 
+            } else { alert("गलत आईडी या पासवर्ड!"); }
+        }
+
+        function checkSubscription(user) {
+            const now = new Date().getTime();
+            if (now - user.regDate > (7 * 24 * 60 * 60 * 1000)) {
+                if (!user.lastPaymentDate) { showPaymentModal(); return; }
+            }
+            document.getElementById('welcomeMsg').innerText = "स्वागत है, " + user.name;
+            showPortal();
+        }
+
+        function showPortal() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mainArea').classList.remove('hidden');
+        }
+
+        function showPaymentModal() {
+            const upiLink = `upi://pay?pa=${UPI_ID}&pn=FixsClub&am=100&cu=INR`;
+            document.body.insertAdjacentHTML('beforeend', `<div id="paymentOverlay"><div style="background:white; padding:30px; border-radius:15px; text-align:center;"><h2>ट्रायल समाप्त!</h2><p>₹100 का भुगतान करें</p><a href="${upiLink}" class="btn" style="background:#673ab7; display:block; color:white; text-decoration:none;">अभी पे करें</a></div></div>`);
+        }
+
         function nav(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            const target = document.getElementById(id + '-view');
-            if(target) target.classList.remove('hidden');
-            
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
+            document.getElementById(id + '-view').classList.remove('hidden');
         }
 
-        function previewImg(event, targetId) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById(targetId).src = reader.result;
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        function printService(type) {
-            if(type === 'PAN_NSDL') {
-                document.getElementById('disp_pn_name').innerText = document.getElementById('pn_name').value;
-                document.getElementById('disp_pn_fname').innerText = document.getElementById('pn_fname').value;
-                document.getElementById('disp_pn_no').innerText = document.getElementById('pn_no').value;
-                var content = document.getElementById('temp-pan').innerHTML;
-            }
-            
-            const win = window.open('', '', 'width=500,height=400');
-            win.document.write('<html><head><style>body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;}</style></head><body>');
-            win.document.write('<div style="width:325px;height:204px;border:1px solid #000;position:relative;border-radius:10px;overflow:hidden;">' + content + '</div>');
-            win.document.write('</body></html>');
-            win.document.close();
-            setTimeout(() => { win.print(); }, 500);
-        }
+        function sendMessage() { alert("मैसेज एडमिन को भेज दिया गया है!"); }
+        function activateUserManual() { /* Admin activation logic */ }
     </script>
 </body>
 </html>
-
-
-
-
-Ismein check karo kya dikkat hai ismein Aadhaar card print Nahin ho raha hai aur Aadhaar Card ka print sab bharne ke bad is par Nahin dikha raha hai Aadhaar Card jaisa
