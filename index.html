@@ -229,7 +229,95 @@
             <div id="c_num"></div>
             <div class="card-footer-red">मेरा <span style="color:red; margin:0 2px;">आधार</span><span class="balanced-pai">,</span> मेरी पहचान</div>
         </div>
+        
+        <div class="aadhaar-box">
+            <div class="card-header-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/State_Emblem_of_India.svg" class="header-left">
+                <div class="header-center">
+                    <div class="brush-saffron" style="font-size: 9.5px;">भारतीय विशिष्ट पहचान प्राधिकरण</div>
+                    <div class="brush-green-long" style="font-size: 8px;">Unique Identification Authority of India</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" class="header-right">
+            </div>
+            <div class="address-box"><b>पता:</b> <br> <span id="cb_addr_hi"></span><br><br><b>Address:</b> <br> <span id="cb_addr_en"></span></div>
+            <div id="qrcode" class="qr-position-back"></div>
+            <div id="c_num_back" style="position: absolute; bottom: 32px; width: 100%; text-align: center; font-size: 15px; font-weight: bold;"></div>
+            
+            <div class="footer-back-clean">
+                <div class="footer-item"><i class="fa-solid fa-phone"></i> 1947</div>
+                <span class="footer-sep">|</span>
+                <div class="footer-item"><i class="fa-regular fa-envelope"></i> help@uidai.gov.in</div>
+                <span class="footer-sep">|</span>
+                <div class="footer-item"><i class="fa-solid fa-globe"></i> www.uidai.gov.in</div>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="dl-btn" class="btn-download" onclick="downloadAadhaar()">2. Download Now</button>
+</div>
 
+<script>
+    document.getElementById('dob').addEventListener('input', function (e) {
+        let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,2})(\d{0,4})/);
+        e.target.value = !v[2] ? v[1] : v[1] + '/' + v[2] + (v[3] ? '/' + v[3] : '');
+    });
+
+    function previewImg(i) { if (i.files && i.files[0]) { var r = new FileReader(); r.onload = function(e) { document.getElementById('view_photo').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
+    
+    async function translateText(t, l) { if(!t) return ""; try { const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${l}&dt=t&q=${encodeURI(t)}`); const d = await res.json(); return d[0][0][0]; } catch(e) { return t; } }
+    
+    async function syncAddress() {
+        let g = document.getElementById('gender').value;
+        let rel_en = (g === "MALE") ? "S/O: " : "W/O: ";
+        let rel_hi = (g === "MALE") ? "आत्मज: " : "अर्धांगिनी: ";
+        document.getElementById('gender_hi').value = (g === "MALE") ? "पुरुष" : "महिला";
+        let addrBody = [document.getElementById('fname_en').value, document.getElementById('h_g_v_c').value, document.getElementById('p_office').value, document.getElementById('dist').value, document.getElementById('state').value, document.getElementById('pincode').value].filter(x => x).join(', ');
+        document.getElementById('addr_en').value = rel_en + addrBody;
+        if(addrBody) { 
+            let tBody = await translateText(addrBody, 'hi'); 
+            document.getElementById('addr_hi').value = rel_hi + tBody; 
+        }
+    }
+
+    async function translateFields() {
+        let n = document.getElementById('name_en').value;
+        if(n) document.getElementById('name_hi').value = await translateText(n, 'hi');
+        syncAddress();
+    }
+
+    function generatePreview() {
+        let r = document.getElementById('a_num').value;
+        let name = document.getElementById('name_en').value;
+        let dob = document.getElementById('dob').value;
+        let addr = document.getElementById('addr_en').value;
+        if(r.length < 12) { alert("Aadhar No. invalid"); return; }
+        document.getElementById('c_num').innerText = r.replace(/(.{4})/g, '$1 ').trim();
+        document.getElementById('c_num_back').innerText = document.getElementById('c_num').innerText;
+        document.getElementById('c_name_en').innerText = name;
+        document.getElementById('c_name_hi').innerText = document.getElementById('name_hi').value;
+        document.getElementById('c_dob').innerText = dob;
+        document.getElementById('c_gender_en').innerText = document.getElementById('gender').value;
+        document.getElementById('c_gender_hi').innerText = document.getElementById('gender_hi').value;
+        document.getElementById('cb_addr_en').innerText = addr;
+        document.getElementById('cb_addr_hi').innerText = document.getElementById('addr_hi').value;
+        document.getElementById('qrcode').innerHTML = "";
+        
+        // Data formatted for best scan results
+        let qrData = "UID:" + r + "\nName:" + name + "\nDOB:" + dob + "\nAddress:" + addr;
+        
+        new QRCode(document.getElementById("qrcode"), { 
+            text: qrData, 
+            width: 105, 
+            height: 105, 
+            correctLevel : QRCode.CorrectLevel.L 
+        });
+        
+        document.getElementById('print-area').style.display = 'flex';
+        document.getElementById('dl-btn').style.display = 'block';
+    }
+
+    function downloadAadhaar() {
+        html2canvas(document.getElementById('capture-box'), { scale: 3, useCORS: true }).then(c => { 
+            let l = document.createElement('a'); l.download = 'Aadhaar_Card.png'; l.href = c.toDataURL(); l.click(); 
                         <div id="aadhaar_history_list"></div>
                     </div>
                 </div>
