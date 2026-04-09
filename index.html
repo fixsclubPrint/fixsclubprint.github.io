@@ -2,144 +2,141 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>RTPS Digital System</title>
+    <title>RTPS Integrated System - Bihar</title>
     <style>
-        /* Design for Original Look */
-        body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; }
-        .main-container { display: flex; gap: 20px; padding: 20px; }
+        body { font-family: 'Arial', sans-serif; display: flex; padding: 20px; background: #f4f4f4; }
+        /* Left Panel: Entry Form */
+        .form-panel { width: 400px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-right: 20px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #800000; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         
-        /* Input Form Style */
-        .input-panel { width: 35%; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .input-panel h3 { border-bottom: 2px solid #800000; color: #800000; }
-        input, select { width: 90%; margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
-
-        /* Certificate Preview Style */
-        .preview-panel { width: 65%; background: white; padding: 40px; border: 2px solid #ccc; position: relative; min-height: 800px; }
-        .header-top { text-align: center; font-weight: bold; border-bottom: 1px solid #000; margin-bottom: 10px; }
-        .symbol { font-size: 24px; float: left; margin-top: -5px; }
-        .symbol.right { float: right; }
-        .form-title { text-align: center; font-size: 18px; text-decoration: underline; margin-top: 10px; }
-        .cert-type { text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0; }
+        /* Right Panel: Original Layout Preview */
+        .preview-container { background: white; width: 210mm; min-height: 297mm; padding: 40px; border: 1px solid #ddd; box-shadow: 0 0 15px rgba(0,0,0,0.1); position: relative; }
+        .header { text-align: center; border-bottom: 1.5px solid #000; padding-bottom: 5px; position: relative; }
+        .swastik { position: absolute; top: 0; font-size: 24px; }
+        .govt-text { font-size: 18px; font-weight: bold; }
+        .form-no { text-align: center; margin: 10px 0; text-decoration: underline; font-weight: bold; }
+        .cert-name { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+        .meta-info { display: flex; justify-content: space-between; font-size: 14px; border-bottom: 1px solid #eee; padding: 5px 0; }
+        .cert-details { display: flex; justify-content: space-between; margin: 15px 0; font-weight: bold; }
+        .main-text { line-height: 2; text-align: justify; margin-top: 30px; font-size: 16px; }
         
-        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 14px; }
-        .cert-meta { display: flex; justify-content: space-between; margin-top: 15px; font-weight: bold; }
-        
-        .content-body { margin-top: 30px; line-height: 1.8; text-align: justify; }
+        /* Table for Income */
         .income-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .income-table td { border: 1px solid black; padding: 8px; }
-
-        /* Footer & Signatures */
-        .footer-sec { display: flex; justify-content: space-between; margin-top: 100px; }
-        .sig-box { text-align: right; color: #00008b; font-size: 13px; }
-        .qr-placeholder { width: 120px; height: 120px; border: 1px solid #ddd; background: #fafafa; }
+        
+        /* Signature & QR */
+        .footer-area { display: flex; justify-content: space-between; margin-top: 80px; align-items: flex-end; }
+        .qr-box { width: 130px; height: 130px; border: 1px solid #ccc; background: #f9f9f9; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .sign-box { text-align: right; color: #00008b; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="input-panel">
-        <h3>Manual Data Entry</h3>
-        <select id="certTypeSelect" onchange="updateForm()">
-            <option value="NIWAS">Residence (Niwas)</option>
-            <option value="JATI">Caste (Jati)</option>
-            <option value="AAY">Income (Aay)</option>
-        </select>
-        
-        <input type="text" id="inName" placeholder="Full Name (Hindi/English)">
-        <input type="text" id="inFather" placeholder="Father's Name">
-        <input type="text" id="inMother" placeholder="Mother's Name">
-        <input type="text" id="inAddress" placeholder="Gram/Mohalla, Ward No">
-        
-        <select id="inCategory">
+<div class="form-panel">
+    <h3>RTPS Manual Entry</h3>
+    <select id="type" onchange="toggleFields()">
+        <option value="NIWAS">निवास (Residence)</option>
+        <option value="JATI">जाति (Caste)</option>
+        <option value="AAY">आय (Income)</option>
+    </select>
+    
+    <input type="text" id="name" placeholder="नाम (Hindi/English)">
+    <input type="text" id="father" placeholder="पिता का नाम">
+    <input type="text" id="mother" placeholder="माता का नाम">
+    <input type="text" id="address" placeholder="ग्राम/मोहल्ला, वार्ड संख्या">
+    
+    <div id="caste-group" style="display:none;">
+        <select id="category">
             <option>अत्यंत पिछड़ा वर्ग (अनुसूची-1)</option>
             <option>पिछड़ा वर्ग (अनुसूची-2)</option>
             <option>अनुसूचित जाति</option>
             <option>अनुसूचित जनजाति</option>
         </select>
-        
-        <input type="text" id="inCaste" placeholder="Caste Name (e.g. यादव)">
-        
-        <div id="incomeInputs" style="display:none;">
-            <input type="number" id="inAgri" placeholder="Agriculture Income" value="0">
-            <input type="number" id="inOther" placeholder="Other Source Income" value="0">
-        </div>
-        
-        <button onclick="renderCertificate()" style="background:#800000; color:white; padding:10px; cursor:pointer;">Generate Original Preview</button>
+        <input type="text" id="casteName" placeholder="जाति का नाम (e.g. यादव)">
     </div>
 
-    <div class="preview-panel" id="printableArea">
-        <div class="header-top">
-            <span class="symbol">卐</span>
-            बिहार सरकार / Government of Bihar
-            <span class="symbol right">卐</span>
+    <div id="income-group" style="display:none;">
+        <input type="number" id="agri" placeholder="कृषि से आय" value="0">
+        <input type="number" id="other" placeholder="अन्य स्रोतों से आय" value="0">
+    </div>
+
+    <button onclick="generate()">Generate Original PDF</button>
+</div>
+
+<div class="preview-container" id="cert">
+    <div class="header">
+        <span class="swastik" style="left:0;">卐</span>
+        [span_0](start_span)[span_1](start_span)[span_2](start_span)<div class="govt-text">बिहार सरकार / Government of Bihar[span_0](end_span)[span_1](end_span)[span_2](end_span)</div>
+        <span class="swastik" style="right:0;">卐</span>
+    </div>
+
+    [span_3](start_span)<div class="form-no" id="outForm">फॉर्म / Form - XIII[span_3](end_span)</div>
+    [span_4](start_span)<div class="cert-name" id="outTitle">निवास प्रमाण-पत्र / Residence Certificate[span_4](end_span)</div>
+
+    <div class="meta-info">
+        [span_5](start_span)<span>District: <b>भोजपुर</b>[span_5](end_span)</span>
+        [span_6](start_span)<span>Sub-Division: <b>जगदीशपुर</b>[span_6](end_span)</span>
+        [span_7](start_span)<span>Circle: <b>जगदीशपुर</b>[span_7](end_span)</span>
+    </div>
+
+    <div class="cert-details">
+        [span_8](start_span)<span>संख्या: <span id="outNo">BRCCO/2026/4450168</span>[span_8](end_span)</span>
+        <span>दिनांक: <span id="outDate">09/04/2026</span></span>
+    </div>
+
+    <div class="main-text" id="outBody">
         </div>
-        
-        <div class="form-title" id="outFormTitle">फॉर्म / Form - XIII</div>
-        <div class="cert-type" id="outCertHead">निवास प्रमाण-पत्र / Residence Certificate</div>
 
-        <div class="info-row">
-            <span>District: <b>भोजपुर</b></span>
-            <span>Sub-Division: <b>जगदीशपुर</b></span>
-            <span>Circle: <b>जगदीशपुर</b></span>
-        </div>
-
-        <div class="cert-meta">
-            <span>प्रमाण-पत्र संख्या: <span id="outCertNo">BRCCO/2026/4450168</span></span>
-            <span>दिनांक: <span id="outDate">09/04/2026</span></span>
-        </div>
-
-        <div class="content-body" id="outContent">
-            </div>
-
-        <div class="footer-sec">
-            <div class="qr-placeholder">QR CODE</div>
-            <div class="sig-box">
-                <p>Digitally signed by AKANKSHA</p>
-                <p>Date: <span id="outTime">2026.04.09 10:30:00 +05:30</span></p>
-                <p>(हस्ताक्षर राजस्व अधिकारी)</p>
-            </div>
+    <div class="footer-area">
+        [span_9](start_span)<div class="qr-box">QR CODE[span_9](end_span)</div>
+        <div class="sign-box">
+            [span_10](start_span)[span_11](start_span)[span_12](start_span)<p>Digitally signed by AKANKSHA[span_10](end_span)[span_11](end_span)[span_12](end_span)</p>
+            [span_13](start_span)<p id="outTime">Date: 2026.04.09 10:30:00 +05:30[span_13](end_span)</p>
+            [span_14](start_span)<p>(हस्ताक्षर राजस्व अधिकारी)[span_14](end_span)</p>
         </div>
     </div>
 </div>
 
 <script>
-    function updateForm() {
-        let type = document.getElementById("certTypeSelect").value;
-        document.getElementById("incomeInputs").style.display = (type === "AAY") ? "block" : "none";
+    function toggleFields() {
+        let t = document.getElementById('type').value;
+        document.getElementById('caste-group').style.display = (t === 'JATI') ? 'block' : 'none';
+        document.getElementById('income-group').style.display = (t === 'AAY') ? 'block' : 'none';
     }
 
-    function renderCertificate() {
-        let type = document.getElementById("certTypeSelect").value;
-        let name = document.getElementById("inName").value;
-        let father = document.getElementById("inFather").value;
-        let category = document.getElementById("inCategory").value;
-        let caste = document.getElementById("inCaste").value;
+    function generate() {
+        let type = document.getElementById('type').value;
+        let name = document.getElementById('name').value;
+        let father = document.getElementById('father').value;
+        let addr = document.getElementById('address').value;
 
-        if(type === "NIWAS") {
-            document.getElementById("outFormTitle").innerText = "फॉर्म / Form - XIII";
-            document.getElementById("outCertHead").innerText = "निवास प्रमाण-पत्र / Residence Certificate";
-            [span_0](start_span)document.getElementById("outCertNo").innerText = "BRCCO/2026/4450168";[span_0](end_span)
-            [span_1](start_span)document.getElementById("outContent").innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b>, पिता <b>${father}</b>, ग्राम <b>${document.getElementById('inAddress').value}</b> के स्थायी निवासी हैं।`;[span_1](end_span)
-        } 
-        else if(type === "JATI") {
-            [span_2](start_span)document.getElementById("outFormTitle").innerText = "फॉर्म / Form - IV";[span_2](end_span)
-            [span_3](start_span)document.getElementById("outCertHead").innerText = "जाति प्रमाण-पत्र / Caste Certificate";[span_3](end_span)
-            [span_4](start_span)document.getElementById("outCertNo").innerText = "BCCCO/2025/4007467";[span_4](end_span)
-            [span_5](start_span)document.getElementById("outContent").innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b>, पिता <b>${father}</b>, बिहार राज्य की <b>${category}</b> के अंतर्गत <b>${caste}</b> समुदाय के सदस्य हैं।`;[span_5](end_span)
+        if(type === 'NIWAS') {
+            [span_15](start_span)document.getElementById('outForm').innerText = "फॉर्म / Form - XIII[span_15](end_span)";
+            [span_16](start_span)document.getElementById('outTitle').innerText = "निवास प्रमाण-पत्र / Residence Certificate[span_16](end_span)";
+            [span_17](start_span)document.getElementById('outNo').innerText = "BRCCO/2026/4450168[span_17](end_span)";
+            [span_18](start_span)document.getElementById('outBody').innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b>, पिता <b>${father}</b>, ग्राम <b>${addr}</b> के स्थायी निवासी हैं।[span_18](end_span)`;
         }
-        else if(type === "AAY") {
-            let agri = parseInt(document.getElementById("inAgri").value) || 0;
-            let other = parseInt(document.getElementById("inOther").value) || 0;
-            let total = agri + other;
-            [span_6](start_span)document.getElementById("outFormTitle").innerText = "फॉर्म / Form - XVI";[span_6](end_span)
-            [span_7](start_span)document.getElementById("outCertHead").innerText = "आय प्रमाण-पत्र / Income Certificate";[span_7](end_span)
-            [span_8](start_span)document.getElementById("outCertNo").innerText = "BICCO/2026/1966368";[span_8](end_span)
-            document.getElementById("outContent").innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b> की कुल वार्षिक आय निम्नांकit है:
+        else if(type === 'JATI') {
+            let cat = document.getElementById('category').value;
+            let cst = document.getElementById('casteName').value;
+            [span_19](start_span)document.getElementById('outForm').innerText = "फॉर्म / Form-IV[span_19](end_span)";
+            [span_20](start_span)document.getElementById('outTitle').innerText = "पिछड़ा वर्ग का जाति प्रमाण-पत्र[span_20](end_span)";
+            [span_21](start_span)[span_22](start_span)document.getElementById('outNo').innerText = "BCCCO/2025/4007467[span_21](end_span)[span_22](end_span)";
+            [span_23](start_span)[span_24](start_span)document.getElementById('outBody').innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b>, पिता <b>${father}</b>, बिहार राज्य की <b>${cat}</b> के अंतर्गत <b>${cst}</b> समुदाय के सदस्य हैं।[span_23](end_span)[span_24](end_span)`;
+        }
+        else if(type === 'AAY') {
+            let agri = parseInt(document.getElementById('agri').value) || 0;
+            let other = parseInt(document.getElementById('other').value) || 0;
+            [span_25](start_span)document.getElementById('outForm').innerText = "फॉर्म / Form - XVI[span_25](end_span)";
+            [span_26](start_span)document.getElementById('outTitle').innerText = "आय प्रमाण-पत्र / Income Certificate[span_26](end_span)";
+            [span_27](start_span)[span_28](start_span)document.getElementById('outNo').innerText = "BICCO/2026/1966368[span_27](end_span)[span_28](end_span)";
+            [span_29](start_span)document.getElementById('outBody').innerHTML = `प्रमाणित किया जाता है कि <b>${name}</b> की वार्षिक आय निम्नांकित है:[span_29](end_span)
                 <table class="income-table">
-                    <tr><td>कृषि से आय</td><td>${agri}/-</td></tr>
-                    <tr><td>अन्य स्रोतों से आय</td><td>${other}/-</td></tr>
-                    <tr><td><b>कुल वार्षिक आय</b></td><td><b>${total}/-</b></td></tr>
-                [span_9](start_span)</table>`;[span_9](end_span)
+                    [span_30](start_span)<tr><td>कृषि से आय[span_30](end_span)</td><td>${agri}/-</td></tr>
+                    [span_31](start_span)<tr><td>अन्य स्रोतों से आय[span_31](end_span)</td><td>${other}/-</td></tr>
+                    [span_32](start_span)<tr><td><b>कुल वार्षिक आय[span_32](end_span)</b></td><td><b>${agri + other}/-</b></td></tr>
+                </table>`;
         }
     }
 </script>
